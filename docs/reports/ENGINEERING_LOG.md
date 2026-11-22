@@ -61,3 +61,12 @@ This log records agent role assignments, architectural decisions, implementation
   - `qa-engineer`: Added regression tests for all Phase 8 fixes and updated `TEST_REPORT.md` (`52/52` tests passing).
   - `hackathon-evaluator` (Pass 2): Re-evaluated all 9 criteria — all `>= 8/10` (`9, 9, 9, 9, 9, 9, 8, 9, 9`; average `8.89 / 10`).
   - `orchestrator`: Fixed final 2 evaluator polish notes (`XRAY_RULE_I18N.url_deception` disposable TLD wording + `renderCohortPanel` scenario-specific `topMissedScenario` mapping in `public/app.js`), added `README.md` and `DEMO_GUIDE.md`, and updated `PROJECT_ANALYSIS.md` and `IMPLEMENTATION_ROADMAP.md`.
+
+### 2026-11-22 — Repository Organization, Modularization & Live Embarko Deployment (`orchestrator`)
+- **Completed:**
+  - Organized repository cleanly: moved specifications into `docs/specs/`, engineering/test reports into `docs/reports/`, and operator guide to `docs/DEMO_GUIDE.md`.
+  - Extracted Express route modules into `src/routes/` (`system.js`, `forensic.js`, `challenges.js`), shrinking `server.js` to a focused entrypoint.
+  - Decomposed the frontend into focused modules under `public/js/` (`i18n.js`, `state.js`, `dom.js`, `audio.js`, `ticketCanvas.js`, `views/drill.js`, `views/xray.js`, `views/challenge.js`, `views/report.js`, `views/companion.js`, `main.js`) while preserving zero-bundler CSP `'self'` compliance.
+  - Added `.editorconfig`, `.gitattributes`, `.github/workflows/ci.yml`, SVG assets (`public/assets/favicon.svg`, `public/assets/social-card.svg`), `prefers-reduced-motion` accessibility CSS, `tests/storage.test.js`, `tests/db.test.js`, and a comprehensive root `README.md`.
+  - Deployed and claimed `https://baitcheck.embarko.app` (`claimed: true`, `appId: cmwreolah0hv4nr784oiqhjkq`, daily schedule verified `outcome: "ok"`).
+- **Verification:** `npm test` (`node --test`) passed `60/60` tests across 17 suites (`0` failures, `0` skips).
