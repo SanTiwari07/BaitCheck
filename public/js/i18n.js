@@ -37,6 +37,28 @@
       statLangVal: 'EN / हिंदी',
       statLangLbl: 'large text available',
       answerCta: 'START PRACTICE →',
+      timedPracticeCta: 'TRY THE 15-SECOND CHALLENGE',
+      timedModeLabel: 'TIMED CHALLENGE',
+      calmModeLabel: 'TAKE YOUR TIME',
+      calmModeNote: 'No timer. Read the situation and choose when you are ready.',
+      secondsLabel: 'seconds',
+      callClueTitle: 'Two clues in the caller’s words',
+      callClueIsolation: '“Stay alone” stops you from checking with family.',
+      callCluePayment: '“Pay a deposit now” pressures you to send money immediately.',
+      fileAnatomyTitle: 'Look at the end of the file name',
+      fileBaseLabel: 'File name',
+      fileDisguiseLabel: 'Looks like a PDF',
+      fileInstallerLabel: 'An app installer',
+      fileAnatomyNote: 'The last part, .apk, tells you this is an app file, not a bill.',
+      upiSendTitle: 'Enter a UPI PIN',
+      upiSendBody: 'Money leaves your account.',
+      upiReceiveTitle: 'Receive money',
+      upiReceiveBody: 'You do not need a UPI PIN.',
+      upiWhoGetsPaid: 'Who would receive the payment',
+      upiPayeeName: 'Name shown in the request',
+      upiAmountLeaving: 'Amount requested',
+      upiPaymentNote: 'Message in the request',
+      upiWarningLabel: 'Remember',
       quickXrayBtn: 'CHECK A MESSAGE',
       quickChallengeBtn: 'PRACTICE WITH FAMILY',
       learnMoreToggle: 'PRACTICE MORE SCAMS • NO TIMER',
@@ -63,13 +85,13 @@
         'SIMULATION SAFE: Zero file downloaded! Notice the disguised double extension (.pdf.apk) trying to hide an Android installer.',
       upiCollectHeader: 'PAYSIM WALLET COLLECT (DEMO)',
       upiCollectSub: 'Simulated Request • Zero Real PIN Pad',
-      timeoutTitle: 'TIME EXPIRED - PANIC TRAP TRIGGERED',
+      timeoutTitle: 'The timer ended. Scams use pressure to rush you.',
       nextDrillBtn: 'NEXT DRILL →',
       viewVerdictBtn: 'VIEW VERDICT TICKET →',
       savingResult: 'Saving drill telemetry to challenge report…',
       savedResult: 'Saved to live family readiness report.',
       saveResultErr: 'Could not sync result to report (local score still shown).',
-      reactionLabel: 'REACTION',
+      reactionLabel: 'You chose in',
 
       finaleEyebrow: 'DRILL COMPLETE • VERDICT TICKET',
       finaleDodged: 'BAIT DODGED',
@@ -108,27 +130,27 @@
       openChallengeReportBtn: 'OPEN LIVE REPORT →',
       replayDrillBtn: 'REPLAY 60s DRILL',
 
-      xrayEyebrow: '02 · INSTANT LINK & UPI X-RAY',
-      xrayTitle: 'LINK, MESSAGE & UPI X-RAY',
+      xrayEyebrow: 'CHECK A MESSAGE',
+      xrayTitle: 'Why might this message be risky?',
       xraySub:
         'Paste a message or link to check for warning signs. We explain what we find. Never paste passwords, OTPs or bank details; the message text is not saved.',
-      xrayPresetsLbl: '1-TAP SAMPLE PRESETS',
-      xrayInputLbl: 'SUSPICIOUS MESSAGE OR LINK',
-      xrayPlaceholder: 'Paste SMS, URL (https://...), .pdf.apk notice, or upi://pay?... string',
+      xrayPresetsLbl: 'TRY A SAMPLE',
+      xrayInputLbl: 'MESSAGE OR LINK TO CHECK',
+      xrayPlaceholder: 'Paste a suspicious message or link',
       xrayClearBtn: 'CLEAR',
-      xrayAnalyzeBtn: 'RUN FORENSIC X-RAY →',
+      xrayAnalyzeBtn: 'CHECK FOR WARNING SIGNS',
       xrayScanningBtn: 'ANALYZING…',
       xrayEmptyErr: 'Please paste a message, URL, or UPI string (or tap a preset above).',
       xrayFailErr: 'Could not analyze input. Please verify your text and try again.',
       xrayNetErr: 'Network error while running Link & UPI X-Ray.',
-      xrayRiskScoreLbl: 'SIGNAL SCORE (NOT A CERTAINTY)',
+      xrayRiskScoreLbl: 'WARNING LEVEL',
       xrayCaveat: 'This checker looks for known patterns. A low score does not prove a message is safe. Verify through an official app or a number you already trust.',
-      xrayLatencyLbl: 'LATENCY',
-      xrayHighlightTitle: 'TOKEN X-RAY PREVIEW',
-      xrayUpiTitle: 'DECODED UPI PAYLOAD',
-      xrayFindingsTitle: 'FORENSIC FINDINGS',
-      xrayRiskUnit: 'RISK',
-      xraySafeTitle: 'NO KNOWN TRAP PATTERNS DETECTED',
+      xrayLatencyLbl: 'CHECK SPEED',
+      xrayHighlightTitle: 'MESSAGE CLUES',
+      xrayUpiTitle: 'PAYMENT DETAILS IN THIS LINK',
+      xrayFindingsTitle: 'WHY TO BE CAREFUL',
+      xrayRiskUnit: 'WARNING SIGN',
+      xraySafeTitle: 'NO KNOWN WARNING SIGNS FOUND',
       xraySafeBody:
         'No known warning pattern was detected. This checker cannot prove a message or link is safe. Verify it through the organisation’s official app or a phone number you already trust.',
 
@@ -216,6 +238,28 @@
       statLangVal: 'EN / हिंदी',
       statLangLbl: 'बड़ा टेक्स्ट उपलब्ध',
       answerCta: 'अभ्यास शुरू करें →',
+      timedPracticeCta: '15 सेकंड की चुनौती आज़माएँ',
+      timedModeLabel: 'समय वाला अभ्यास',
+      calmModeLabel: 'आराम से करें',
+      calmModeNote: 'कोई टाइमर नहीं। स्थिति पढ़ें और तैयार होने पर जवाब चुनें।',
+      secondsLabel: 'सेकंड में',
+      callClueTitle: 'कॉल की बातों में दो संकेत',
+      callClueIsolation: 'अकेले रहने को कहना आपको परिवार से जाँचने से रोकता है।',
+      callCluePayment: 'अभी पैसे जमा करने को कहना जल्दबाज़ी का दबाव है।',
+      fileAnatomyTitle: 'फ़ाइल के नाम का आखिरी हिस्सा देखें',
+      fileBaseLabel: 'फ़ाइल का नाम',
+      fileDisguiseLabel: '.pdf जैसा दिखता है',
+      fileInstallerLabel: 'ऐप इंस्टॉलर',
+      fileAnatomyNote: '.apk बताता है कि यह ऐप फ़ाइल है, बिजली का बिल नहीं।',
+      upiSendTitle: 'UPI PIN डालें',
+      upiSendBody: 'आपके खाते से पैसे जाएंगे।',
+      upiReceiveTitle: 'पैसे पाएं',
+      upiReceiveBody: 'UPI PIN की जरूरत नहीं।',
+      upiWhoGetsPaid: 'पैसे किसे जाएंगे',
+      upiPayeeName: 'अनुरोध में दिखा नाम',
+      upiAmountLeaving: 'मांगी गई रकम',
+      upiPaymentNote: 'भुगतान के साथ संदेश',
+      upiWarningLabel: 'ध्यान रखें',
       quickXrayBtn: 'संदेश जाँचें',
       quickChallengeBtn: 'परिवार के साथ अभ्यास',
       learnMoreToggle: 'और ठगी के उदाहरण • बिना टाइमर',
@@ -287,27 +331,27 @@
       openChallengeReportBtn: 'लाइव रिपोर्ट देखें →',
       replayDrillBtn: '60s ड्रिल दोबारा खेलें',
 
-      xrayEyebrow: '02 · त्वरित लिंक और UPI X-RAY',
-      xrayTitle: 'लिंक, मैसेज और UPI X-RAY',
+      xrayEyebrow: 'संदेश की जाँच',
+      xrayTitle: 'यह संदेश जोखिम भरा क्यों हो सकता है?',
       xraySub:
         'संदेश या लिंक को चेतावनी संकेतों के लिए जाँचें। हम बताएँगे कि क्या मिला। पासवर्ड, OTP या बैंक जानकारी न डालें; संदेश का टेक्स्ट सेव नहीं होता।',
-      xrayPresetsLbl: '1-टैप सैंपल प्रीसेट',
-      xrayInputLbl: 'संदिग्ध मैसेज या लिंक',
-      xrayPlaceholder: 'SMS, URL (https://...), .pdf.apk नोटिस या upi://pay?... पेस्ट करें',
+      xrayPresetsLbl: 'उदाहरण देखें',
+      xrayInputLbl: 'जाँचने के लिए संदेश या लिंक',
+      xrayPlaceholder: 'संदिग्ध संदेश या लिंक पेस्ट करें',
       xrayClearBtn: 'साफ़ करें',
-      xrayAnalyzeBtn: 'फॉरेंसिक X-RAY चलाएं →',
+      xrayAnalyzeBtn: 'चेतावनी के संकेत जाँचें',
       xrayScanningBtn: 'जांच जारी है…',
       xrayEmptyErr: 'कृपया जांच के लिए कोई मैसेज, लिंक या ऊपर से एक सैंपल चुनें।',
       xrayFailErr: 'इनपुट की जांच नहीं हो सकी। कृपया टेक्स्ट जांचें और पुनः प्रयास करें।',
       xrayNetErr: 'लिंक और UPI X-RAY चलाते समय नेटवर्क त्रुटि हुई।',
-      xrayRiskScoreLbl: 'संकेत स्कोर (पक्का प्रमाण नहीं)',
+      xrayRiskScoreLbl: 'चेतावनी का स्तर',
       xrayCaveat: 'यह जाँच जाने-पहचाने पैटर्न देखती है। कम स्कोर यह साबित नहीं करता कि संदेश सुरक्षित है। आधिकारिक ऐप या पहले से भरोसेमंद नंबर से पुष्टि करें।',
       xrayLatencyLbl: 'जांच गति',
-      xrayHighlightTitle: 'खतरनाक शब्दों की पहचान',
-      xrayUpiTitle: 'डिकोड किया गया UPI डेटा',
-      xrayFindingsTitle: 'फॉरेंसिक निष्कर्ष',
-      xrayRiskUnit: 'जोखिम',
-      xraySafeTitle: 'कोई ज्ञात स्कैम पैटर्न नहीं मिला',
+      xrayHighlightTitle: 'संदेश के संकेत',
+      xrayUpiTitle: 'लिंक में भुगतान का विवरण',
+      xrayFindingsTitle: 'सावधान क्यों रहें',
+      xrayRiskUnit: 'चेतावनी का संकेत',
+      xraySafeTitle: 'कोई जाना-पहचाना चेतावनी संकेत नहीं मिला',
       xraySafeBody:
         'कोई जाना-पहचाना चेतावनी संकेत नहीं मिला। यह जाँच साबित नहीं कर सकती कि संदेश या लिंक सुरक्षित है। संस्था के आधिकारिक ऐप या पहले से भरोसेमंद नंबर से पुष्टि करें।',
 
@@ -363,17 +407,17 @@
   };
 
   const XRAY_VERDICT_LABELS = {
-    high: { en: 'HIGH RISK - LIKELY SCAM TRAP', hi: 'उच्च जोखिम - संभावित स्कैम जाल' },
-    medium: { en: 'CAUTION - SUSPICIOUS SIGNALS', hi: 'सावधान - संदिग्ध संकेत' },
-    low: { en: 'LOW RISK - NO KNOWN TRAP TOKENS', hi: 'कम जोखिम - कोई ज्ञात जाल पैटर्न नहीं' }
+    high: { en: 'A scam is likely', hi: 'संभावित स्कैम' },
+    medium: { en: 'Check this carefully', hi: 'ध्यान से जाँचें' },
+    low: { en: 'No known warning signs found', hi: 'कोई जाना-पहचाना चेतावनी संकेत नहीं मिला' }
   };
 
   const XRAY_RULE_I18N = {
     punycode_homoglyph: {
       en: {
-        title: 'Punycode / Lookalike Homoglyph Domain',
+        title: 'Lookalike web address',
         detail:
-          'Detected an internationalized Punycode (xn--) domain or mixed Cyrillic/Greek lookalike characters used to impersonate trusted sites.'
+          'This address imitates a trusted website using a lookalike name or characters.'
       },
       hi: {
         title: 'Punycode / हमशक्ल (Homoglyph) नकली डोमेन',
@@ -383,9 +427,9 @@
     },
     double_extension_apk: {
       en: {
-        title: 'Disguised Double-Extension / Executable Lure',
+        title: 'App file disguised as a document',
         detail:
-          'Found an executable (.apk/.exe/.bat) or double-extension file disguised as a document. Installing unknown APKs can steal SMS OTPs and device control.'
+          'The file name ends in .apk, which is an app installer, not a bill or PDF. Do not install it.'
       },
       hi: {
         title: 'दस्तावेज़ के रूप में छिपी .apk / खतरनाक फाइल',
@@ -395,9 +439,9 @@
     },
     url_deception: {
       en: {
-        title: 'Deceptive or Masked URL Pattern',
+        title: 'Unusual or disguised web address',
         detail:
-          'Detected URL credential masking (@), a raw IPv4 host, a shortened link, or a high-risk disposable TLD (.xyz/.top/.click) with lure keywords.'
+          'This link hides its destination, uses a shortened address, or comes from an unusual domain.'
       },
       hi: {
         title: 'भ्रामक या छिपा हुआ URL पैटर्न',
@@ -407,9 +451,9 @@
     },
     upi_collect_trap: {
       en: {
-        title: 'UPI Collect / PIN-to-Receive Trap',
+        title: 'Request that may send money out',
         detail:
-          'Detected a UPI debit/collect pattern paired with refund, prize, or PIN claims. Entering a UPI PIN only sends money out and never credits money.'
+          'This request mentions a refund or prize, but approving it sends money out. A PIN is never needed to receive money.'
       },
       hi: {
         title: 'UPI कलेक्ट / पिन से पैसे पाने का जाल',
@@ -419,9 +463,9 @@
     },
     social_engineering_pressure: {
       en: {
-        title: 'High-Pressure / Authority Manipulation Language',
+        title: 'Pressure to act quickly',
         detail:
-          'Found panic, isolation, fake legal/KYC suspension, or urgency phrases engineered to force action before verifying.'
+          'Urgent threats, isolation, or false authority are used to stop you from checking first.'
       },
       hi: {
         title: 'डराने, जल्दबाज़ी या नकली कानूनी दबाव की भाषा',
@@ -476,15 +520,25 @@
 
   function localizeUpiWarning(upiDecoded, lang) {
     if (!upiDecoded) return '';
-    if (lang !== 'hi') return upiDecoded.warning || '';
     const rawWarn = String(upiDecoded.warning || '');
     const am = upiDecoded.am;
+    if (lang !== 'hi') {
+      if (rawWarn.startsWith('Collect-Trap Alert:') && am) {
+        return `This request claims to be a refund or prize, but approving it sends ₹${am} to the other person. A UPI PIN is only for sending money.`;
+      }
+      if (rawWarn.startsWith('Debit Alert:') && am) {
+        return `Approving this request sends ₹${am} from your account. Never enter a UPI PIN to receive money.`;
+      }
+      if (!rawWarn) return 'This link contains payment details. Check the recipient and amount before approving.';
+      return 'A UPI PIN confirms a payment. Never enter it to receive money.';
+    }
     if (rawWarn.startsWith('Collect-Trap Alert:') && am) {
       return `कलेक्ट-जाल चेतावनी: यह लिंक कैशबैक/रिफंड/इनाम का झांसा देकर आपके खाते से ₹${am} काटने की कोशिश कर रहा है। UPI PIN डालने से पैसा हमेशा बाहर जाता है, कभी अंदर नहीं आता।`;
     }
     if (rawWarn.startsWith('Debit Alert:') && am) {
       return `डेबिट चेतावनी: इस UPI लिंक को मंज़ूर करके UPI PIN डालने पर आपके खाते से ₹${am} कट जाएंगे। पैसे प्राप्त करने के लिए कभी भी UPI PIN नहीं डालना होता।`;
     }
+    if (!rawWarn) return 'इस लिंक में भुगतान का विवरण है। मंज़ूर करने से पहले पाने वाले और रकम की जाँच करें।';
     return 'सुनहरा नियम: UPI PIN डालने से पैसा हमेशा आपके खाते से बाहर जाता है, कभी अंदर नहीं आता।';
   }
 

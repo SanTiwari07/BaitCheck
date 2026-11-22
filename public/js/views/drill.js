@@ -356,8 +356,14 @@
         const answerBtn = createEl('button', 'button-primary button-full', t('answerCta'));
         answerBtn.type = 'button';
         answerBtn.id = 'answer-start-drill-btn';
-        answerBtn.addEventListener('click', startDrillSequence);
+        answerBtn.addEventListener('click', () => startDrillSequence('calm'));
         card.appendChild(answerBtn);
+
+        const timedBtn = createEl('button', 'button-ghost-light button-full timed-practice-link', t('timedPracticeCta'));
+        timedBtn.type = 'button';
+        timedBtn.id = 'timed-challenge-btn';
+        timedBtn.addEventListener('click', () => startDrillSequence('timed'));
+        card.appendChild(timedBtn);
 
         const quickRow = createEl('div', 'quick-links-row');
         const qXray = createEl('button', 'button-dark', t('quickXrayBtn'));
@@ -398,26 +404,31 @@
           createEl('span', 'eyebrow', `${t('drillPrefix')} ${state.drillIndex + 1} ${t('ofLabel')} ${state.drills.length}`)
         );
         topStrip.appendChild(createEl('span', 'status-tag status-tag--warn', t('simulationBadge')));
+        topStrip.appendChild(createEl('span', 'caption-txt', t(state.drillMode === 'timed' ? 'timedModeLabel' : 'calmModeLabel')));
         sheet.appendChild(topStrip);
 
         const durationMs = (Number(drill.durationSec) || 15) * 1000;
-        const countdownBox = createEl('div', 'countdown-box');
-        const cdHeader = createEl('div', 'countdown-header');
-        cdHeader.appendChild(createEl('span', 'eyebrow eyebrow--dark', t('clockLabel')));
-        const cdTime = createEl('span', 'countdown-time', (state.drillRemainingMs / 1000).toFixed(1) + 's');
-        cdTime.id = 'drill-countdown-time';
-        if (state.drillRemainingMs <= 5000) cdTime.classList.add('is-urgent');
-        cdHeader.appendChild(cdTime);
-        countdownBox.appendChild(cdHeader);
+        if (state.drillMode === 'timed') {
+          const countdownBox = createEl('div', 'countdown-box');
+          const cdHeader = createEl('div', 'countdown-header');
+          cdHeader.appendChild(createEl('span', 'eyebrow eyebrow--dark', t('clockLabel')));
+          const cdTime = createEl('span', 'countdown-time', (state.drillRemainingMs / 1000).toFixed(1) + 's');
+          cdTime.id = 'drill-countdown-time';
+          if (state.drillRemainingMs <= 5000) cdTime.classList.add('is-urgent');
+          cdHeader.appendChild(cdTime);
+          countdownBox.appendChild(cdHeader);
 
-        const cdTrack = createEl('div', 'countdown-track');
-        const cdFill = createEl('div', 'countdown-fill');
-        cdFill.id = 'drill-countdown-fill';
-        cdFill.style.width = Math.max(0, Math.min(100, (state.drillRemainingMs / durationMs) * 100)).toFixed(1) + '%';
-        if (state.drillRemainingMs <= 5000) cdFill.classList.add('is-urgent');
-        cdTrack.appendChild(cdFill);
-        countdownBox.appendChild(cdTrack);
-        sheet.appendChild(countdownBox);
+          const cdTrack = createEl('div', 'countdown-track');
+          const cdFill = createEl('div', 'countdown-fill');
+          cdFill.id = 'drill-countdown-fill';
+          cdFill.style.width = Math.max(0, Math.min(100, (state.drillRemainingMs / durationMs) * 100)).toFixed(1) + '%';
+          if (state.drillRemainingMs <= 5000) cdFill.classList.add('is-urgent');
+          cdTrack.appendChild(cdFill);
+          countdownBox.appendChild(cdTrack);
+          sheet.appendChild(countdownBox);
+        } else {
+          sheet.appendChild(createEl('p', 'calm-mode-note', t('calmModeNote')));
+        }
 
         const drillCard = createEl('div', 'paper-card');
         drillCard.appendChild(createEl('div', 'masking-tape'));
@@ -455,6 +466,22 @@
 
           if (state.apkNoticeShown) {
             frame.appendChild(createEl('div', 'apk-sim-notice', t('apkSimNotice')));
+            const anatomy = createEl('div', 'file-anatomy');
+            anatomy.appendChild(createEl('p', 'eyebrow', t('fileAnatomyTitle')));
+            const parts = createEl('div', 'file-anatomy-parts');
+            const base = createEl('div', 'file-anatomy-part');
+            base.appendChild(createEl('strong', '', 'MetroBill_Notice'));
+            base.appendChild(createEl('span', '', t('fileBaseLabel')));
+            const disguise = createEl('div', 'file-anatomy-part is-disguise');
+            disguise.appendChild(createEl('strong', '', '.pdf'));
+            disguise.appendChild(createEl('span', '', t('fileDisguiseLabel')));
+            const installer = createEl('div', 'file-anatomy-part is-danger');
+            installer.appendChild(createEl('strong', '', '.apk'));
+            installer.appendChild(createEl('span', '', t('fileInstallerLabel')));
+            parts.append(base, disguise, installer);
+            anatomy.appendChild(parts);
+            anatomy.appendChild(createEl('p', 'caption-txt', t('fileAnatomyNote')));
+            frame.appendChild(anatomy);
           }
           drillCard.appendChild(frame);
         } else if (drill.mode === 'upi-collect') {
@@ -505,14 +532,28 @@
               : loc(drill.debrief.trapTitle);
 
           banner.appendChild(createEl('h3', 'debrief-title', headingText));
-          banner.appendChild(
-            createEl(
-              'p',
-              'mono-tabular',
-              `${t('reactionLabel')}: ${(lastOutcome.reactionMs / 1000).toFixed(1)}s (${lastOutcome.reactionMs} ms)`
-            )
-          );
+          banner.appendChild(createEl('p', 'body-md', `${t('reactionLabel')} ${(lastOutcome.reactionMs / 1000).toFixed(1)} ${t('secondsLabel')}`));
           banner.appendChild(createEl('p', 'debrief-body', loc(drill.debrief.explanation)));
+
+          if (drill.id === 'drill-1-call') {
+            const clues = createEl('div', 'call-clue-list');
+            clues.appendChild(createEl('strong', 'body-md', t('callClueTitle')));
+            clues.appendChild(createEl('p', 'body-md', t('callClueIsolation')));
+            clues.appendChild(createEl('p', 'body-md', t('callCluePayment')));
+            banner.appendChild(clues);
+          }
+
+          if (drill.mode === 'upi-collect') {
+            const flow = createEl('div', 'upi-money-flow');
+            const send = createEl('div', 'upi-money-flow-item is-danger');
+            send.appendChild(createEl('strong', '', t('upiSendTitle')));
+            send.appendChild(createEl('span', '', t('upiSendBody')));
+            const receive = createEl('div', 'upi-money-flow-item is-safe');
+            receive.appendChild(createEl('strong', '', t('upiReceiveTitle')));
+            receive.appendChild(createEl('span', '', t('upiReceiveBody')));
+            flow.append(send, receive);
+            banner.appendChild(flow);
+          }
 
           if (state.syncStatus === 'saving') {
             banner.appendChild(createEl('p', 'caption-txt', t('savingResult')));

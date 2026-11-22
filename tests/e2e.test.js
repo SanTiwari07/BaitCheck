@@ -450,7 +450,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     // Switch to Hindi
     await cdp.clickSelector('#lang-hi-btn');
     await cdp.waitFor(
-      'document.querySelector("#tab-drill-label")?.textContent === "60s ड्रिल"',
+      'document.querySelector("#tab-drill-label")?.textContent === "अभ्यास"',
       'Hindi tab label update'
     );
 
@@ -459,7 +459,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
       ribbon: document.querySelector('#safety-ribbon-text')?.textContent?.trim(),
       scrollWidth: document.documentElement.scrollWidth
     })`);
-    assert.equal(hiMetrics.tabDrill, '60s ड्रिल');
+    assert.equal(hiMetrics.tabDrill, 'अभ्यास');
     assert.match(hiMetrics.ribbon, /सिम्युलेशन/);
     assert.ok(
       hiMetrics.scrollWidth <= 360,
@@ -469,17 +469,34 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     // Switch back to English
     await cdp.clickSelector('#lang-en-btn');
     await cdp.waitFor(
-      'document.querySelector("#tab-drill-label")?.textContent === "60s DRILL"',
+      'document.querySelector("#tab-drill-label")?.textContent === "PRACTICE"',
       'English tab label restore'
     );
   });
 
-  it('2. Full 60s Drill flow (Trap + APK Inspect + Pass + 1080x1350 PNG Canvas)', async () => {
+  it('2. Calm practice starts without a countdown', async () => {
+    await cdp.setViewport(360, 800, true);
+    await cdp.navigate(`${baseUrl}/`);
+    await cdp.waitFor('document.querySelector("#answer-start-drill-btn")', 'Calm practice CTA');
+    await cdp.clickSelector('#answer-start-drill-btn');
+    await cdp.waitFor('document.querySelector(".calm-mode-note")', 'Untimed practice note');
+
+    const calmState = await cdp.eval(`(() => ({
+      note: document.querySelector('.calm-mode-note')?.textContent || '',
+      timer: Boolean(document.querySelector('#drill-countdown-time')),
+      choices: document.querySelectorAll('#view-drill .choices-list button').length
+    }))()`);
+    assert.match(calmState.note, /No timer/);
+    assert.equal(calmState.timer, false);
+    assert.ok(calmState.choices >= 2, 'Expected answer choices in calm mode');
+  });
+
+  it('3. Full timed drill flow (Trap + APK Inspect + Pass + 1080x1350 PNG Canvas)', async () => {
     await cdp.setViewport(360, 800, true);
     await cdp.navigate(`${baseUrl}/`);
     await cdp.waitFor('document.querySelector("#answer-start-drill-btn")', 'Hero CTA');
 
-    await cdp.clickSelector('#answer-start-drill-btn');
+    await cdp.clickSelector('#timed-challenge-btn');
     await cdp.waitFor(
       'document.querySelector("#drill-countdown-time") && document.querySelector(".caption-script")',
       'Drill 1 active stage'
@@ -565,6 +582,9 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
       'document.querySelector(".apk-sim-notice")?.textContent || ""'
     );
     assert.match(apkNotice, /SIMULATION SAFE/);
+    const fileAnatomy = await cdp.eval('document.querySelector(".file-anatomy")?.textContent || ""');
+    assert.match(fileAnatomy, /\.pdf/);
+    assert.match(fileAnatomy, /\.apk/);
 
     await cdp.clickByText('#view-drill .choices-list button', 'Check the .apk extension & delete the message');
     await cdp.waitFor('document.querySelector(".safe-pass-banner")', 'Drill 2 pass debrief');
@@ -585,6 +605,9 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
       'Decline - a UPI PIN only sends money out'
     );
     await cdp.waitFor('document.querySelector(".safe-pass-banner")', 'Drill 3 pass debrief');
+    const moneyFlow = await cdp.eval('document.querySelector(".upi-money-flow")?.textContent || ""');
+    assert.match(moneyFlow, /Money leaves your account/);
+    assert.match(moneyFlow, /do not need a UPI PIN/i);
     const d3Debrief = await cdp.eval(
       'document.querySelector(".safe-pass-banner")?.textContent || ""'
     );
@@ -668,7 +691,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     assert.equal(pngBytes.readUInt32BE(20), 1350);
   });
 
-  it('3. Tab 2 Link X-Ray (Presets, Decoded UPI Table & XSS Safety)', async () => {
+  it('4. Tab 2 Message Check (Presets, Plain Payment Summary & XSS Safety)', async () => {
     await cdp.setViewport(360, 800, true);
     await cdp.clickSelector('#tab-xray-btn');
     await cdp.waitFor(
@@ -679,11 +702,11 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     const xrayOverflow = await cdp.eval('document.documentElement.scrollWidth');
     assert.ok(xrayOverflow <= 360, `Expected <=360px overflow in X-Ray tab, got ${xrayOverflow}`);
 
-    // Preset 1: Punycode + KYC SMS
-    await cdp.clickByText('#view-xray .preset-chip', 'Punycode + KYC SMS');
+    // Preset 1: Fake bank update message
+    await cdp.clickByText('#view-xray .preset-chip', 'Fake bank update message');
     await cdp.waitFor(
       'document.querySelector("#view-xray .risk-meter-wrap") && document.querySelectorAll("#view-xray mark").length > 0',
-      'Preset 1 Punycode HIGH RISK result'
+      'Preset 1 fake bank message result'
     );
 
     const preset1 = await cdp.eval(`(() => ({
@@ -692,25 +715,25 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
       markCount: document.querySelectorAll('#view-xray .xray-highlight-box mark').length
     }))()`);
 
-    assert.match(preset1.verdict, /HIGH RISK/);
+    assert.match(preset1.verdict, /scam is likely/i);
     const scoreNum = parseInt(preset1.scoreText, 10);
     assert.ok(scoreNum >= 50, `Expected score >= 50, got ${preset1.scoreText}`);
     assert.ok(preset1.markCount >= 1, 'Expected <mark> elements rendered');
 
-    // Preset 3: UPI Cashback Trap
-    await cdp.clickByText('#view-xray .preset-chip', 'UPI Cashback Trap');
-    await cdp.waitFor('document.querySelector("#view-xray .upi-table")', 'Decoded UPI table');
+    // Preset 3: Fake refund request
+    await cdp.clickByText('#view-xray .preset-chip', 'Fake refund request');
+    await cdp.waitFor('document.querySelector("#view-xray .payment-details")', 'Plain payment summary');
 
-    const upiTableText = await cdp.eval(
-      'document.querySelector("#view-xray .upi-table")?.textContent || ""'
+    const paymentSummaryText = await cdp.eval(
+      'document.querySelector("#view-xray .payment-details")?.textContent || ""'
     );
-    assert.match(upiTableText, /reward-desk@paysim/);
-    assert.match(upiTableText, /4500/);
+    assert.match(paymentSummaryText, /reward-desk@paysim/);
+    assert.match(paymentSummaryText, /4500/);
 
     // XSS Safety test
     const xssPayload = '<img src=x onerror="window.__xssPwned=true"> https://xn--evil-demo.example';
     await cdp.setInputValue('#xray-textarea', xssPayload);
-    await cdp.clickByText('#view-xray button.button-primary', 'RUN FORENSIC X-RAY');
+    await cdp.clickByText('#view-xray button.button-primary', 'CHECK FOR WARNING SIGNS');
 
     await cdp.waitFor(
       '(document.querySelector("#view-xray .xray-highlight-box")?.textContent || "").includes("xn--evil-demo.example")',
@@ -736,7 +759,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     );
   });
 
-  it('4. Tab 3 Family Challenge -> /c/:id -> /c/:id/report live persistence', async () => {
+  it('5. Tab 3 Family Challenge -> /c/:id -> /c/:id/report live persistence', async () => {
     await cdp.setViewport(360, 800, true);
     await cdp.clickSelector('#tab-challenge-btn');
     await cdp.waitFor(
@@ -798,7 +821,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     assert.equal(bannerText.toUpperCase(), 'CHALLENGE FROM AARAV FOR MOM');
 
     // Run all 3 drills with passing choices
-    await cdp.clickSelector('#answer-start-drill-btn');
+    await cdp.clickSelector('#timed-challenge-btn');
 
     // Drill 1 Pass
     await cdp.waitFor('document.querySelector("#view-drill .choices-list button")', 'Drill 1 choices');
@@ -859,7 +882,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     );
   });
 
-  it('5. Desktop 1280x800 2-column grid layout & zero console/exception errors', async () => {
+  it('6. Desktop 1280x800 2-column grid layout & zero console/exception errors', async () => {
     await cdp.setViewport(1280, 800, false);
     await cdp.navigate(`${baseUrl}/`);
     await cdp.waitFor('document.querySelector("#answer-start-drill-btn")', 'Desktop hero ready');
@@ -898,7 +921,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     );
   });
 
-  it('6. Responsive 390x844 & 768x1024 zero overflow + /c/nonexistent-999 friendly 404 recovery', async () => {
+  it('7. Responsive 390x844 & 768x1024 zero overflow + /c/nonexistent-999 friendly 404 recovery', async () => {
     // iPhone 14 (390x844) across primary tabs
     await cdp.setViewport(390, 844, true);
     await cdp.navigate(`${baseUrl}/`);

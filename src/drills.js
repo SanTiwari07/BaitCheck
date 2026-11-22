@@ -299,32 +299,32 @@ const XRAY_PRESETS = [
   {
     id: 'preset-punycode-kyc',
     label: {
-      en: 'Punycode + KYC SMS',
-      hi: 'Punycode + KYC SMS'
+      en: 'Fake bank update message',
+      hi: 'नकली बैंक अपडेट संदेश'
     },
     text: 'ALERT: Your bank KYC suspended today. Update immediately at https://xn--metrobank-kyc-9x2a.example/update or account blocked.'
   },
   {
     id: 'preset-pdf-apk',
     label: {
-      en: '.pdf.apk Utility Lure',
-      hi: '.pdf.apk बिजली बिल जाल'
+      en: 'Fake electricity bill app',
+      hi: 'नकली बिजली बिल ऐप'
     },
     text: 'URGENT: Electricity cut tonight 9:30 PM. Install MetroBill_Notice.pdf.apk to pay Rs 12 verification.'
   },
   {
     id: 'preset-upi-collect',
     label: {
-      en: 'UPI Cashback Trap',
-      hi: 'UPI कैशबैक ट्रैप'
+      en: 'Fake refund request',
+      hi: 'नकली पैसे वापसी अनुरोध'
     },
     text: 'Congratulations! Claim Rs 4500 cashback refund: upi://pay?pa=reward-desk@paysim&pn=Prize%20Refund%20Demo&am=4500&cu=INR&tn=Approve%20PIN%20to%20Receive'
   },
   {
     id: 'preset-safe-link',
     label: {
-      en: 'Safe Portal Link',
-      hi: 'सुरक्षित पोर्टल लिंक'
+      en: 'Official cyber safety page',
+      hi: 'आधिकारिक साइबर सुरक्षा पेज'
     },
     text: 'Official cyber safety portal reminder: report fraud at https://cybercrime.gov.in or dial 1930.'
   }

@@ -101,7 +101,7 @@
   }
 
   function resumeActiveDrillTimer() {
-    if (state.drillPhase !== 'active' || state.drillAnswered) return;
+    if (state.drillPhase !== 'active' || state.drillAnswered || state.drillMode !== 'timed') return;
     const drill = state.drills[state.drillIndex];
     if (!drill) return;
 
@@ -291,10 +291,11 @@
   // Drill Engine
   // =========================================================================
 
-  function startDrillSequence() {
+  function startDrillSequence(mode = 'calm') {
     if (!state.drills.length) return;
+    state.drillMode = mode === 'timed' ? 'timed' : 'calm';
     unlockAudio();
-    playIncomingChime();
+    if (state.drillMode === 'timed') playIncomingChime();
 
     state.drillPhase = 'active';
     state.drillIndex = 0;
@@ -326,7 +327,7 @@
 
     renderDrillView();
     speakCaption(loc(drill.script), state.lang);
-    startDrillCountdownInterval(drill, durationMs);
+    if (state.drillMode === 'timed') startDrillCountdownInterval(drill, durationMs);
   }
 
   function updateCountdownDom(remainingMs, totalMs) {
@@ -356,7 +357,8 @@
 
     const durationMs = (Number(drill.durationSec) || 15) * 1000;
     const rawElapsed = Math.round(performance.now() - state.drillStartPerf);
-    const reactionMs = Math.max(120, Math.min(durationMs, rawElapsed));
+    const maxReactionMs = state.drillMode === 'timed' ? durationMs : 60000;
+    const reactionMs = Math.max(120, Math.min(maxReactionMs, rawElapsed));
 
     state.drillAnswered = true;
     const passed = Boolean(choice.passed);
@@ -387,7 +389,7 @@
   }
 
   function handleDrillTimeout() {
-    if (state.drillAnswered || state.drillPhase !== 'active') return;
+    if (state.drillMode !== 'timed' || state.drillAnswered || state.drillPhase !== 'active') return;
     const drill = state.drills[state.drillIndex];
     if (!drill) return;
 

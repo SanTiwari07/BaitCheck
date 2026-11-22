@@ -26,6 +26,7 @@
 
       // Drill state
       drillPhase: 'hero', // 'hero' | 'active' | 'finale'
+      drillMode: 'calm', // 'calm' | 'timed'
       drillIndex: 0,
       drillOutcomes: [],
       drillStartPerf: 0,

@@ -175,7 +175,6 @@
               ? 'status-tag--warn'
               : 'status-tag--pass';
         rightMeta.appendChild(createEl('span', 'status-tag ' + verdictClass, localizeXrayVerdict(res)));
-        rightMeta.appendChild(createEl('span', 'mono-tabular', `${t('xrayLatencyLbl')}: ${res.elapsedMs} ms`));
         scoreRow.appendChild(rightMeta);
         meterCard.appendChild(scoreRow);
 
@@ -215,30 +214,23 @@
 
           const warnBox = createEl('div', 'trap-alert-banner');
           warnBox.style.marginTop = '0';
+          warnBox.appendChild(createEl('strong', 'body-md', t('upiWarningLabel')));
           warnBox.appendChild(createEl('strong', 'body-md', localizeUpiWarning(res.upiDecoded)));
           upiCard.appendChild(warnBox);
 
-          const table = createEl('table', 'upi-table');
-          const tbody = createEl('tbody');
-          const isHi = state.lang === 'hi';
-          const fields = [
-            [isHi ? 'pa (भुगतान VPA)' : 'pa (Payee VPA)', res.upiDecoded.pa],
-            [isHi ? 'pn (पाने वाले का नाम)' : 'pn (Payee Name)', res.upiDecoded.pn],
-            [isHi ? 'am (राशि ₹)' : 'am (Amount ₹)', res.upiDecoded.am],
-            [isHi ? 'cu (मुद्रा)' : 'cu (Currency)', res.upiDecoded.cu],
-            [isHi ? 'tn (विवरण)' : 'tn (Note)', res.upiDecoded.tn],
-            ['mode', res.upiDecoded.mode],
-            [isHi ? 'tr (संदर्भ)' : 'tr (Ref)', res.upiDecoded.tr]
+          const paymentDetails = [
+            [t('upiWhoGetsPaid'), res.upiDecoded.pa],
+            [t('upiPayeeName'), res.upiDecoded.pn],
+            [t('upiAmountLeaving'), res.upiDecoded.am ? `₹${res.upiDecoded.am}` : ''],
+            [t('upiPaymentNote'), res.upiDecoded.tn]
           ];
-          for (let i = 0; i < fields.length; i++) {
-            if (!fields[i][1]) continue;
-            const tr = createEl('tr');
-            tr.appendChild(createEl('th', '', fields[i][0]));
-            tr.appendChild(createEl('td', 'mono-tabular', fields[i][1]));
-            tbody.appendChild(tr);
+          const receipt = createEl('dl', 'payment-details');
+          for (const [label, value] of paymentDetails) {
+            if (!value) continue;
+            receipt.appendChild(createEl('dt', '', label));
+            receipt.appendChild(createEl('dd', 'mono-tabular', value));
           }
-          table.appendChild(tbody);
-          upiCard.appendChild(table);
+          upiCard.appendChild(receipt);
           sheet.appendChild(upiCard);
         }
 
@@ -258,7 +250,7 @@
               createEl(
                 'span',
                 'status-tag ' + (f.severity === 'danger' ? 'status-tag--fail' : 'status-tag--warn'),
-                `+${f.points} ${t('xrayRiskUnit')}`
+                t('xrayRiskUnit')
               )
             );
             sw.appendChild(top);
