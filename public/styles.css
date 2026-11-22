@@ -1607,3 +1607,14 @@ mark.hl-warn {
     padding: 6px 4px;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-frame::before,
+  .rec-dot {
+    animation: none !important;
+  }
+
+  .countdown-fill {
+    transition: none !important;
+  }
+}
