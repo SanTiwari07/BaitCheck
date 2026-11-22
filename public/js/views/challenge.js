@@ -120,6 +120,32 @@
         state.challengeTargetLabel = e.target.value;
       });
       targetGroup.appendChild(targetInput);
+
+      const targetPresetGroup = createEl('div', 'target-presets');
+      targetPresetGroup.setAttribute('role', 'group');
+      targetPresetGroup.setAttribute('aria-label', t('targetPresetsLbl'));
+      const targetPresets = [
+        ['Mom', 'targetPresetMom'],
+        ['Dad', 'targetPresetDad'],
+        ['Grandparent', 'targetPresetGrandparent'],
+        ['Sibling', 'targetPresetSibling'],
+        ['Friend', 'targetPresetFriend']
+      ];
+      for (const [value, labelKey] of targetPresets) {
+        const presetBtn = createEl(
+          'button',
+          'radio-chip' + (state.challengeTargetLabel === value ? ' is-active' : ''),
+          t(labelKey)
+        );
+        presetBtn.type = 'button';
+        presetBtn.setAttribute('aria-pressed', state.challengeTargetLabel === value ? 'true' : 'false');
+        presetBtn.addEventListener('click', () => {
+          state.challengeTargetLabel = value;
+          renderChallengeView();
+        });
+        targetPresetGroup.appendChild(presetBtn);
+      }
+      targetGroup.appendChild(targetPresetGroup);
       formCard.appendChild(targetGroup);
 
       const langGroup = createEl('div');

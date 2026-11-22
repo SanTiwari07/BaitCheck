@@ -10,13 +10,13 @@
 
   <p>
     <a href="https://baitcheck.embarko.app"><img src="https://img.shields.io/badge/Live%20App-baitcheck.embarko.app-FEC917?style=for-the-badge&labelColor=0D0D0D" alt="Live App" /></a>
-    <a href="https://github.com/SanTiwari07/BaitCheck/actions"><img src="https://img.shields.io/badge/Tests-60%2F60%20Passing-067647?style=for-the-badge&labelColor=0D0D0D" alt="Tests Passing" /></a>
+    <a href="https://github.com/SanTiwari07/BaitCheck/actions"><img src="https://img.shields.io/badge/Tests-61%2F61%20Passing-067647?style=for-the-badge&labelColor=0D0D0D" alt="Tests Passing" /></a>
     <img src="https://img.shields.io/badge/Memory-~52%20MB%20RSS-1A1A1A?style=for-the-badge&labelColor=0D0D0D" alt="Memory Footprint" />
     <img src="https://img.shields.io/badge/Languages-EN%20%7C%20%E0%A4%B9%E0%A4%BF%E0%A4%82%E0%A4%A6%E0%A5%80-FEC917?style=for-the-badge&labelColor=0D0D0D" alt="Bilingual Support" />
   </p>
 
   <p>
-    Built for the <strong>Deploy With Embarko Student Challenge 2026</strong> (<code>#DeployWithEmbarko</code>) ·
+    Built for the <strong>Deploy With Embarko Student Challenge 2026</strong> (<code>#DeployWithEmbarko</code>)
     <a href="https://baitcheck.embarko.app"><strong>Launch Live App</strong></a> ·
     <a href="docs/DEMO_GUIDE.md"><strong>Demo Guide</strong></a> ·
     <a href="docs/reports/TEST_REPORT.md"><strong>Test &amp; Security Report</strong></a>

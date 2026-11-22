@@ -159,6 +159,11 @@
             { id: 'drill-2-apk', weight: 35, title: { en: 'Fake Utility Bill .pdf.apk Forward', hi: 'नकली बिजली बिल .pdf.apk मैसेज' } },
             { id: 'drill-3-upi', weight: 30, title: { en: 'UPI Cashback Collect Trap', hi: 'UPI कैशबैक कलेक्ट जाल' } }
           ];
+      const coachingKeyByDrill = {
+        'drill-1-call': 'reportCoachCall',
+        'drill-2-apk': 'reportCoachFile',
+        'drill-3-upi': 'reportCoachUpi'
+      };
 
       const breakdownCard = createEl('div', 'paper-card stack-sm');
       breakdownCard.appendChild(createEl('h2', 'title-card', t('ticketHeadline')));
@@ -168,6 +173,7 @@
         const latest = latestMap.get(d.id);
         const row = createEl('div', 'ticket-drill-row');
         const left = createEl('div');
+        let coaching = null;
         left.appendChild(createEl('strong', 'body-md', `${i + 1}. ${loc(d.title)}`));
 
         if (latest) {
@@ -183,6 +189,14 @@
             left.appendChild(
               createEl('div', 'caption-txt', `${t('reportMissedFlagLbl')} ${formatMissedFlag(latest.missed_flag)}`)
             );
+            const coachingKey = coachingKeyByDrill[d.id];
+            if (coachingKey) {
+              coaching = createEl('div', 'report-coaching');
+              coaching.appendChild(createEl('strong', 'body-md', t('reportCoachTitle')));
+              coaching.appendChild(
+                createEl('p', 'caption-txt', `${t('reportCoachPrefix')} ${challenge.target_label}: ${t(coachingKey)}`)
+              );
+            }
           }
           row.appendChild(left);
           row.appendChild(
@@ -198,6 +212,7 @@
           row.appendChild(createEl('span', 'status-tag status-tag--pending', t('pendingTag')));
         }
         breakdownCard.appendChild(row);
+        if (coaching) breakdownCard.appendChild(coaching);
       }
       sheet.appendChild(breakdownCard);
 

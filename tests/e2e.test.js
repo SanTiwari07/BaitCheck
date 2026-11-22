@@ -769,7 +769,9 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     );
 
     await cdp.setInputValue('#challenge-creator-input', 'Aarav');
-    await cdp.setInputValue('#challenge-target-input', 'Mom');
+    await cdp.clickByText('#view-challenge .target-presets button', 'Mom');
+    const targetValue = await cdp.eval('document.querySelector("#challenge-target-input")?.value || ""');
+    assert.equal(targetValue, 'Mom');
     await cdp.clickSelector('#view-challenge form button[type="submit"]');
 
     await cdp.waitFor(
@@ -821,17 +823,18 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     );
     assert.equal(bannerText.toUpperCase(), 'CHALLENGE FROM AARAV FOR MOM');
 
-    // Run all 3 drills with passing choices
+    // Run all 3 drills and confirm misses produce family coaching
+    await cdp.clickSelector('.timed-practice-details summary');
     await cdp.clickSelector('#timed-challenge-btn');
 
-    // Drill 1 Pass
+    // Drill 1 miss, then teach the family member how to respond
     await cdp.waitFor('document.querySelector("#view-drill .choices-list button")', 'Drill 1 choices');
-    await cdp.clickByText('#view-drill .choices-list button', 'Ask for an official written warrant & hang up');
+    await cdp.clickByText('#view-drill .choices-list button', 'Stay on the video call & pay the refundable deposit');
     await cdp.waitFor(
-      '(document.querySelector("#view-drill")?.textContent || "").includes("Saved to live family readiness report.")',
-      'Drill 1 telemetry saved'
+      'document.querySelector(".trap-alert-banner") && (document.querySelector("#view-drill")?.textContent || "").includes("Saved to live family readiness report.")',
+      'Drill 1 miss and coaching result saved'
     );
-    await cdp.clickByText('#view-drill .safe-pass-banner button', 'NEXT DRILL');
+    await cdp.clickByText('#view-drill .trap-alert-banner button', 'NEXT DRILL');
 
     // Drill 2 Pass
     await cdp.waitFor('document.querySelector(".apk-pill-btn")', 'Drill 2 choices');
@@ -858,7 +861,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     const finaleTiles = await cdp.eval(
       'Array.from(document.querySelectorAll("#view-drill .split-flap-tile")).map((t) => t.textContent.trim())'
     );
-    assert.ok(finaleTiles.some((t) => t.includes('100%')), `Expected 100% immunity, got ${finaleTiles}`);
+    assert.ok(finaleTiles.some((t) => t.includes('65%')), `Expected 65% immunity, got ${finaleTiles}`);
 
     // Navigate directly to /c/mom-.../report
     await cdp.navigate(`${baseUrl}${challengePath}/report`);
@@ -876,7 +879,10 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     assert.match(report.text.toUpperCase(), /REPORT FOR MOM/);
     assert.match(report.text.toUpperCase(), /SENT BY AARAV/);
     assert.match(report.text.toUpperCase(), /ALL 3 DRILLS COMPLETED/);
-    assert.ok(report.tiles.some((t) => t.includes('100%')), `Expected 100% in ${report.tiles}`);
+    assert.ok(report.tiles.some((t) => t.includes('65%')), `Expected 65% in ${report.tiles}`);
+    assert.match(report.text, /A helpful next step/);
+    assert.match(report.text, /Try saying to Mom/);
+    assert.match(report.text, /No official can demand money on a video call/);
     assert.ok(
       report.scrollWidth <= 360,
       `Expected zero horizontal overflow on /report at 360px, got ${report.scrollWidth}`

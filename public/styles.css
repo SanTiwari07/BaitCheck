@@ -1669,6 +1669,31 @@ mark.hl-warn {
   color: var(--on-primary);
 }
 
+.target-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-xs);
+  margin-top: var(--sp-sm);
+}
+
+.target-presets .radio-chip {
+  flex: 1 1 auto;
+  padding: 0 var(--sp-sm);
+}
+
+.report-coaching {
+  margin: 0 0 var(--sp-sm) var(--sp-sm);
+  padding: var(--sp-sm) var(--sp-md);
+  background: var(--surface-muted);
+  border-left: 4px solid var(--primary);
+}
+
+.report-coaching p {
+  margin: 4px 0 0;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
 .privacy-note {
   background: var(--paper);
   border: 1px solid var(--hairline);

@@ -8,7 +8,7 @@
 
 BaitCheck is a free, bilingual scam-safety practice app for kids, adults, and older people. In a short guided drill, people make choices in realistic but fictional scam situations, learn the warning signs, and practice a safer next step. They can also inspect a suspicious message with the rule-based Message Check or invite family to practice together.
 
-The app is designed for quick understanding: no account is needed to start, the home screen offers three clear actions, the main practice takes about a minute, and additional examples can be explored without a timer. A larger-text control is available in the header.
+The app is designed for quick understanding: no account is needed, calm untimed practice is the main action, and message checking and family practice stay available in the three tabs. A timed challenge is optional. Additional examples can be explored without a timer, and a larger-text control is available in the header.
 
 ## 2. The Problem and the Approach
 
@@ -63,14 +63,16 @@ This runs the repository's unit, API integration, and browser end-to-end test su
 - Open the deployed app on a phone-sized screen.
 - Point out the safety banner: this is a simulation and does not take real payments, OTPs, or downloads.
 - Show English/Hindi, sound, and the A+ larger-text control.
-- Explain the three plain-language actions: **Practice**, **Check a message**, and **Practice with family**.
-- Start the main practice.
+- Point out the clear first action, **Start Practice**, and the three tabs for **Practice**, **Check a message**, and **Family Test**.
+- Mention that calm practice has no timer and the timed challenge is optional.
+- Start the calm practice.
 
-### Step 2: Make one decision in the timed practice (30 seconds)
+### Step 2: Make one decision in calm practice (30 seconds)
 
 - Read the fictional caller/message and pick a response.
 - Choose a risky response once to show the consequence and explanation, then point out the safer alternative.
 - Highlight that feedback names the warning sign and gives a next action instead of only marking an answer right or wrong.
+- Point out the visual file anatomy and UPI money-flow explanation when they appear.
 - If time permits, finish all three short scenarios and show the summary.
 
 ### Step 3: Show the no-timer lessons (15 seconds)
@@ -107,12 +109,12 @@ The challenge page asks for a 40-second to 3-minute video covering six parts. Ke
 
 | Time | Part | What to show and say |
 |---|---|---|
-| 0:00-0:04 | Introduction | Show the simulated call. Say who you are and that you built BaitCheck to help families practice spotting scams. |
-| 0:04-0:16 | What you built | Show one scenario, make a choice, and reveal the clue and safer next step. Keep the simulation label visible. |
-| 0:16-0:23 | Embarko experience | Briefly explain how you used Embarko and your AI tool while building the app. Use your actual experience. |
-| 0:23-0:34 | Hosting on Embarko | Show the real deployment workflow or dashboard and the live app opening at its Embarko URL. |
-| 0:34-0:49 | Wow factor | Open a family practice link and show its report, or run the message checker on a fictional sample. Choose one clear payoff. |
-| 0:49-0:55 | Link and hashtag | Show the live URL clearly and end with `#DeployWithEmbarko`. |
+| 0:00-0:03 | Hook | Show the simulated call and caption: **Would you know when to hang up?** |
+| 0:03-0:14 | Introduction and app | Say who you are and show the calm practice. Choose a response and reveal the two caller clues. Keep the simulation label visible. |
+| 0:14-0:22 | Embarko experience | Briefly explain how you used Embarko and your AI tool while building the app. Use your actual experience. |
+| 0:22-0:32 | Hosting on Embarko | Show the real deployment workflow or dashboard and the live app opening at its Embarko URL. |
+| 0:32-0:47 | Wow factor | Show the visual UPI money-flow explanation, then one family challenge result with its coaching tip. |
+| 0:47-0:55 | Link and hashtag | Show the live URL clearly and end with `#DeployWithEmbarko`. |
 
 Post the video publicly on Instagram, X, and YouTube if you can produce a clean version for each. Submit every post link with the app link. Keep the app live and posts public until judging. Do not use paid promotion, purchased engagement, or copyrighted media.
 
