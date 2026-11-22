@@ -1,4 +1,8 @@
 <div align="center">
+  <img src="docs/screenshots/banner.png" alt="BaitCheck - Safe Practice for Every Age" width="100%" />
+
+  <br /><br />
+
   <h1>BAITCHECK</h1>
   <p>
     <strong>Bilingual Scam-Safety Practice App, Real-Life Scam Simulator &amp; Deterministic Message/UPI Checker</strong>
