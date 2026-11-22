@@ -1,16 +1,16 @@
-const crypto = require('crypto');
+'use strict';
+
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const { initDb } = require('./src/db');
-const { DRILLS, getDrillById } = require('./src/drills');
 const { uploadVerdictBadge } = require('./src/storage');
 const { createSystemRouter } = require('./src/routes/system');
 const { createForensicRouter } = require('./src/routes/forensic');
+const { createChallengesRouter } = require('./src/routes/challenges');
 
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const INDEX_HTML_PATH = path.join(PUBLIC_DIR, 'index.html');
-const CHALLENGE_ID_RE = /^[a-z0-9-]{2,40}$/;
 
 const PLACEHOLDER_HTML = `<!DOCTYPE html>
 <html lang="en">
@@ -77,96 +77,6 @@ function serveAppShell(_req, res) {
 }
 
 /**
- * Generates N random lowercase base36 characters using crypto.randomBytes.
- * @param {number} length
- * @returns {string}
- */
-function randomBase36(length) {
-  const bytes = crypto.randomBytes(length);
-  let out = '';
-  for (let i = 0; i < length; i++) {
-    out += (bytes[i] % 36).toString(36);
-  }
-  return out;
-}
-
-/**
- * Generates a unique URL-safe challenge slug (e.g. mom-7x2a) retrying on collision.
- * @param {string} targetLabel
- * @param {ReturnType<typeof initDb>} db
- * @returns {string}
- */
-function generateChallengeSlug(targetLabel, db) {
-  const prefix =
-    targetLabel
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
-      .slice(0, 12)
-      .replace(/-+$/g, '') || 'family';
-
-  for (let attempt = 0; attempt < 8; attempt++) {
-    const candidate = `${prefix}-${randomBase36(4)}`;
-    if (!db.getChallenge(candidate)) {
-      return candidate;
-    }
-  }
-  return `${prefix}-${randomBase36(6)}`;
-}
-
-/**
- * Computes weighted immunity score and reaction metrics from latest result per scenario.
- * @param {Array<{ scenario_id: string, passed: number, reaction_ms: number }>} results
- */
-function computeChallengeSummary(results) {
-  const latestByScenario = new Map();
-  if (Array.isArray(results)) {
-    for (const row of results) {
-      if (row && typeof row.scenario_id === 'string') {
-        latestByScenario.set(row.scenario_id, row);
-      }
-    }
-  }
-
-  let immunityScore = 0;
-  let completedCount = 0;
-  let reactionSum = 0;
-
-  for (const drill of DRILLS) {
-    const latest = latestByScenario.get(drill.id);
-    if (!latest) continue;
-    completedCount += 1;
-    reactionSum += Number(latest.reaction_ms) || 0;
-    if (Boolean(latest.passed)) {
-      immunityScore += Number(drill.weight) || 0;
-    }
-  }
-
-  return {
-    immunityScore: Math.max(0, Math.min(100, immunityScore)),
-    completedCount,
-    totalScenarios: DRILLS.length,
-    averageReactionMs: completedCount > 0 ? Math.round(reactionSum / completedCount) : null
-  };
-}
-
-/**
- * Validates and decodes a base64 PNG data URL (`data:image/png;base64,...`).
- * Returns null if format, base64 encoding, PNG magic bytes, or size is invalid.
- * @param {unknown} dataUrl
- * @returns {Buffer | null}
- */
-function parseStrictBoolean(value) {
-  if (value === true || value === 1 || value === 'true') {
-    return true;
-  }
-  if (value === false || value === 0 || value === 'false') {
-    return false;
-  }
-  return null;
-}
-
-/**
  * Builds and configures the Express application without binding a network port.
  * @param {{ dbPath?: string, uploader?: (params: { filename: string, pngBuffer: Buffer }) => Promise<object> }} [options]
  * @returns {import('express').Express}
@@ -187,108 +97,10 @@ function createApp(options = {}) {
     return defaultJsonParser(req, res, next);
   });
   app.use(express.static(PUBLIC_DIR));
+
   app.use(createSystemRouter({ db }));
   app.use(createForensicRouter({ db, uploader }));
-
-  app.post('/api/challenge', (req, res) => {
-    const creatorName = (req.body?.creatorName ?? req.body?.creator_name ?? '').toString().trim();
-    const targetLabel = (
-      req.body?.targetLabel ??
-      req.body?.target_label ??
-      req.body?.parentLabel ??
-      req.body?.parent_label ??
-      ''
-    )
-      .toString()
-      .trim();
-    const lang = req.body?.lang === 'hi' ? 'hi' : 'en';
-
-    if (!creatorName || creatorName.length > 40) {
-      return res.status(400).json({ error: 'creatorName must be between 1 and 40 characters' });
-    }
-    if (!targetLabel || targetLabel.length > 40) {
-      return res.status(400).json({ error: 'targetLabel must be between 1 and 40 characters' });
-    }
-
-    const id = generateChallengeSlug(targetLabel, db);
-    const created = db.createChallenge({ id, creatorName, targetLabel, lang });
-    return res.status(201).json({
-      ...created,
-      challengeUrl: `/c/${created.id}`,
-      reportUrl: `/c/${created.id}/report`
-    });
-  });
-
-  app.get('/api/challenge/:id', (req, res) => {
-    const { id } = req.params;
-    if (!CHALLENGE_ID_RE.test(id)) {
-      return res.status(404).json({ error: 'Challenge not found' });
-    }
-
-    const data = db.getChallenge(id);
-    if (!data) {
-      return res.status(404).json({ error: 'Challenge not found' });
-    }
-
-    return res.status(200).json({
-      ...data,
-      summary: computeChallengeSummary(data.results)
-    });
-  });
-
-  app.post('/api/challenge/:id/result', (req, res) => {
-    const { id } = req.params;
-    if (!CHALLENGE_ID_RE.test(id)) {
-      return res.status(404).json({ error: 'Challenge not found' });
-    }
-
-    const scenarioId = (req.body?.scenarioId ?? req.body?.scenario_id ?? '').toString().trim();
-    if (!scenarioId || !getDrillById(scenarioId)) {
-      return res.status(400).json({ error: 'Invalid scenarioId' });
-    }
-
-    const passed = parseStrictBoolean(req.body?.passed);
-    if (passed === null) {
-      return res.status(400).json({ error: 'passed must be a boolean' });
-    }
-    const rawReaction = req.body?.reactionMs ?? req.body?.reaction_ms;
-    const parsedReaction =
-      rawReaction === undefined || rawReaction === null || rawReaction === ''
-        ? 15000
-        : Number(rawReaction);
-    const reactionMs = Number.isFinite(parsedReaction)
-      ? Math.max(0, Math.min(60000, Math.round(parsedReaction)))
-      : 15000;
-
-    const rawMissed = req.body?.missedFlag ?? req.body?.missed_flag;
-    let missedFlag = null;
-    if (typeof rawMissed === 'string') {
-      const trimmedMissed = rawMissed.trim();
-      if (trimmedMissed.length > 64) {
-        return res.status(400).json({ error: 'missedFlag must be 64 characters or fewer' });
-      }
-      missedFlag = trimmedMissed.length > 0 ? trimmedMissed : null;
-    } else if (rawMissed !== undefined && rawMissed !== null) {
-      return res.status(400).json({ error: 'missedFlag must be a string or null' });
-    }
-
-    const result = db.recordDrillResult({
-      challengeId: id,
-      scenarioId,
-      passed,
-      reactionMs,
-      missedFlag
-    });
-    if (!result) {
-      return res.status(404).json({ error: 'Challenge not found' });
-    }
-
-    const updated = db.getChallenge(id);
-    return res.status(201).json({
-      result,
-      summary: computeChallengeSummary(updated?.results)
-    });
-  });
+  app.use(createChallengesRouter({ db }));
 
   app.get('/c/:id', serveAppShell);
   app.get('/c/:id/report', serveAppShell);
@@ -324,27 +136,12 @@ if (require.main === module) {
     console.log(`BaitCheck server listening on 0.0.0.0:${port}`);
   });
 
-  let shuttingDown = false;
-  function shutdown() {
-    if (shuttingDown) return;
-    shuttingDown = true;
+  const shutdown = () => {
     server.close(() => {
-      try {
-        app.locals.db.close();
-      } catch {
-        // Ignore close errors on shutdown.
-      }
+      app.locals.db.close();
       process.exit(0);
     });
-    setTimeout(() => {
-      try {
-        app.locals.db.close();
-      } catch {
-        // Ignore close errors on shutdown.
-      }
-      process.exit(0);
-    }, 5000).unref();
-  }
+  };
 
   process.on('SIGINT', shutdown);
   process.on('SIGTERM', shutdown);
