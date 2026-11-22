@@ -231,6 +231,9 @@
         readyCard.appendChild(testNowBtn);
 
         sheet.appendChild(readyCard);
+        if (global.BaitCheckMotion && global.BaitCheckMotion.consumeKey('challenge-ready', ch.id)) {
+          readyCard.classList.add('bc-feedback-enter');
+        }
       }
 
       if (state.recentChallenges.length > 0) {
@@ -273,6 +276,9 @@
 
         recentCard.appendChild(recentList);
         sheet.appendChild(recentCard);
+        if (global.BaitCheckMotion && global.BaitCheckMotion.consumeKey('challenge-recent', state.recentChallenges.map((x) => x.id).join(','))) {
+          global.BaitCheckMotion.applyStagger(recentList, '.recent-challenge-row', 55, 40);
+        }
       }
 
       container.appendChild(sheet);

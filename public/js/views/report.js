@@ -146,6 +146,21 @@
       }
       sheet.appendChild(flapGrid);
 
+      const completedNum = Math.max(0, Number(summary.completedCount || 0));
+      const totalNum = Math.max(1, Number(summary.totalScenarios || 3));
+      const progressPct = Math.max(0, Math.min(100, Math.round((completedNum / totalNum) * 100)));
+      const progressWrap = createEl('div', 'report-progress-wrap');
+      const progressTrack = createEl('div', 'report-progress-track');
+      progressTrack.setAttribute('role', 'progressbar');
+      progressTrack.setAttribute('aria-valuemin', '0');
+      progressTrack.setAttribute('aria-valuemax', String(totalNum));
+      progressTrack.setAttribute('aria-valuenow', String(completedNum));
+      const progressFill = createEl('div', 'report-progress-fill' + (isComplete ? ' is-complete' : ''));
+      progressFill.style.width = `${progressPct}%`;
+      progressTrack.appendChild(progressFill);
+      progressWrap.appendChild(progressTrack);
+      sheet.appendChild(progressWrap);
+
       const latestMap = new Map();
       const results = Array.isArray(data.results) ? data.results : [];
       for (let i = 0; i < results.length; i++) {
@@ -252,6 +267,15 @@
 
       sheet.appendChild(actions);
       container.appendChild(sheet);
+
+      const motion = global.BaitCheckMotion;
+      const reportKey = `${challenge.id}|${completedNum}|${summary.immunityScore}`;
+      if (motion && motion.consumeKey('report-view', reportKey)) {
+        motion.applyStagger(flapGrid, '.split-flap-tile', 65, 30);
+        motion.animateScaleXFill(progressFill);
+        breakdownCard.classList.add('bc-step-enter');
+        motion.applyStagger(breakdownCard, '.ticket-drill-row, .report-coaching', 55, 80);
+      }
     }
 
     return { loadReport, renderReportView };

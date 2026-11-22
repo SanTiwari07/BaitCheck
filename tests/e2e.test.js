@@ -1214,4 +1214,66 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     assert.deepEqual(cdp.consoleErrors, []);
     assert.deepEqual(cdp.pageExceptions, []);
   });
+
+  it('10. Programmatic animations, progress bar & prefers-reduced-motion compliance', async () => {
+    await cdp.setViewport(390, 844, true);
+    await cdp.navigate(`${baseUrl}/`);
+    await cdp.waitFor(
+      'document.querySelector(".practice-welcome.bc-hero-animate") && document.querySelectorAll(".bc-stagger-item").length >= 4',
+      'Hero programmatic entrance animation classes'
+    );
+
+    const heroMotion = await cdp.eval(`(() => {
+      const welcome = document.querySelector('.practice-welcome');
+      const revealed = Array.from(document.querySelectorAll('.sim-scam-card.is-revealed'));
+      return {
+        hasMotionApi: Boolean(window.BaitCheckMotion),
+        hasHeroClass: Boolean(welcome && welcome.classList.contains('bc-hero-animate')),
+        staggerCount: document.querySelectorAll('.bc-stagger-item').length,
+        revealedCards: revealed.length,
+        scrollWidth: document.documentElement.scrollWidth
+      };
+    })()`);
+    assert.equal(heroMotion.hasMotionApi, true);
+    assert.equal(heroMotion.hasHeroClass, true);
+    assert.ok(heroMotion.staggerCount >= 4);
+    assert.ok(heroMotion.revealedCards >= 1);
+    assert.ok(heroMotion.scrollWidth <= 390);
+
+    // X-Ray risk bar sweep & mark reveal
+    await cdp.clickSelector('#tab-xray-btn');
+    await cdp.waitFor('document.querySelector("#view-xray.bc-view-enter")', 'View enter transition');
+    await cdp.clickByText('#view-xray .preset-chip', 'Fake bank update message');
+    await cdp.waitFor(
+      'document.querySelector("#view-xray .risk-bar-fill.bc-bar-sweep") && document.querySelectorAll("#view-xray mark.bc-stagger-item").length >= 1',
+      'X-Ray bar sweep & mark stagger classes'
+    );
+
+    // Reduced motion check
+    await cdp.send('Emulation.setEmulatedMedia', {
+      features: [{ name: 'prefers-reduced-motion', value: 'reduce' }]
+    });
+    await cdp.navigate(`${baseUrl}/`);
+    await cdp.waitFor('document.querySelector("#answer-start-drill-btn")', 'Reduced motion hero');
+    const reduced = await cdp.eval(`(() => {
+      const card = document.querySelector('.sim-scam-card');
+      const welcome = document.querySelector('.practice-welcome');
+      return {
+        reducedFlag: window.BaitCheckMotion.prefersReducedMotion(),
+        heroAnimated: Boolean(welcome && welcome.classList.contains('bc-hero-animate')),
+        cardOpacity: card ? getComputedStyle(card).opacity : '',
+        scrollWidth: document.documentElement.scrollWidth
+      };
+    })()`);
+    assert.equal(reduced.reducedFlag, true);
+    assert.equal(reduced.heroAnimated, false);
+    assert.equal(reduced.cardOpacity, '1');
+    assert.ok(reduced.scrollWidth <= 390);
+
+    // Restore media emulation
+    await cdp.send('Emulation.setEmulatedMedia', { features: [] });
+
+    assert.deepEqual(cdp.consoleErrors, []);
+    assert.deepEqual(cdp.pageExceptions, []);
+  });
 });

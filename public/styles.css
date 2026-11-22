@@ -3200,3 +3200,309 @@ html.large-text { font-size: 19px; }
   .poster-wall, .newsprint-sheet { padding-right: 10px; padding-left: 10px; }
   .practice-welcome .display-xl { font-size: 1.85rem; }
 }
+
+/* =========================================================================
+   Programmatic Motion & Interaction System (GPU-composited, zero layout shift)
+   ========================================================================= */
+
+@keyframes bcFadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bcViewEnter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bcBarSweep {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes bcMarkReveal {
+  0% {
+    opacity: 0.35;
+    box-shadow: 0 0 0 0 rgba(21, 92, 70, 0);
+  }
+  55% {
+    opacity: 1;
+    box-shadow: 0 0 0 3px rgba(255, 119, 89, 0.24);
+  }
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(255, 119, 89, 0);
+  }
+}
+
+@keyframes bcHighlightDraw {
+  from {
+    background-size: 0% 100%;
+  }
+  to {
+    background-size: 100% 100%;
+  }
+}
+
+@keyframes bcHeroAmbient {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(-14px, 10px, 0) scale(1.06);
+    opacity: 0.85;
+  }
+}
+
+@keyframes bcScanSweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(260%);
+  }
+}
+
+@keyframes bcCurrentStepPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.62;
+  }
+}
+
+.practice-welcome {
+  position: relative;
+  overflow: hidden;
+}
+
+.practice-welcome::before {
+  content: '';
+  position: absolute;
+  top: -35%;
+  right: -12%;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(89, 159, 125, 0.16) 0%, rgba(89, 159, 125, 0) 70%);
+  pointer-events: none;
+  animation: bcHeroAmbient 14s ease-in-out infinite;
+}
+
+.practice-welcome > * {
+  position: relative;
+  z-index: 1;
+}
+
+.bc-hero-animate .highlight-mark {
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  animation: bcHighlightDraw 560ms cubic-bezier(0.22, 1, 0.36, 1) 240ms both;
+}
+
+.bc-view-enter {
+  animation: bcViewEnter 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bc-step-enter {
+  animation: bcFadeSlideUp 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bc-feedback-enter {
+  animation: bcFadeSlideUp 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bc-stagger-item {
+  animation: bcFadeSlideUp 320ms cubic-bezier(0.22, 1, 0.36, 1) var(--bc-delay, 0ms) both;
+}
+
+.xray-highlight-box mark.bc-stagger-item {
+  animation: bcMarkReveal 480ms cubic-bezier(0.22, 1, 0.36, 1) var(--bc-delay, 0ms) both;
+}
+
+.bc-bar-sweep {
+  transform-origin: left center;
+  animation: bcBarSweep 640ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both;
+}
+
+.bc-scroll-reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 360ms cubic-bezier(0.22, 1, 0.36, 1) var(--bc-delay, 0ms),
+    transform 360ms cubic-bezier(0.22, 1, 0.36, 1) var(--bc-delay, 0ms),
+    border-color 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.bc-scroll-reveal.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Tactile button & card interaction states (zero height alteration on rest) */
+.button-primary,
+.button-dark,
+.button-ghost-light,
+.button-danger,
+.tab-btn,
+.lang-btn,
+.sound-btn,
+.preset-chip,
+.radio-chip,
+.drill-choice-card,
+.apk-pill-btn,
+.sim-filter-btn,
+.edu-audience-btn {
+  transition:
+    transform 150ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 180ms ease;
+}
+
+.button-primary:hover:not(:disabled),
+.button-dark:hover:not(:disabled),
+.preset-chip:hover:not(:disabled),
+.drill-choice-card:hover:not(:disabled),
+.apk-pill-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.button-primary:active:not(:disabled),
+.button-dark:active:not(:disabled),
+.button-ghost-light:active:not(:disabled),
+.tab-btn:active,
+.lang-btn:active,
+.sound-btn:active,
+.preset-chip:active,
+.radio-chip:active,
+.drill-choice-card:active:not(:disabled),
+.apk-pill-btn:active {
+  transform: scale(0.985);
+}
+
+.sim-scam-card.is-revealed:hover {
+  transform: translateY(-2px);
+}
+
+.edu-progress-seg {
+  transition: background-color 280ms ease, opacity 280ms ease;
+}
+
+.edu-progress-seg.is-current {
+  animation: bcCurrentStepPulse 2.2s ease-in-out infinite;
+}
+
+/* Message Check (X-Ray) scanning feedback */
+.xray-loading-status {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px 0 2px;
+}
+
+.xray-scan-track {
+  position: relative;
+  width: 100%;
+  height: 5px;
+  border-radius: var(--r-full);
+  background: var(--pale-green);
+  overflow: hidden;
+}
+
+.xray-scan-bar {
+  width: 38%;
+  height: 100%;
+  border-radius: var(--r-full);
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  animation: bcScanSweep 1.1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Family Practice Report completion progress bar */
+.report-progress-wrap {
+  width: 100%;
+}
+
+.report-progress-track {
+  width: 100%;
+  height: 10px;
+  border-radius: var(--r-full);
+  background: var(--pale-green);
+  border: 1px solid rgba(21, 92, 70, 0.14);
+  overflow: hidden;
+}
+
+.report-progress-fill {
+  height: 100%;
+  border-radius: var(--r-full);
+  background: var(--action-blue);
+  transition: width 360ms cubic-bezier(0.22, 1, 0.36, 1), background-color 240ms ease;
+}
+
+.report-progress-fill.is-complete {
+  background: var(--primary);
+}
+
+/* Full reduced-motion accessibility compliance */
+@media (prefers-reduced-motion: reduce) {
+  .practice-welcome::before,
+  .bc-hero-animate .highlight-mark,
+  .bc-view-enter,
+  .bc-step-enter,
+  .bc-feedback-enter,
+  .bc-stagger-item,
+  .xray-highlight-box mark.bc-stagger-item,
+  .bc-bar-sweep,
+  .edu-progress-seg.is-current,
+  .xray-scan-bar {
+    animation: none !important;
+  }
+
+  .bc-scroll-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .button-primary,
+  .button-dark,
+  .button-ghost-light,
+  .button-danger,
+  .tab-btn,
+  .lang-btn,
+  .sound-btn,
+  .preset-chip,
+  .radio-chip,
+  .drill-choice-card,
+  .apk-pill-btn,
+  .sim-filter-btn,
+  .edu-audience-btn,
+  .sim-scam-card,
+  .edu-progress-seg,
+  .report-progress-fill {
+    transition: none !important;
+    transform: none !important;
+  }
+}

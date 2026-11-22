@@ -81,6 +81,10 @@
       }
 
       panel.appendChild(list);
+
+      if (global.BaitCheckMotion && steps.length && global.BaitCheckMotion.consumeKey('playbook', `${state.lang}-${steps.length}`)) {
+        global.BaitCheckMotion.applyStagger(list, '.swatch-strip', 70, 60);
+      }
     }
 
     return { renderCohortPanel, renderPlaybookPanel };

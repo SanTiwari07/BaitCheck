@@ -334,6 +334,12 @@
       card.appendChild(actions);
       sheet.appendChild(card);
       container.appendChild(sheet);
+
+      const motion = global.BaitCheckMotion;
+      if (motion && motion.consumeKey('sim', `${scam.id}-anatomy`)) {
+        card.classList.add('bc-step-enter');
+        motion.applyStagger(card, '.sim-anatomy-section', 70, 60);
+      }
     }
 
     function renderActiveSimulation(container) {
@@ -473,6 +479,24 @@
 
       sheet.appendChild(card);
       container.appendChild(sheet);
+
+      const motion = global.BaitCheckMotion;
+      if (motion) {
+        if (motion.consumeKey('sim', `${scam.id}-step-${step.stepNumber}`)) {
+          card.classList.add('bc-step-enter');
+          motion.applyStagger(choicesList, '.drill-choice-card', 55, 70);
+        }
+        const clueDrawer = card.querySelector('.sim-clue-drawer');
+        if (clueDrawer && motion.consumeKey('sim-clues', `${scam.id}-${step.stepNumber}-open`)) {
+          clueDrawer.classList.add('bc-feedback-enter');
+        } else if (!clueDrawer) {
+          motion.resetSlot('sim-clues');
+        }
+        if (selectedChoice && motion.consumeKey('sim-outcome', `${scam.id}-${step.stepNumber}-${selectedChoice.id}`)) {
+          const bannerEl = card.querySelector('.safe-pass-banner, .trap-alert-banner');
+          if (bannerEl) bannerEl.classList.add('bc-feedback-enter');
+        }
+      }
     }
 
     function renderScamCard(scam, lessonNum, isFeatured) {
@@ -601,6 +625,9 @@
         grid.appendChild(renderScamCard(related[i], i + 1, i === 0));
       }
       hub.appendChild(grid);
+      if (global.BaitCheckMotion) {
+        global.BaitCheckMotion.observeScrollReveals(hub, '.edu-mini-lesson, .sim-scam-card', 60);
+      }
     }
 
     function renderElderSafeMode(hub, allScams) {
@@ -632,6 +659,9 @@
         grid.appendChild(renderScamCard(related[i], i + 1, i === 0));
       }
       hub.appendChild(grid);
+      if (global.BaitCheckMotion) {
+        global.BaitCheckMotion.observeScrollReveals(hub, '.sim-scam-card', 60);
+      }
     }
 
     function renderSimulatorHub(container) {
@@ -746,6 +776,11 @@
       hub.appendChild(filterDisclosure);
       hub.appendChild(audienceWrap);
       container.appendChild(hub);
+
+      const motion = global.BaitCheckMotion;
+      if (motion) {
+        motion.observeScrollReveals(hub, '.sim-scam-card', 60);
+      }
     }
 
     return {

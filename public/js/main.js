@@ -316,6 +316,12 @@
 
   function startDrillSequence(mode = 'calm') {
     if (!state.drills.length) return;
+    if (window.BaitCheckMotion) {
+      window.BaitCheckMotion.resetSlot('drill');
+      window.BaitCheckMotion.resetSlot('apk');
+      window.BaitCheckMotion.resetSlot('drill-debrief');
+      window.BaitCheckMotion.resetSlot('ticket-preview');
+    }
     state.drillMode = mode === 'timed' ? 'timed' : 'calm';
     unlockAudio();
     if (state.drillMode === 'timed') playIncomingChime();
@@ -562,13 +568,33 @@
     if (activeTab === 'challenge') els.tabChallengeBtn.setAttribute('aria-current', 'page');
     else els.tabChallengeBtn.removeAttribute('aria-current');
 
-    els.viewDrill.classList.toggle(
-      'is-hidden',
-      !(state.route.mode === 'challenge-drill' || (state.route.mode === 'tab' && state.route.tab === 'drill'))
-    );
-    els.viewXray.classList.toggle('is-hidden', !(state.route.mode === 'tab' && state.route.tab === 'xray'));
-    els.viewChallenge.classList.toggle('is-hidden', !(state.route.mode === 'tab' && state.route.tab === 'challenge'));
-    els.viewReport.classList.toggle('is-hidden', state.route.mode !== 'report');
+    const showDrill = state.route.mode === 'challenge-drill' || (state.route.mode === 'tab' && state.route.tab === 'drill');
+    const showXray = state.route.mode === 'tab' && state.route.tab === 'xray';
+    const showChallenge = state.route.mode === 'tab' && state.route.tab === 'challenge';
+    const showReport = state.route.mode === 'report';
+
+    els.viewDrill.classList.toggle('is-hidden', !showDrill);
+    els.viewXray.classList.toggle('is-hidden', !showXray);
+    els.viewChallenge.classList.toggle('is-hidden', !showChallenge);
+    els.viewReport.classList.toggle('is-hidden', !showReport);
+
+    const activeViewKey = showReport
+      ? `report:${state.route.challengeId || ''}`
+      : showXray
+        ? 'tab:xray'
+        : showChallenge
+          ? 'tab:challenge'
+          : `drill:${state.route.challengeId || 'home'}`;
+    if (window.BaitCheckMotion && window.BaitCheckMotion.consumeKey('active-view', activeViewKey)) {
+      const targetPanel = showReport
+        ? els.viewReport
+        : showXray
+          ? els.viewXray
+          : showChallenge
+            ? els.viewChallenge
+            : els.viewDrill;
+      window.BaitCheckMotion.triggerViewEnter(targetPanel);
+    }
   }
 
   const {
@@ -695,6 +721,10 @@
     els.footerDisclaimer = document.getElementById('footer-disclaimer');
 
     els.brandHomeBtn.addEventListener('click', () => {
+      if (window.BaitCheckMotion) {
+        window.BaitCheckMotion.resetSlot('drill');
+        window.BaitCheckMotion.resetSlot('sim');
+      }
       state.drillPhase = 'hero';
       state.simActiveId = null;
       state.simStepIndex = 0;

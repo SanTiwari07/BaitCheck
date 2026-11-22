@@ -10,7 +10,7 @@
 
   <p>
     <a href="https://baitcheck.embarko.app"><img src="https://img.shields.io/badge/Live%20App-baitcheck.embarko.app-155C46?style=for-the-badge&labelColor=18332A" alt="Live App" /></a>
-    <a href="https://github.com/SanTiwari07/BaitCheck/actions"><img src="https://img.shields.io/badge/Tests-63%2F63%20Passing-155C46?style=for-the-badge&labelColor=18332A" alt="Tests Passing" /></a>
+    <a href="https://github.com/SanTiwari07/BaitCheck/actions"><img src="https://img.shields.io/badge/Tests-64%2F64%20Passing-155C46?style=for-the-badge&labelColor=18332A" alt="Tests Passing" /></a>
     <img src="https://img.shields.io/badge/Memory-~50%20MB%20RSS-245E9B?style=for-the-badge&labelColor=18332A" alt="Memory Footprint" />
     <img src="https://img.shields.io/badge/Languages-EN%20%7C%20%E0%A4%B9%E0%A4%BF%E0%A4%82%E0%A4%A6%E0%A5%80-155C46?style=for-the-badge&labelColor=18332A" alt="Bilingual Support" />
   </p>
@@ -34,6 +34,16 @@ Modern scams rarely rely on obvious typos. Instead, they create urgency and soci
 3. **UPI Cashback / Refund Collect Traps** that exploit confusion around UPI PINs (`a UPI PIN only sends money out, never receives it`).
 
 **BaitCheck** gives families, older adults, and students a calm, no-login browser space to practice spotting scams step by step, inspect suspicious messages and payment links, and share practice links with family members. Everything runs with fictional examples, bilingual **English and Hindi (`EN` / `हिंदी`)** support, an **`A+` large-text toggle**, and responsive layouts for mobile, tablet, and desktop.
+
+---
+
+## Demo Videos & Social Showcase
+
+Watch BaitCheck in action across our walkthrough and scam-awareness shorts:
+
+- **Main Showcase on X:** [x.com/santiwari07/status/2124546849399054362](https://x.com/santiwari07/status/2124546849399054362)
+- **YouTube Short:** [youtube.com/shorts/D_qZgbC9ias](https://www.youtube.com/shorts/D_qZgbC9ias)
+- **Instagram Reel:** [instagram.com/reels/DgDROwGA6i2/](https://www.instagram.com/reels/DgDROwGA6i2/)
 
 ---
 
@@ -127,6 +137,7 @@ BaitCheck/
 │   │   ├── dom.js                   # Safe createElement helpers & SVG builders
 │   │   ├── i18n.js                  # EN & हिंदी copy, X-Ray rule localization & flags
 │   │   ├── main.js                  # Bootstrap, API sync, top bar & SPA router
+│   │   ├── motion.js                # Reduced-motion-safe staggered reveals & transitions
 │   │   ├── scenarios.js             # 8 multi-step real-life scam scenarios & parent quizzes
 │   │   ├── state.js                 # Centralized app state, route parser & localStorage
 │   │   └── ticketCanvas.js          # 1080x1350 Canvas Verdict Ticket PNG generator
@@ -176,7 +187,7 @@ The server listens on `http://0.0.0.0:3000` (configurable via `PORT`). Open `htt
 npm test
 ```
 
-Runs all unit, SQLite persistence, storage, REST API integration, and headless Chromium CDP end-to-end tests (**63/63 passing**).
+Runs all unit, SQLite persistence, storage, REST API integration, and headless Chromium CDP end-to-end tests (**64/64 passing**).
 
 ---
 

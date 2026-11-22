@@ -245,6 +245,20 @@
 
       wall.appendChild(actions);
       container.appendChild(wall);
+
+      const motion = global.BaitCheckMotion;
+      if (motion) {
+        if (motion.consumeKey('drill', 'finale')) {
+          wall.classList.add('bc-step-enter');
+          motion.applyStagger(flapGrid, '.split-flap-tile', 70, 40);
+          ticket.classList.add('bc-feedback-enter');
+          motion.applyStagger(rowsWrap, '.ticket-drill-row', 60, 120);
+        }
+        if (state.ticketPreviewUrl && motion.consumeKey('ticket-preview', 'shown')) {
+          const previewBox = actions.querySelector('.ticket-preview-box');
+          if (previewBox) previewBox.classList.add('bc-feedback-enter');
+        }
+      }
     }
 
     function renderDrillView() {
@@ -391,6 +405,19 @@
           renderLearningLibrary(wall);
         }
         container.appendChild(wall);
+
+        const motion = global.BaitCheckMotion;
+        if (motion && motion.consumeKey('drill', `hero-${state.activeChallenge ? state.activeChallenge.id : 'main'}`)) {
+          card.classList.add('bc-hero-animate');
+          motion.applyStagger(
+            copyCol,
+            '.hero-eyebrow-pill, .display-xl, .hero-value-prop, .hero-meta-pills, .hero-cta-group',
+            55,
+            20
+          );
+          previewCard.classList.add('bc-step-enter');
+          motion.applyStagger(stepsList, '.hero-preview-step', 75, 140);
+        }
         return;
       }
 
@@ -632,6 +659,28 @@
 
         sheet.appendChild(drillCard);
         container.appendChild(sheet);
+
+        const motion = global.BaitCheckMotion;
+        if (motion) {
+          if (motion.consumeKey('drill', `step-${state.drillIndex}-${drill.id}`)) {
+            drillCard.classList.add('bc-step-enter');
+            motion.applyStagger(choicesList, '.drill-choice-card', 55, 80);
+          }
+          if (state.apkNoticeShown && motion.consumeKey('apk', `shown-${state.drillIndex}`)) {
+            const apkNotice = drillCard.querySelector('.apk-sim-notice');
+            if (apkNotice) apkNotice.classList.add('bc-feedback-enter');
+            const anatomy = drillCard.querySelector('.file-anatomy');
+            if (anatomy) {
+              anatomy.classList.add('bc-feedback-enter');
+              motion.applyStagger(anatomy, '.file-anatomy-part', 85, 60);
+            }
+          }
+          if (state.drillAnswered && lastOutcome && motion.consumeKey('drill-debrief', `${state.drillIndex}-${lastOutcome.choiceId || 'timeout'}`)) {
+            const bannerEl = drillCard.querySelector('.safe-pass-banner, .trap-alert-banner');
+            if (bannerEl) bannerEl.classList.add('bc-feedback-enter');
+            motion.applyStagger(drillCard, '.call-clue-list p, .upi-money-flow-item', 75, 90);
+          }
+        }
         return;
       }
 

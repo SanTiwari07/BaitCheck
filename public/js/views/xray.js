@@ -149,6 +149,17 @@
       btnRow.appendChild(clearBtn);
       inputWrap.appendChild(btnRow);
 
+      if (state.xrayLoading) {
+        const loadingWrap = createEl('div', 'xray-loading-status');
+        loadingWrap.setAttribute('role', 'status');
+        loadingWrap.setAttribute('aria-live', 'polite');
+        const scanTrack = createEl('div', 'xray-scan-track');
+        scanTrack.appendChild(createEl('div', 'xray-scan-bar'));
+        loadingWrap.appendChild(scanTrack);
+        loadingWrap.appendChild(createEl('span', 'caption-txt', t('xrayScanningBtn')));
+        inputWrap.appendChild(loadingWrap);
+      }
+
       const xrayErrorText = getXrayErrorText();
       if (xrayErrorText) {
         inputWrap.appendChild(createEl('div', 'trap-alert-banner', xrayErrorText));
@@ -273,6 +284,24 @@
           findingsWrap.appendChild(safeBanner);
         }
         sheet.appendChild(findingsWrap);
+
+        const motion = global.BaitCheckMotion;
+        const scanKey = `${state.xrayInput}|${res.riskScore}|${(res.findings || []).length}`;
+        if (motion && motion.consumeKey('xray-result', scanKey)) {
+          meterCard.classList.add('bc-step-enter');
+          motion.animateScaleXFill(fill);
+          const hlBox = sheet.querySelector('.xray-highlight-box');
+          if (hlBox) {
+            hlBox.parentElement.classList.add('bc-feedback-enter');
+            motion.applyStagger(hlBox, 'mark', 90, 120);
+          }
+          motion.applyStagger(findingsWrap, '.finding-swatch, .safe-pass-banner', 70, 140);
+          const upiReceipt = sheet.querySelector('.payment-details');
+          if (upiReceipt) {
+            upiReceipt.parentElement.classList.add('bc-feedback-enter');
+            motion.applyStagger(upiReceipt, 'dd', 55, 100);
+          }
+        }
       }
 
       container.appendChild(sheet);
