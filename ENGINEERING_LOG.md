@@ -52,3 +52,12 @@ This log records agent role assignments, architectural decisions, implementation
   - `qa-engineer`: Built `tests/e2e.test.js` driving headless Chrome over native Node `WebSocket` CDP across `360×800` and `1280×800` viewports.
 - **Verification:** `npm test` (`node --test`) passed `45/45` tests across 15 suites (`0` failures, `0` skips, `0` browser console errors, `0` uncaught exceptions).
 - **Next Action:** Run Phase 6 comprehensive security/performance/edge-case QA, create `TEST_REPORT.md` and `DEMO_GUIDE.md`, and conduct strict independent Hackathon Judge evaluation (Phase 8).
+
+### 2026-11-22 — Phase 6 QA, Phase 8 Strict Evaluation, Remediations & Final Polish (`qa-engineer`, `hackathon-evaluator`, `backend-engineer`, `frontend-engineer`, `orchestrator`)
+- **Completed:**
+  - `qa-engineer`: Ran Phase 6 security audit (`npm audit` = `0` vulnerabilities, static XSS/CSP/anti-phishing scan clean), live 75-request memory benchmark (`56.46 MB` RSS, `3.517 ms` avg HTTP `/api/scan`), added `/api/badge`, `390×844` / `768×1024`, and `/c/nonexistent-999` 404 tests, and generated `TEST_REPORT.md`.
+  - `hackathon-evaluator` (Pass 1): Scored initial app `7.67 / 10` weighted mean, flagging `<25` green X-Ray verdict bug, mid-drill tab-switch timer freeze, quiz-spoiler choice phrasing, incomplete Hindi parity, Canvas mobile WebView fallback, strict `passed` boolean check, and missing challenge history.
+  - `backend-engineer` + `frontend-engineer`: Fixed all flagged issues (`src/forensicEngine.js` `riskScore > 0` -> `medium` + disposable TLD rules; `src/drills.js` realistic non-spoiler choices; `server.js` strict boolean + 404 HTML/JSON fallbacks; `public/app.js` + `public/styles.css` timer pause/resume, complete Hindi parity, `toBlob` + inline PNG preview + `/api/badge` wiring, `localStorage` recent challenges, `360×640` above-the-fold CTA).
+  - `qa-engineer`: Added regression tests for all Phase 8 fixes and updated `TEST_REPORT.md` (`52/52` tests passing).
+  - `hackathon-evaluator` (Pass 2): Re-evaluated all 9 criteria — all `>= 8/10` (`9, 9, 9, 9, 9, 9, 8, 9, 9`; average `8.89 / 10`).
+  - `orchestrator`: Fixed final 2 evaluator polish notes (`XRAY_RULE_I18N.url_deception` disposable TLD wording + `renderCohortPanel` scenario-specific `topMissedScenario` mapping in `public/app.js`), added `README.md` and `DEMO_GUIDE.md`, and updated `PROJECT_ANALYSIS.md` and `IMPLEMENTATION_ROADMAP.md`.

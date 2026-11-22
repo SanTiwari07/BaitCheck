@@ -172,7 +172,7 @@
   - Idle & post-load RSS `<60 MB` (strictly `<75 MB`).
   - Zero console errors, zero failed network requests during normal journeys.
 - **Test Cases:** `tests/forensic.test.js`, `tests/api.test.js`, `tests/e2e.test.js`, memory benchmark.
-- **Completion Status:** Pending
+- **Completion Status:** Completed and verified
 
 ---
 
@@ -189,4 +189,4 @@
   - All 9 evaluation scores `>=8` or documented/fixed.
   - All completion criteria in Phase 10 checked off and verified.
 - **Test Cases:** Complete cold-start fresh-browser walkthrough following `DEMO_GUIDE.md`.
-- **Completion Status:** Pending
+- **Completion Status:** Completed and verified
