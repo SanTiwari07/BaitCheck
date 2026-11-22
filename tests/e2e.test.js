@@ -1011,4 +1011,154 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
       `Expected zero uncaught page exceptions, observed: ${JSON.stringify(cdp.pageExceptions)}`
     );
   });
+
+  it('8. Real-Life Scam Simulator (8 scams, Cyber Lock multi-step flow, evidence images & anatomy)', async () => {
+    await cdp.setViewport(360, 800, true);
+    await cdp.navigate(`${baseUrl}/`);
+    await cdp.waitFor(
+      'document.querySelectorAll("#real-life-simulator-hub .sim-card-img").length === 8 && Array.from(document.querySelectorAll("#real-life-simulator-hub .sim-card-img")).every((i) => i.complete && i.naturalWidth > 0)',
+      'Real-Life Simulator Hub with loaded images'
+    );
+
+    const hubState = await cdp.eval(`(() => {
+      const cards = Array.from(document.querySelectorAll('#real-life-simulator-hub .sim-scam-card'));
+      const imgs = Array.from(document.querySelectorAll('#real-life-simulator-hub .sim-card-img'));
+      return {
+        cardCount: cards.length,
+        loadedImages: imgs.filter((i) => i.complete && i.naturalWidth > 0).length,
+        scrollWidth: document.documentElement.scrollWidth
+      };
+    })()`);
+
+    assert.equal(hubState.cardCount, 8);
+    assert.equal(hubState.loadedImages, 8, 'Expected all simulator card images to load cleanly');
+    assert.ok(hubState.scrollWidth <= 360, `Expected <=360px overflow on simulator hub, got ${hubState.scrollWidth}`);
+
+    // Filter by CALLS & VIDEO then back to ALL
+    await cdp.clickByText('.sim-filter-row button', 'CALLS & VIDEO');
+    const filteredCount = await cdp.eval('document.querySelectorAll(".sim-scam-card").length');
+    assert.equal(filteredCount, 3);
+    await cdp.clickByText('.sim-filter-row button', 'ALL');
+
+    // Launch Fake Police "Cyber Lock" & Digital Arrest Call
+    await cdp.clickSelector('button[data-sim-id="digital-arrest-cyber-lock"]');
+    await cdp.waitFor(
+      'Boolean(document.querySelector(".sim-evidence-video"))',
+      'Simulator Step 1 active with real video element'
+    );
+
+    const step1 = await cdp.eval(`(() => {
+      const vid = document.querySelector('.sim-evidence-video');
+      return {
+        src: vid ? vid.getAttribute('src') : '',
+        poster: vid ? vid.getAttribute('poster') : '',
+        text: document.querySelector('#view-drill')?.textContent || '',
+        scrollWidth: document.documentElement.scrollWidth
+      };
+    })()`);
+
+    assert.equal(step1.src, '/assets/sim/police-video-call.mp4');
+    assert.equal(step1.poster, '/assets/sim/police-video-poster.jpg');
+    assert.match(step1.text, /CYBER LOCK/);
+    assert.match(step1.text, /WHAT WILL YOU DO NEXT\?/);
+    assert.ok(step1.scrollWidth <= 360);
+
+    // Step 1: Choose escalating action to experience Step 2
+    await cdp.clickByText('#view-drill .choices-list button', 'Stay on the video call');
+    await cdp.waitFor('document.querySelector(".trap-alert-banner")', 'Step 1 escalation debrief');
+    await cdp.clickByText('.sim-outcome-actions button', 'SEE WHAT SCAMMER DOES NEXT');
+
+    // Step 2: Forged Cyber Lock warrant
+    await cdp.waitFor(
+      '(document.querySelector(".sim-evidence-img")?.getAttribute("src") || "").includes("cyber-lock-warrant.svg") && Boolean(document.querySelector(".sim-evidence-img")?.complete && document.querySelector(".sim-evidence-img")?.naturalWidth > 0)',
+      'Step 2 forged Cyber Lock warrant'
+    );
+    const step2Loaded = await cdp.eval(
+      'Boolean(document.querySelector(".sim-evidence-img")?.complete && document.querySelector(".sim-evidence-img")?.naturalWidth > 0)'
+    );
+    assert.equal(step2Loaded, true);
+
+    await cdp.clickByText('#view-drill .choices-list button', 'Lock the room door');
+    await cdp.waitFor('document.querySelector(".trap-alert-banner")', 'Step 2 escalation debrief');
+    await cdp.clickByText('.sim-outcome-actions button', 'SEE WHAT SCAMMER DOES NEXT');
+
+    // Step 3: Refuse payment & complete simulation
+    await cdp.waitFor(
+      '(document.querySelector("#view-drill")?.textContent || "").includes("48,500")',
+      'Step 3 final escrow demand'
+    );
+    await cdp.clickByText('#view-drill .choices-list button', 'Refuse all payment');
+    await cdp.waitFor('document.querySelector(".safe-pass-banner")', 'Step 3 safe debrief');
+    await cdp.clickByText('.sim-outcome-actions button', 'VIEW FULL SCAM ANATOMY');
+
+    await cdp.waitFor(
+      '(document.querySelector("#view-drill")?.textContent || "").includes("HOW THIS SCAM WORKS IN REAL LIFE")',
+      'Full scam anatomy report'
+    );
+    const anatomyOverflow = await cdp.eval('document.documentElement.scrollWidth');
+    assert.ok(anatomyOverflow <= 360, `Expected <=360px overflow on anatomy report, got ${anatomyOverflow}`);
+
+    assert.deepEqual(
+      cdp.consoleErrors,
+      [],
+      `Expected zero browser console errors, observed: ${JSON.stringify(cdp.consoleErrors)}`
+    );
+    assert.deepEqual(
+      cdp.pageExceptions,
+      [],
+      `Expected zero uncaught page exceptions, observed: ${JSON.stringify(cdp.pageExceptions)}`
+    );
+  });
+
+  it('9. Parent & Kid Mode, Elder-Safe Guide, A/B/C choice badges & scroll-to-top on Next', async () => {
+    await cdp.setViewport(360, 800, true);
+    await cdp.navigate(`${baseUrl}/`);
+    await cdp.waitFor('document.querySelector("button[data-audience-mode=\'parent-kid\']")', 'Audience mode buttons');
+
+    // Test Parent & Kid Mode
+    await cdp.clickSelector('button[data-audience-mode="parent-kid"]');
+    await cdp.waitFor('document.querySelector("#parent-guide-card")', 'Parent & Kid Guide card');
+
+    const parentCheck = await cdp.eval(`(() => ({
+      text: document.querySelector('#parent-guide-card')?.textContent || '',
+      scrollWidth: document.documentElement.scrollWidth
+    }))()`);
+    assert.match(parentCheck.text, /1,00,000/);
+    assert.ok(parentCheck.scrollWidth <= 360, `Expected <=360px overflow in Parent & Kid mode, got ${parentCheck.scrollWidth}`);
+
+    // Answer the interactive Parent-Kid AI voice lesson
+    await cdp.clickByText('#parent-guide-card .choices-list button', 'Family Safe-Word');
+    await cdp.waitFor('document.querySelector("#parent-guide-card .safe-pass-banner")', 'Parent lesson feedback');
+
+    // Test Elder-Safe Mode
+    await cdp.clickSelector('button[data-audience-mode="elder"]');
+    await cdp.waitFor('document.querySelector("#elder-guide-card")', 'Elder-Safe Guide card');
+    const elderCheck = await cdp.eval(`(() => ({
+      hasClass: document.querySelector('#view-drill')?.classList.contains('is-elder-mode'),
+      scrollWidth: document.documentElement.scrollWidth
+    }))()`);
+    assert.equal(elderCheck.hasClass, true);
+    assert.ok(elderCheck.scrollWidth <= 360, `Expected <=360px overflow in Elder mode, got ${elderCheck.scrollWidth}`);
+
+    // Switch back to All Lessons and verify scroll-to-top on Next step
+    await cdp.clickSelector('button[data-audience-mode="all"]');
+    await cdp.clickSelector('button[data-sim-id="digital-arrest-cyber-lock"]');
+    await cdp.waitFor('document.querySelector(".edu-progress-bar")', 'Step progress bar visible');
+
+    // Scroll down to answer & click next, then confirm window scrolls back near top
+    await cdp.eval('window.scrollTo(0, 600)');
+    await cdp.clickByText('#view-drill .choices-list button', 'Stay on the video call');
+    await cdp.waitFor('document.querySelector(".sim-outcome-actions button")', 'Outcome actions ready');
+    await cdp.clickByText('.sim-outcome-actions button', 'SEE WHAT SCAMMER DOES NEXT');
+    await cdp.waitFor(
+      '(document.querySelector(".sim-evidence-img")?.getAttribute("src") || "").includes("cyber-lock-warrant.svg")',
+      'Step 2 loaded'
+    );
+    await delay(150);
+    const scrollAfterNext = await cdp.eval('window.scrollY');
+    assert.ok(scrollAfterNext < 120, `Expected window.scrollY to scroll back near top after Next, got ${scrollAfterNext}`);
+
+    assert.deepEqual(cdp.consoleErrors, []);
+    assert.deepEqual(cdp.pageExceptions, []);
+  });
 });

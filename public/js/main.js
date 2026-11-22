@@ -24,13 +24,17 @@
 
   function t(key) {
     const pack = I18N[state.lang] || I18N.en;
-    return pack[key] !== undefined ? pack[key] : (I18N.en[key] || key);
+    return cleanCopy(pack[key] !== undefined ? pack[key] : (I18N.en[key] || key));
+  }
+
+  function cleanCopy(value) {
+    return String(value || '').replace(/\s*—\s*/g, ', ');
   }
 
   function loc(obj) {
     if (!obj) return '';
-    if (typeof obj === 'string') return obj;
-    return obj[state.lang] || obj.en || '';
+    if (typeof obj === 'string') return cleanCopy(obj);
+    return cleanCopy(obj[state.lang] || obj.en || '');
   }
 
   const {
@@ -40,7 +44,7 @@
     buildSilhouetteSvg
   } = window.BaitCheckDom;
 
-  // Audio Engine (Tap-to-Unlock WebAudio + Conditional en-IN/hi-IN TTS)
+  // Audio Engine (Tap-to-Unlock WebAudio)
   // =========================================================================
 
   const {
@@ -49,8 +53,7 @@
     playTickSound,
     playPassChime,
     playTrapBuzz,
-    stopSpeech,
-    speakCaption
+    stopSpeech
   } = window.BaitCheckAudio.createAudioController(state);
 
   // URL Routing & Timer Lifecycle
@@ -127,6 +130,25 @@
     }
   }
 
+  function scrollToStageTop() {
+    try {
+      const stage = document.querySelector('.stage-column');
+      const targetY = stage
+        ? Math.max(0, Math.round(stage.getBoundingClientRect().top + window.scrollY - 48))
+        : 0;
+      const applyScroll = () => {
+        window.scrollTo(0, targetY);
+        document.documentElement.scrollTop = targetY;
+      };
+      applyScroll();
+      if (typeof window.requestAnimationFrame === 'function') {
+        window.requestAnimationFrame(applyScroll);
+      }
+    } catch {
+      // Ignore scroll errors in non-visual test environments.
+    }
+  }
+
   function navigateTo(urlPath, opts) {
     const options = opts || {};
     pauseActiveDrillTimer();
@@ -140,6 +162,7 @@
 
     state.route = parseRoute(parsedUrl.pathname, parsedUrl.search);
     syncRouteView();
+    scrollToStageTop();
   }
 
   function syncRouteView() {
@@ -298,6 +321,8 @@
     if (state.drillMode === 'timed') playIncomingChime();
 
     state.drillPhase = 'active';
+    state.simActiveId = null;
+    state.simCompleted = false;
     state.drillIndex = 0;
     state.drillOutcomes = [];
     state.ticketDownloadedMsg = '';
@@ -326,7 +351,7 @@
     state.syncStatus = null;
 
     renderDrillView();
-    speakCaption(loc(drill.script), state.lang);
+    scrollToStageTop();
     if (state.drillMode === 'timed') startDrillCountdownInterval(drill, durationMs);
   }
 
@@ -428,6 +453,7 @@
     } else {
       state.drillPhase = 'finale';
       renderDrillView();
+      scrollToStageTop();
     }
   }
 
@@ -545,6 +571,24 @@
     els.viewReport.classList.toggle('is-hidden', state.route.mode !== 'report');
   }
 
+  const {
+    renderActiveSimulation,
+    renderSimulatorHub
+  } = window.BaitCheckViews.createSimulatorView({
+    state,
+    t,
+    loc,
+    createEl,
+    onRenderDrillView: () => renderDrillView(),
+    scrollToStageTop,
+    navigateTo,
+    unlockAudio,
+    playIncomingChime,
+    playPassChime,
+    playTrapBuzz,
+    stopSpeech
+  });
+
   const { renderDrillView } = window.BaitCheckViews.createDrillView({
     state,
     els,
@@ -560,7 +604,10 @@
     handleDrillChoice,
     advanceDrill,
     computeFinaleMetrics,
-    downloadVerdictTicketPng
+    downloadVerdictTicketPng,
+    renderActiveSimulation,
+    renderSimulatorHub,
+    scrollToStageTop
   });
 
   const { renderXrayView } = window.BaitCheckViews.createXrayView({
@@ -649,6 +696,11 @@
 
     els.brandHomeBtn.addEventListener('click', () => {
       state.drillPhase = 'hero';
+      state.simActiveId = null;
+      state.simStepIndex = 0;
+      state.simSelectedChoiceId = null;
+      state.simHistory = [];
+      state.simCompleted = false;
       state.drillIndex = 0;
       state.drillOutcomes = [];
       state.ticketPreviewUrl = '';

@@ -368,21 +368,11 @@ textarea:focus-visible {
 }
 
 .paper-card.is-tilted {
-  transform: rotate(0deg);
-}
-
-@media (min-width: 480px) {
-  .paper-card.is-tilted {
-    transform: rotate(-0.8deg);
-  }
+  transform: none;
 }
 
 .masking-tape {
-  width: 68px;
-  height: 16px;
-  background: var(--tape);
-  border: 1px solid var(--hairline);
-  margin: -24px auto var(--sp-sm);
+  display: none;
 }
 
 .highlight-mark {
@@ -390,7 +380,6 @@ textarea:focus-visible {
   background: var(--primary);
   color: var(--on-primary);
   padding: 2px 6px;
-  transform: rotate(-1.2deg);
 }
 
 .eyebrow {
@@ -1211,20 +1200,39 @@ html.large-text {
 
 .drill-choice-card {
   width: 100%;
-  min-height: 52px;
-  padding: var(--sp-md) var(--sp-base);
-  background: var(--paper);
+  min-height: 56px;
+  padding: var(--sp-md);
+  background: var(--surface-card);
   color: var(--body);
-  border: 1px solid var(--hairline-strong);
+  border: 2px solid var(--hairline-strong);
   box-shadow: 2px 2px 0 var(--ink);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--sp-sm);
+  justify-content: flex-start;
+  gap: var(--sp-md);
   text-align: left;
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   font-weight: 700;
-  line-height: 1.35;
+  line-height: 1.38;
+}
+
+.choice-letter-badge {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink);
+  color: var(--primary);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.choice-label-text {
+  flex: 1;
+  min-width: 0;
 }
 
 .drill-choice-card:hover:not(:disabled) {
@@ -1936,4 +1944,970 @@ mark.hl-warn {
   .countdown-fill {
     transition: none !important;
   }
+}
+
+/* =========================================================================
+   Upgraded 60s Drill Visual Stages
+   ========================================================================= */
+
+.drill-visual--video-rich {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--sp-md);
+}
+
+.drill-video-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-md);
+}
+
+.drill-stage-img,
+.drill-stage-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--hairline-strong);
+  background: var(--ink);
+}
+
+.drill-stage-video,
+.sim-evidence-video {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.drill-stage-img--spaced {
+  margin-bottom: var(--sp-sm);
+}
+
+/* =========================================================================
+   Real-Life Scam Simulator Hub & Active Phone Stage
+   ========================================================================= */
+
+.sim-hub-section {
+  margin-top: var(--sp-lg);
+  padding: var(--sp-base);
+  background: var(--canvas);
+  color: var(--body);
+  border: 2px solid var(--hairline-strong);
+}
+
+.sim-hub-header {
+  display: grid;
+  gap: var(--sp-xs);
+  margin-bottom: var(--sp-md);
+}
+
+.sim-hub-title {
+  margin: 0;
+  color: var(--ink);
+}
+
+.sim-hub-sub {
+  margin: 0;
+  color: var(--body);
+}
+
+/* Guided Progress Bar (Duolingo-style clear step segments) */
+.edu-progress-bar {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 6px;
+  margin-bottom: var(--sp-md);
+}
+
+.edu-progress-seg {
+  height: 10px;
+  background: rgba(13, 13, 13, 0.16);
+  border: 1px solid var(--ink);
+}
+
+.edu-progress-seg.is-done {
+  background: var(--success);
+}
+
+.edu-progress-seg.is-current {
+  background: var(--primary);
+}
+
+/* Learning Mode Switcher (All | Parent & Kid | Elder-Safe) */
+.edu-audience-wrap {
+  margin-bottom: var(--sp-base);
+  padding: var(--sp-md);
+  background: var(--surface-card);
+  border: 1px solid var(--hairline-strong);
+}
+
+.edu-audience-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+  margin-top: 6px;
+}
+
+@media (min-width: 560px) {
+  .edu-audience-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.edu-audience-btn {
+  min-height: 48px;
+  padding: 8px 10px;
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.edu-audience-btn.is-active {
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+/* Parental Guide & Elder-Safe Guide Cards */
+.edu-guide-card {
+  background: var(--surface-card);
+  color: var(--body);
+  border: 2px solid var(--ink);
+  padding: var(--sp-base);
+  margin-bottom: var(--sp-base);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.edu-guide--parent {
+  border-top: 6px solid var(--primary);
+}
+
+.edu-guide--elder {
+  border-top: 6px solid var(--success);
+}
+
+.edu-rules-box {
+  background: #fffbeb;
+  border: 1px solid var(--ink);
+  border-left: 5px solid var(--primary);
+  padding: var(--sp-md);
+}
+
+.edu-rule-item {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.edu-mini-lesson {
+  background: var(--paper);
+  border: 1px solid var(--hairline-strong);
+  padding: var(--sp-md);
+}
+
+.edu-sub-heading {
+  margin: var(--sp-base) 0 var(--sp-sm);
+  color: var(--ink);
+}
+
+.edu-lesson-num {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.sim-cards-grid--elder {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Elder-Safe Enhanced Readability */
+.is-elder-mode .body-md,
+.is-elder-mode .drill-choice-card,
+.is-elder-mode .caption-script {
+  font-size: 1.12rem;
+  line-height: 1.55;
+}
+
+.is-elder-mode .drill-choice-card,
+.is-elder-mode .button-primary,
+.is-elder-mode .button-dark {
+  min-height: 60px;
+}
+
+.sim-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: var(--sp-base);
+}
+
+.sim-filter-btn {
+  min-height: 44px;
+  padding: 6px 12px;
+  background: var(--surface-card);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.sim-filter-btn.is-active {
+  background: var(--ink);
+  color: var(--primary);
+  border-color: var(--ink);
+}
+
+.sim-cards-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-base);
+}
+
+@media (min-width: 680px) {
+  .sim-cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sim-scam-card.is-featured {
+    grid-column: 1 / -1;
+  }
+}
+
+.sim-scam-card {
+  background: var(--paper);
+  color: var(--body);
+  border: 2px solid var(--hairline-strong);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sim-scam-card.is-featured {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.sim-card-thumb {
+  position: relative;
+  background: var(--ink);
+  border-bottom: 2px solid var(--hairline-strong);
+  overflow: hidden;
+}
+
+.sim-card-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.sim-card-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: var(--danger);
+  color: var(--on-danger);
+  border: 1px solid var(--ink);
+  padding: 3px 8px;
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.sim-scam-card.is-featured .sim-card-badge {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.sim-card-body {
+  padding: var(--sp-base);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+  flex: 1;
+}
+
+.sim-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-xs);
+  flex-wrap: wrap;
+}
+
+.sim-steps-pill {
+  background: var(--ink);
+  color: var(--primary);
+  padding: 2px 6px;
+  font-size: 0.7rem;
+}
+
+.sim-card-title {
+  margin: 0;
+  color: var(--ink);
+}
+
+.sim-card-summary {
+  margin: 0;
+  color: var(--body);
+  flex: 1;
+}
+
+.sim-loss-tag {
+  margin: 0;
+  color: var(--danger);
+  font-size: 0.76rem;
+}
+
+.sim-launch-btn {
+  min-height: 46px;
+  margin-top: auto;
+}
+
+/* Active Multi-Step Simulation Stage */
+.sim-stage-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-sm);
+}
+
+.sim-back-btn {
+  min-height: 44px;
+  padding: 6px 12px;
+}
+
+.sim-phone-frame {
+  background: var(--ink);
+  color: var(--on-dark);
+  border: 2px solid var(--hairline-strong);
+  margin: var(--sp-md) 0 var(--sp-base);
+}
+
+.sim-phone-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  padding: var(--sp-sm) var(--sp-md);
+  background: #050505;
+  border-bottom: 1px solid var(--hairline-dark);
+}
+
+.sim-phone-channel {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--on-dark);
+  overflow-wrap: anywhere;
+}
+
+.sim-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--danger);
+  color: var(--on-danger);
+  padding: 3px 8px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.sim-media-stage {
+  position: relative;
+  background: #101216;
+}
+
+.sim-evidence-img,
+.sim-evidence-video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.sim-pip-self {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(13, 13, 13, 0.85);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  padding: 4px 8px;
+  font-size: 0.68rem;
+}
+
+.sim-call-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  background: rgba(13, 13, 13, 0.92);
+  border-top: 1px solid var(--hairline-dark);
+}
+
+.sim-call-entity {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.92rem;
+  color: var(--on-dark);
+}
+
+.sim-call-num {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--primary);
+}
+
+.sim-fake-urlbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #1f2937;
+  color: #fca5a5;
+  border-top: 1px solid var(--hairline-dark);
+  overflow-wrap: anywhere;
+}
+
+.sim-evidence-tools {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-xs);
+  padding: var(--sp-sm);
+  background: var(--surface-dark);
+  border-top: 1px solid var(--hairline-dark);
+}
+
+.sim-tool-btn {
+  min-height: 44px;
+  padding: 6px 8px;
+  background: var(--surface-card);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  font-size: 0.82rem;
+}
+
+.sim-clue-drawer {
+  background: var(--paper);
+  color: var(--body);
+  border-top: 2px solid var(--primary);
+  padding: var(--sp-md);
+}
+
+.sim-clue-list,
+.sim-bullet-list {
+  margin: var(--sp-xs) 0 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 6px;
+}
+
+.sim-quote-box {
+  margin-bottom: var(--sp-base);
+}
+
+.sim-question-heading {
+  margin: 0 0 var(--sp-sm);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.sim-tactic-line {
+  margin: 0 0 var(--sp-sm);
+  font-size: 0.95rem;
+}
+
+.sim-safer-box {
+  margin: var(--sp-sm) 0 var(--sp-md);
+  padding: var(--sp-sm) var(--sp-md);
+  background: rgba(255, 255, 255, 0.75);
+  border-left: 4px solid var(--ink);
+  font-size: 0.95rem;
+}
+
+.sim-outcome-actions {
+  margin-top: var(--sp-sm);
+}
+
+.sim-loss-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  padding: var(--sp-sm) var(--sp-md);
+  background: var(--danger-surface);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+}
+
+.sim-anatomy-section {
+  padding: var(--sp-md);
+  background: var(--surface-muted);
+  border: 1px solid var(--hairline-strong);
+  display: grid;
+  gap: var(--sp-xs);
+}
+
+.sim-anatomy-section.is-highlight {
+  background: #fffbeb;
+  border-color: var(--ink);
+  border-left: 6px solid var(--primary);
+}
+
+.sim-path-list {
+  display: grid;
+  gap: var(--sp-xs);
+}
+
+.sim-path-row {
+  padding: var(--sp-sm);
+  background: var(--surface-card);
+  border-left: 4px solid var(--stone);
+}
+
+.sim-path-row.is-safe {
+  border-left-color: var(--success);
+}
+
+.sim-path-row.is-warn {
+  border-left-color: var(--danger);
+}
+
+.sim-path-row p {
+  margin: 4px 0 0;
+}
+
+/* Mobile-first practice experience */
+@media (max-width: 719px) {
+  body {
+    background: var(--canvas);
+    color: var(--body);
+    padding-bottom: 78px;
+  }
+
+  .safety-ribbon {
+    position: relative;
+    padding: 7px 12px;
+    font-size: 0.7rem;
+    letter-spacing: 0.035em;
+  }
+
+  .top-nav-inner {
+    padding: 10px 12px 0;
+    gap: 10px;
+  }
+
+  .top-nav-row {
+    align-items: center;
+  }
+
+  .brand-stamp {
+    min-height: 40px;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+
+  .nav-controls {
+    gap: 5px;
+  }
+
+  .lang-btn,
+  .sound-btn {
+    min-height: 40px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+  }
+
+  .tab-bar {
+    position: fixed;
+    z-index: 60;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 8px max(10px, env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom));
+    gap: 7px;
+    background: var(--ink);
+    border-top: 1px solid var(--hairline-dark);
+    box-shadow: 0 -8px 24px rgba(13, 13, 13, 0.18);
+  }
+
+  .tab-btn {
+    min-height: 52px;
+    border: 1px solid var(--hairline-dark);
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .tab-btn .tab-num {
+    display: none;
+  }
+
+  .page-shell,
+  .workspace-grid {
+    min-height: 0;
+    background: var(--canvas);
+  }
+
+  .poster-wall {
+    padding: 14px 12px 24px;
+    background: var(--canvas);
+    color: var(--body);
+  }
+
+  .incoming-call-card {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 18px;
+    background: var(--paper);
+    color: var(--body);
+    border: 1px solid var(--hairline);
+    border-top: 5px solid var(--primary);
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(13, 13, 13, 0.07);
+  }
+
+  .practice-welcome .eyebrow {
+    margin: 0 0 8px;
+    color: var(--muted);
+  }
+
+  .practice-welcome .display-xl {
+    margin: 0;
+    max-width: 13ch;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 10vw, 3.1rem);
+    line-height: 0.98;
+    text-transform: none;
+  }
+
+  .practice-welcome .highlight-mark {
+    display: block;
+    width: fit-content;
+    margin-top: 5px;
+    background: transparent;
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--primary);
+    text-decoration-thickness: 5px;
+    text-underline-offset: 3px;
+  }
+
+  .practice-welcome .hero-value-prop {
+    margin: 14px 0 18px;
+    max-width: 48ch;
+    color: var(--body);
+    font-size: 1.04rem;
+    line-height: 1.55;
+  }
+
+  .practice-welcome .button-primary,
+  .practice-welcome .button-ghost-light {
+    min-height: 54px;
+    border-radius: 10px;
+    font-size: 1rem;
+  }
+
+  .timed-practice-details {
+    margin-top: 10px;
+  }
+
+  .timed-practice-details summary {
+    padding: 8px 2px;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .timed-practice-link {
+    margin-top: 8px;
+  }
+
+  .sim-hub-section {
+    max-width: 760px;
+    margin: 16px auto 0;
+    padding: 20px 14px;
+    background: transparent;
+    border: 0;
+  }
+
+  .sim-hub-header {
+    margin-bottom: 16px;
+  }
+
+  .sim-hub-title {
+    margin: 2px 0 6px;
+    font-size: 1.9rem;
+    line-height: 1.05;
+    text-transform: none;
+  }
+
+  .sim-hub-sub {
+    max-width: 56ch;
+    font-size: 1rem;
+  }
+
+  .edu-audience-wrap {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .edu-audience-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .edu-audience-btn {
+    min-height: 50px;
+    padding: 6px;
+    border-width: 1px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    line-height: 1.2;
+    text-transform: none;
+  }
+
+  .sim-filter-row {
+    flex-wrap: nowrap;
+    margin-right: -14px;
+    padding: 2px 14px 8px 0;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .sim-filter-btn {
+    flex: 0 0 auto;
+    min-height: 42px;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .sim-cards-grid,
+  .sim-cards-grid--elder {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .sim-scam-card,
+  .sim-scam-card.is-featured {
+    overflow: hidden;
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(13, 13, 13, 0.06);
+  }
+
+  .sim-card-thumb {
+    border: 0;
+  }
+
+  .sim-card-img {
+    max-height: 190px;
+    object-fit: cover;
+    object-position: center 36%;
+  }
+
+  .sim-card-badge {
+    border-radius: 6px;
+    font-size: 0.68rem;
+  }
+
+  .sim-card-body {
+    padding: 15px;
+    gap: 9px;
+  }
+
+  .sim-card-title {
+    font-size: 1.25rem;
+    line-height: 1.15;
+    text-transform: none;
+  }
+
+  .sim-card-summary {
+    font-size: 0.96rem;
+    line-height: 1.5;
+  }
+
+  .sim-launch-btn,
+  .drill-choice-card,
+  .sim-tool-btn,
+  .sim-back-btn {
+    min-height: 52px;
+    border-radius: 9px;
+  }
+
+  .newsprint-sheet {
+    padding: 14px 12px 24px;
+    border: 0;
+  }
+
+  .paper-card,
+  .edu-guide-card,
+  .sim-phone-frame {
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .sim-evidence-tools {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sim-stage-nav {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    padding: 5px 0 9px;
+    background: var(--canvas);
+  }
+
+  .choices-list {
+    gap: 10px;
+  }
+
+  .drill-choice-card {
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .cohort-band {
+    display: none;
+  }
+
+  .playbook-band {
+    padding: 18px 14px;
+    border-top: 1px solid var(--hairline);
+    background: var(--paper);
+    color: var(--body);
+  }
+
+  .colophon-footer {
+    padding-bottom: 24px;
+  }
+}
+
+@media (min-width: 720px) {
+  .practice-welcome {
+    max-width: 760px;
+    margin: 0 auto;
+    border-radius: 16px;
+  }
+
+  .sim-scam-card,
+  .sim-scam-card.is-featured {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .sim-tool-btn,
+  .sim-launch-btn,
+  .drill-choice-card {
+    min-height: 50px;
+  }
+}
+
+
+/* Clear, compact controls for the simulator hub */
+.edu-audience-wrap,
+.sim-filter-disclosure {
+  margin: 10px 0 16px;
+  padding: 0;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 12px;
+  background: var(--surface-card);
+}
+.edu-audience-summary,
+.sim-filter-summary {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style-position: inside;
+}
+.edu-audience-wrap[open] .edu-audience-row,
+.sim-filter-disclosure[open] .sim-filter-row {
+  margin: 0;
+  padding: 0 12px 12px;
+}
+.sim-filter-btn,
+.edu-audience-btn {
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.sim-show-more-btn {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 14px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 10px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  text-transform: none;
+}
+.sim-training-note {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border-left: 4px solid var(--primary);
+  border-radius: 8px;
+  background: var(--canvas);
+  color: var(--body);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+.sim-source-link {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  margin-top: 14px;
+  color: var(--ink);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+.sim-evidence-tools .sim-tool-btn {
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+.sim-card-summary {
+  line-height: 1.5;
 }

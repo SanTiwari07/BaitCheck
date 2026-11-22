@@ -75,16 +75,15 @@
       try {
         const synth = window.speechSynthesis;
         const voices = synth.getVoices ? synth.getVoices() : [];
-        if (!voices || voices.length === 0) return;
-
         const targetRe = lang === 'hi' ? /^hi[-_]IN$/i : /^en[-_]IN$/i;
-        const matchedVoice = voices.find((v) => targetRe.test(v.lang || ''));
-        if (!matchedVoice) return;
+        const languageRe = lang === 'hi' ? /^hi\b/i : /^en\b/i;
+        const matchedVoice = voices.find((v) => targetRe.test(v.lang || '')) ||
+          voices.find((v) => languageRe.test(v.lang || '')) || null;
 
         synth.cancel();
         const utter = new SpeechSynthesisUtterance(text);
-        utter.voice = matchedVoice;
-        utter.lang = matchedVoice.lang;
+        if (matchedVoice) utter.voice = matchedVoice;
+        utter.lang = matchedVoice ? matchedVoice.lang : (lang === 'hi' ? 'hi-IN' : 'en-IN');
         utter.rate = 1.02;
         synth.speak(utter);
       } catch {

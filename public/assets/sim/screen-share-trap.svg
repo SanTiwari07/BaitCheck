@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340" role="img" aria-label="Simulated screen-sharing remote access scam">
+  <rect width="600" height="340" fill="#161616" />
+  <rect x="28" y="18" width="544" height="304" fill="#1e242c" stroke="#d92d20" stroke-width="2.5" />
+
+  <!-- Fake Support Header -->
+  <rect x="28" y="18" width="544" height="52" fill="#d92d20" />
+  <text x="48" y="48" fill="#ffffff" font-family="Arial Narrow, sans-serif" font-weight="800" font-size="19">REMOTE SUPPORT SESSION (SIMULATED TRAP)</text>
+
+  <!-- Screen Mirror Illustration -->
+  <rect x="48" y="88" width="236" height="210" fill="#0f172a" stroke="#64748b" stroke-width="2" />
+  <text x="166" y="114" text-anchor="middle" fill="#fec917" font-family="Consolas, monospace" font-weight="700" font-size="11">YOUR PHONE SCREEN</text>
+  <rect x="66" y="130" width="200" height="36" fill="#1e293b" stroke="#475569" stroke-width="1" />
+  <text x="78" y="153" fill="#e2e8f0" font-family="Consolas, monospace" font-size="11">SMS: Bank OTP 849201</text>
+  <rect x="66" y="178" width="200" height="36" fill="#1e293b" stroke="#475569" stroke-width="1" />
+  <text x="78" y="201" fill="#e2e8f0" font-family="Consolas, monospace" font-size="11">UPI App Balance Visible</text>
+  <rect x="66" y="226" width="200" height="44" fill="#3f1515" stroke="#ef4444" stroke-width="1.5" />
+  <text x="166" y="253" text-anchor="middle" fill="#fca5a5" font-family="Arial Narrow, sans-serif" font-weight="800" font-size="13">SCAMMER CAN SEE EVERYTHING</text>
+
+  <!-- Pairing Code Card -->
+  <rect x="304" y="88" width="248" height="210" fill="#fcfaf6" stroke="#0d0d0d" stroke-width="2" />
+  <text x="322" y="118" fill="#0d0d0d" font-family="Arial Narrow, sans-serif" font-weight="800" font-size="16">9-DIGIT ACCESS CODE</text>
+  <rect x="322" y="132" width="212" height="50" fill="#0d0d0d" />
+  <text x="428" y="165" text-anchor="middle" fill="#fec917" font-family="Consolas, monospace" font-weight="700" font-size="24" letter-spacing="3">492 810 337</text>
+  <text x="322" y="208" fill="#1e1e1c" font-family="Arial, sans-serif" font-size="12">Caller says: "Read this code so I can</text>
+  <text x="322" y="226" fill="#1e1e1c" font-family="Arial, sans-serif" font-size="12">fix your account / refund your fee."</text>
+  <rect x="322" y="246" width="212" height="34" fill="#fec917" stroke="#0d0d0d" stroke-width="1.5" />
+  <text x="428" y="268" text-anchor="middle" fill="#0d0d0d" font-family="Arial Narrow, sans-serif" font-weight="800" font-size="13">NEVER SHARE SCREEN CODES</text>
+</svg>

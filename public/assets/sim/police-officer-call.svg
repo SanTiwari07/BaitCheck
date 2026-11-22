@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 380" role="img" aria-label="Simulated fake police officer on a video call">
+  <defs>
+    <linearGradient id="wallGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1b2432" />
+      <stop offset="100%" stop-color="#0f141d" />
+    </linearGradient>
+    <linearGradient id="deskGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3b2c22" />
+      <stop offset="100%" stop-color="#221913" />
+    </linearGradient>
+    <linearGradient id="uniformGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9e875c" />
+      <stop offset="100%" stop-color="#6e5c3b" />
+    </linearGradient>
+    <radialGradient id="camGlow" cx="50%" cy="42%" r="55%">
+      <stop offset="0%" stop-color="#4c6b94" stop-opacity="0.28" />
+      <stop offset="100%" stop-color="#0b0e14" stop-opacity="0.72" />
+    </radialGradient>
+    <pattern id="scanlines" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="2" fill="#000000" fill-opacity="0.12" />
+    </pattern>
+  </defs>
+
+  <!-- Office Backdrop -->
+  <rect width="640" height="380" fill="url(#wallGrad)" />
+
+  <!-- Fake Backdrop Banner / Curtain -->
+  <rect x="38" y="24" width="170" height="240" fill="#16202e" stroke="#2e3f57" stroke-width="2" />
+  <rect x="52" y="42" width="142" height="58" fill="#1e2d42" stroke="#d4af37" stroke-width="1.5" />
+  <text x="123" y="68" text-anchor="middle" fill="#e6c86e" font-family="Arial Narrow, sans-serif" font-weight="800" font-size="14" letter-spacing="1.5">CYBER CELL DESK</text>
+  <text x="123" y="86" text-anchor="middle" fill="#9fb2cc" font-family="Consolas, monospace" font-size="10">SIMULATED PROP</text>
+  <!-- Decorative Stripes -->
+  <rect x="64" y="120" width="118" height="8" fill="#c94b3b" opacity="0.7" />
+  <rect x="64" y="132" width="118" height="8" fill="#e5e7eb" opacity="0.7" />
+  <rect x="64" y="144" width="118" height="8" fill="#2d7a4f" opacity="0.7" />
+
+  <!-- Office Monitor on Right -->
+  <rect x="445" y="102" width="155" height="106" rx="4" fill="#0a0e14" stroke="#394454" stroke-width="3" />
+  <rect x="454" y="111" width="137" height="84" fill="#111d2e" />
+  <rect x="462" y="120" width="60" height="8" fill="#d92d20" opacity="0.85" />
+  <rect x="462" y="135" width="115" height="5" fill="#4f6d96" />
+  <rect x="462" y="146" width="96" height="5" fill="#4f6d96" />
+  <rect x="462" y="157" width="108" height="5" fill="#4f6d96" />
+  <rect x="462" y="172" width="48" height="14" fill="#fec917" opacity="0.8" />
+  <rect x="514" y="208" width="18" height="24" fill="#2a323d" />
+  <rect x="488" y="232" width="70" height="8" fill="#2a323d" />
+
+  <!-- Desk -->
+  <polygon points="0,290 640,290 640,380 0,380" fill="url(#deskGrad)" />
+  <rect x="0" y="286" width="640" height="6" fill="#523e31" />
+
+  <!-- Case Folders & Desk Mic -->
+  <rect x="48" y="268" width="94" height="18" fill="#d8c39e" stroke="#443" stroke-width="1" />
+  <rect x="56" y="256" width="84" height="14" fill="#c79e63" stroke="#443" stroke-width="1" />
+  <rect x="492" y="274" width="64" height="16" fill="#111" />
+  <line x1="524" y1="274" x2="508" y2="235" stroke="#2a2d34" stroke-width="4" />
+  <ellipse cx="506" cy="233" rx="7" ry="10" fill="#181b20" stroke="#555" stroke-width="1.5" />
+
+  <!-- Officer Torso / Uniform -->
+  <path d="M188,292 C192,226 232,202 320,202 C408,202 448,226 452,292 Z" fill="url(#uniformGrad)" stroke="#4c3f28" stroke-width="2" />
+  <!-- Collar & Tie -->
+  <polygon points="282,204 320,248 358,204 342,196 320,218 298,196" fill="#826d47" stroke="#4c3f28" stroke-width="1.5" />
+  <polygon points="311,222 329,222 334,292 306,292" fill="#1c2430" />
+  <!-- Shoulder Epaulettes (Generic Bars) -->
+  <rect x="215" y="214" width="46" height="14" rx="2" transform="rotate(-12 215 214)" fill="#2a2318" stroke="#d4af37" stroke-width="1.2" />
+  <circle cx="228" cy="219" r="3" fill="#d4af37" />
+  <circle cx="242" cy="216" r="3" fill="#d4af37" />
+  <rect x="379" y="205" width="46" height="14" rx="2" transform="rotate(12 379 205)" fill="#2a2318" stroke="#d4af37" stroke-width="1.2" />
+  <circle cx="398" cy="216" r="3" fill="#d4af37" />
+  <circle cx="412" cy="219" r="3" fill="#d4af37" />
+  <!-- Shirt Pockets & Generic Badge -->
+  <rect x="228" y="246" width="54" height="44" fill="#8f784f" stroke="#5a4a2f" stroke-width="1.5" />
+  <rect x="358" y="246" width="54" height="44" fill="#8f784f" stroke="#5a4a2f" stroke-width="1.5" />
+  <rect x="364" y="232" width="42" height="11" fill="#111" stroke="#d4af37" stroke-width="1" />
+  <rect x="368" y="236" width="34" height="3" fill="#f5f5f5" />
+
+  <!-- Neck & Head -->
+  <rect x="296" y="170" width="48" height="42" rx="14" fill="#b87e5c" />
+  <path d="M296,184 Q320,198 344,184" fill="#9a6344" />
+  <!-- Ears -->
+  <ellipse cx="268" cy="126" rx="8" ry="15" fill="#b27756" />
+  <ellipse cx="372" cy="126" rx="8" ry="15" fill="#b27756" />
+  <!-- Face -->
+  <path d="M270,104 C270,66 370,66 370,104 C370,148 352,184 320,184 C288,184 270,148 270,104 Z" fill="#c78b67" />
+  <!-- Hair -->
+  <path d="M268,108 C266,62 300,48 320,48 C342,48 374,62 372,108 C368,84 352,74 320,74 C288,74 272,84 268,108 Z" fill="#1e1e22" />
+  <path d="M274,78 C295,62 344,62 364,78" fill="none" stroke="#42424a" stroke-width="2" />
+  <!-- Stern Eyebrows & Eyes -->
+  <path d="M284,106 L310,113" stroke="#18181b" stroke-width="4.5" stroke-linecap="round" />
+  <path d="M356,106 L330,113" stroke="#18181b" stroke-width="4.5" stroke-linecap="round" />
+  <ellipse cx="298" cy="120" rx="8" ry="5" fill="#ffffff" />
+  <circle cx="298" cy="120" r="3.5" fill="#1d1816" />
+  <ellipse cx="342" cy="120" rx="8" ry="5" fill="#ffffff" />
+  <circle cx="342" cy="120" r="3.5" fill="#1d1816" />
+  <!-- Glasses Rim for Stern Authority Look -->
+  <rect x="281" y="112" width="33" height="16" rx="3" fill="none" stroke="#2a2d34" stroke-width="2" />
+  <rect x="326" y="112" width="33" height="16" rx="3" fill="none" stroke="#2a2d34" stroke-width="2" />
+  <line x1="314" y1="119" x2="326" y2="119" stroke="#2a2d34" stroke-width="2" />
+  <!-- Nose & Mustache -->
+  <path d="M320,116 L316,138 L325,140" fill="none" stroke="#9e6647" stroke-width="2.5" stroke-linecap="round" />
+  <path d="M298,149 C308,142 332,142 342,149 C334,154 306,154 298,149 Z" fill="#232327" />
+  <!-- Stern Mouth -->
+  <path d="M306,158 Q320,154 334,158" fill="none" stroke="#7d4a36" stroke-width="2.5" stroke-linecap="round" />
+
+  <!-- Desk Nameplate -->
+  <polygon points="246,316 394,316 404,344 236,344" fill="#181b20" stroke="#c59f3b" stroke-width="2" />
+  <text x="320" y="334" text-anchor="middle" fill="#f3f4f6" font-family="Arial Narrow, sans-serif" font-weight="800" font-size="13" letter-spacing="1.2">CYBER DESK • UNIT 04 (DEMO)</text>
+
+  <!-- Webcam Vignette & Scanlines -->
+  <rect width="640" height="380" fill="url(#camGlow)" />
+  <rect width="640" height="380" fill="url(#scanlines)" />
+</svg>

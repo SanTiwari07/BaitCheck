@@ -43,6 +43,18 @@
       learningOpenScenarioId: null,
       learningAnswers: {},
 
+      // Real-Life Scam Simulator & Audience Mode state
+      learningAudience: 'all', // 'all' | 'parent-kid' | 'elder'
+      parentLessonAnswers: {},
+      simCategoryFilter: 'all',
+      simShowAll: false,
+      simActiveId: null,
+      simStepIndex: 0,
+      simSelectedChoiceId: null,
+      simHistory: [],
+      simCompleted: false,
+      simCluesOpen: false,
+
       // Active challenge context (when on /c/:id)
       activeChallenge: null,
       challengeLoadError: null,

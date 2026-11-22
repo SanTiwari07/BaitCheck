@@ -16,7 +16,10 @@
     handleDrillChoice,
     advanceDrill,
     computeFinaleMetrics,
-    downloadVerdictTicketPng
+    downloadVerdictTicketPng,
+    renderActiveSimulation,
+    renderSimulatorHub,
+    scrollToStageTop
   }) {
     function renderLearningLibrary(container) {
       const library = createEl('section', 'learning-library');
@@ -236,6 +239,7 @@
         state.ticketPreviewUrl = '';
         state.ticketBadgeUrl = '';
         renderDrillView();
+        if (typeof scrollToStageTop === 'function') scrollToStageTop();
       });
       actions.appendChild(replayBtn);
 
@@ -246,6 +250,7 @@
     function renderDrillView() {
       const container = els.viewDrill;
       clearEl(container);
+      container.classList.toggle('is-elder-mode', state.learningAudience === 'elder');
 
       if (state.route.mode === 'challenge-drill' && state.challengeLoadError) {
         const sheet = createEl('div', 'newsprint-sheet');
@@ -296,6 +301,11 @@
       }
 
       if (state.drillPhase === 'hero') {
+        if (state.simActiveId && typeof renderActiveSimulation === 'function') {
+          renderActiveSimulation(container);
+          return;
+        }
+
         const wall = createEl('div', 'poster-wall');
 
         if (state.activeChallenge) {
@@ -309,28 +319,8 @@
           wall.appendChild(banner);
         }
 
-        const card = createEl('div', 'incoming-call-card');
-        const meta = createEl('div', 'call-header-meta');
-        meta.appendChild(createEl('span', 'eyebrow eyebrow--dark', t('heroEyebrow')));
-
-        const recPill = createEl('span', 'rec-pill');
-        recPill.appendChild(createEl('span', 'rec-dot'));
-        recPill.appendChild(document.createTextNode(t('incomingSimulated')));
-        meta.appendChild(recPill);
-        card.appendChild(meta);
-
-        const callerStage = createEl('div', 'caller-ring-stage');
-        const pulseFrame = createEl('div', 'pulse-frame');
-        pulseFrame.appendChild(buildCallerEmblemSvg());
-        callerStage.appendChild(pulseFrame);
-
-        const callerMeta = createEl('div', 'caller-meta');
-        const firstDrill = state.drills[0];
-        const entityName = firstDrill ? loc(firstDrill.entity) : 'Central Cyber Desk (Simulated)';
-        callerMeta.appendChild(createEl('p', 'caller-name', entityName));
-        callerMeta.appendChild(createEl('p', 'caller-sub', t('heroCallerSub')));
-        callerStage.appendChild(callerMeta);
-        card.appendChild(callerStage);
+        const card = createEl('div', 'incoming-call-card practice-welcome');
+        card.appendChild(createEl('p', 'eyebrow eyebrow--dark', t('heroEyebrow')));
 
         const h1 = createEl('h1', 'display-xl');
         h1.appendChild(document.createTextNode(t('heroHeadlinePre')));
@@ -338,20 +328,6 @@
         card.appendChild(h1);
 
         card.appendChild(createEl('p', 'hero-value-prop', t('heroValueProp')));
-
-        const statsRow = createEl('div', 'hero-checklist');
-        const chips = [
-          [t('statTrapsVal'), t('statTrapsLbl')],
-          [t('statClockVal'), t('statClockLbl')],
-          [t('statLangVal'), t('statLangLbl')]
-        ];
-        for (let i = 0; i < chips.length; i++) {
-          const chip = createEl('div', 'hero-stat-chip');
-          chip.appendChild(createEl('strong', '', chips[i][0]));
-          chip.appendChild(createEl('span', '', chips[i][1]));
-          statsRow.appendChild(chip);
-        }
-        card.appendChild(statsRow);
 
         const answerBtn = createEl('button', 'button-primary button-full', t('answerCta'));
         answerBtn.type = 'button';
@@ -369,7 +345,11 @@
         card.appendChild(timedDetails);
 
         wall.appendChild(card);
-        renderLearningLibrary(wall);
+        if (typeof renderSimulatorHub === 'function') {
+          renderSimulatorHub(wall);
+        } else {
+          renderLearningLibrary(wall);
+        }
         container.appendChild(wall);
         return;
       }
@@ -397,6 +377,15 @@
         topStrip.appendChild(createEl('span', 'status-tag status-tag--warn', t('simulationBadge')));
         topStrip.appendChild(createEl('span', 'caption-txt', t(state.drillMode === 'timed' ? 'timedModeLabel' : 'calmModeLabel')));
         sheet.appendChild(topStrip);
+
+        const progressBar = createEl('div', 'edu-progress-bar');
+        for (let p = 0; p < state.drills.length; p++) {
+          const seg = createEl('div', 'edu-progress-seg');
+          if (p < state.drillIndex) seg.classList.add('is-done');
+          if (p === state.drillIndex) seg.classList.add('is-current');
+          progressBar.appendChild(seg);
+        }
+        sheet.appendChild(progressBar);
 
         const durationMs = (Number(drill.durationSec) || 15) * 1000;
         if (state.drillMode === 'timed') {
@@ -427,22 +416,35 @@
         drillCard.appendChild(createEl('h2', 'display-md', loc(drill.title)));
 
         if (drill.mode === 'video-call') {
-          const frame = createEl('div', 'drill-visual-frame drill-visual--video');
+          const frame = createEl('div', 'drill-visual-frame drill-visual--video drill-visual--video-rich');
+          const topInfo = createEl('div', 'drill-video-topbar');
           const info = createEl('div', 'stack-sm');
           const rec = createEl('span', 'rec-pill');
           rec.appendChild(createEl('span', 'rec-dot'));
           rec.appendChild(document.createTextNode(t('simulationBadge')));
           info.appendChild(rec);
           info.appendChild(createEl('strong', 'body-md', loc(drill.entity)));
-          frame.appendChild(info);
+          topInfo.appendChild(info);
 
           const sil = createEl('div', 'silhouette-box');
           sil.appendChild(buildSilhouetteSvg());
-          frame.appendChild(sil);
+          topInfo.appendChild(sil);
+          frame.appendChild(topInfo);
+
+          const simVideo = createEl('video', 'drill-stage-video');
+          const callScene = createEl('img', 'drill-stage-img drill-stage-img--spaced');
+          callScene.src = '/assets/sim/police-officer-call.svg';
+          callScene.alt = loc(drill.title);
+          frame.appendChild(callScene);
+
           drillCard.appendChild(frame);
         } else if (drill.mode === 'chat-attachment') {
           const frame = createEl('div', 'drill-visual-frame drill-visual--chat');
           frame.appendChild(createEl('div', 'chat-bubble-meta', `${loc(drill.entity)} • ${t('exampleMessage')}`));
+          const simImg = createEl('img', 'drill-stage-img drill-stage-img--spaced');
+          simImg.src = '/assets/sim/electricity-notice.svg';
+          simImg.alt = loc(drill.title);
+          frame.appendChild(simImg);
           frame.appendChild(createEl('div', 'caption-txt', t('inspectApkHint')));
 
           const pillBtn = createEl('button', 'apk-pill-btn');
@@ -478,6 +480,10 @@
         } else if (drill.mode === 'upi-collect') {
           const frame = createEl('div', 'drill-visual-frame drill-visual--upi');
           frame.appendChild(createEl('p', 'eyebrow', t('upiCollectHeader')));
+          const simImg = createEl('img', 'drill-stage-img drill-stage-img--spaced');
+          simImg.src = '/assets/sim/upi-qr-training.svg';
+          simImg.alt = loc(drill.title);
+          frame.appendChild(simImg);
           const row = createEl('div', 'upi-amount-row');
           row.appendChild(createEl('span', 'upi-amount-big', drill.collectMeta ? drill.collectMeta.amountDisplay : '₹4,500'));
           row.appendChild(createEl('span', 'status-tag status-tag--warn', t('upiCollectLabel')));
@@ -497,6 +503,7 @@
         const choicesList = createEl('div', 'choices-list');
         const lastOutcome = state.drillAnswered ? state.drillOutcomes[state.drillOutcomes.length - 1] : null;
         const choices = drill.choices || [];
+        const LETTERS = ['A', 'B', 'C', 'D'];
 
         for (let i = 0; i < choices.length; i++) {
           const ch = choices[i];
@@ -508,7 +515,8 @@
             btn.classList.add(ch.passed ? 'is-selected-pass' : 'is-selected-fail');
           }
 
-          btn.appendChild(createEl('span', '', loc(ch.label)));
+          btn.appendChild(createEl('span', 'choice-letter-badge', LETTERS[i] || String(i + 1)));
+          btn.appendChild(createEl('span', 'choice-label-text', loc(ch.label)));
           btn.addEventListener('click', () => handleDrillChoice(ch));
           choicesList.appendChild(btn);
         }
