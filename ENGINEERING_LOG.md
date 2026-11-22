@@ -33,6 +33,13 @@ This log records agent role assignments, architectural decisions, implementation
 - **Completed:**
   - Created `package.json`, `package-lock.json`, `embarko.json`, and `server.js` (`0.0.0.0:$PORT`, `/health`, static `public/`, `/c/:id` & `/c/:id/report` shell routing).
   - Discovered `better-sqlite3@^11.8.1` C++ compilation fails on local Node `v26.13.0` (`v8::Object::GetPrototype` removed in V8), whereas Node's built-in `node:sqlite` (`DatabaseSync`) works natively at `33.53 MB` RSS. Moved `better-sqlite3` to `optionalDependencies` so `npm install` succeeds cleanly on both Node 26+ (`node:sqlite`) and Node 20 (`better-sqlite3`).
-- **Verification:**
-  - `npm install` exited 0 with 0 vulnerabilities.
-  - `GET /health` returned `200 {"ok":true,"memoryMb":50.52,"uptime":0}`; `/`, `/c/demo`, `/c/demo/report` returned `200` with `SIMULATION` ribbon.
+- **Verification:** `npm install` exited 0; `GET /health` returned `200 {"ok":true,"memoryMb":50.52,"uptime":0}`; `/`, `/c/demo`, `/c/demo/report` returned `200`.
+
+### 2026-11-22 — Priority 1 Backend, SQLite Persistence & Forensic Engine (`db-engineer`, `backend-engineer`, `qa-engineer`)
+- **Completed:**
+  - `db-engineer`: Implemented `src/db.js` with dual driver (`node:sqlite` primary on Node 22.5+/26+, `better-sqlite3` fallback on Node 20), `DATA_DIR/baitcheck.db` resolution, Litestream table preservation (`_litestream_seq`, `_litestream_lock`), zero-PII `forensic_scans`, and IST `daily_stats` seeding without double-counting.
+  - `backend-engineer`: Implemented `src/forensicEngine.js` (Punycode/homoglyph, `.pdf.apk`, `@`-mask/IPv4/shorteners, `upi://pay?` parser, bilingual pressure tokens, lossless spans), `src/drills.js` (bilingual Drills 1–3, 1930 Playbook, 4 safe presets, zero real brand names), and wired all REST endpoints in `server.js` (`/api/drills`, `/api/stats`, `/api/scan`, `/api/challenge`, `/api/challenge/:id`, `/api/challenge/:id/result`, `/tasks/daily-stats`).
+  - `orchestrator`: Adjusted `HIGH RISK` threshold in `src/forensicEngine.js` to `>= 50` so multi-signal traps (`xn--` + urgency, `.pdf.apk` + urgency, `upi://pay` + cashback/PIN) consistently classify as high risk.
+  - `qa-engineer`: Created `tests/forensic.test.js` (29 unit tests) and `tests/api.test.js` (11 integration tests).
+- **Verification:** `npm test` (`node --test`) passed 40/40 tests in 383ms (`0` failures, `0` skips); `/api/scan` < 2ms even on 2000-char pathological input.
+- **Next Action:** Begin Priority 2 frontend implementation (`public/index.html`, `public/styles.css`, `public/app.js`) following `design.md`, `prd.md`, and `requirement.md`.

@@ -34,7 +34,7 @@
   - `daily_stats` seeded on empty first boot.
   - `/tasks/daily-stats` rejects missing/bad `Authorization` header with `401` when `CRON_SECRET` is set.
 - **Test Cases:** DB persistence across restart; cron auth 401 vs 200; baseline stats non-zero; zero PII fields stored.
-- **Completion Status:** Pending
+- **Completion Status:** Completed and verified
 
 ### Feature 1.3: Deterministic Forensic Engine (`src/forensicEngine.js`) & `POST /api/scan`
 - **Objective:** Implement `<10 ms` deterministic forensic dissection of URLs, messages, `.apk` lures, and `upi://pay?` strings without external APIs.
@@ -49,7 +49,7 @@
   - Rejects empty or >2000 char input cleanly (or truncates/validates with HTTP 400).
   - Returns safe non-HTML spans/tokens for XSS-safe rendering.
 - **Test Cases:** `tests/forensic.test.js` covering 20+ malicious and benign inputs, edge cases, and latency.
-- **Completion Status:** Pending
+- **Completion Status:** Completed and verified
 
 ### Feature 1.4: Bilingual Drills Data (`src/drills.js`) & Challenge REST APIs
 - **Objective:** Implement bilingual EN/हिंदी drill scripts, non-spoiler choices, and challenge creation/result/report REST endpoints.
@@ -63,7 +63,7 @@
   - Choices do not spoil correct answers; weights sum to 100 (`35 + 35 + 30`).
   - Input validation prevents XSS/empty slugs and rejects unknown `challenge_id` with 404.
 - **Test Cases:** API integration tests for creating challenges, recording 3 drill results, verifying reaction_ms bounds, and reading report aggregations.
-- **Completion Status:** Pending
+- **Completion Status:** Completed and verified
 
 ---
 
