@@ -1,22 +1,18 @@
 <div align="center">
-  <img src="public/assets/social-card.svg" alt="BaitCheck - 60s Scam Survival Drill & Forensic Link X-Ray" width="100%" />
-
-  <br /><br />
-
   <h1>BAITCHECK</h1>
   <p>
-    <strong>60-Second Interactive AI-Era Scam Survival Trainer, Deterministic Forensic Link/UPI X-Ray &amp; Family Readiness Platform</strong>
+    <strong>Bilingual Scam-Safety Practice App, Real-Life Scam Simulator &amp; Deterministic Message/UPI Checker</strong>
   </p>
 
   <p>
-    <a href="https://baitcheck.embarko.app"><img src="https://img.shields.io/badge/Live%20App-baitcheck.embarko.app-FEC917?style=for-the-badge&labelColor=0D0D0D" alt="Live App" /></a>
-    <a href="https://github.com/SanTiwari07/BaitCheck/actions"><img src="https://img.shields.io/badge/Tests-61%2F61%20Passing-067647?style=for-the-badge&labelColor=0D0D0D" alt="Tests Passing" /></a>
-    <img src="https://img.shields.io/badge/Memory-~52%20MB%20RSS-1A1A1A?style=for-the-badge&labelColor=0D0D0D" alt="Memory Footprint" />
-    <img src="https://img.shields.io/badge/Languages-EN%20%7C%20%E0%A4%B9%E0%A4%BF%E0%A4%82%E0%A4%A6%E0%A5%80-FEC917?style=for-the-badge&labelColor=0D0D0D" alt="Bilingual Support" />
+    <a href="https://baitcheck.embarko.app"><img src="https://img.shields.io/badge/Live%20App-baitcheck.embarko.app-155C46?style=for-the-badge&labelColor=18332A" alt="Live App" /></a>
+    <a href="https://github.com/SanTiwari07/BaitCheck/actions"><img src="https://img.shields.io/badge/Tests-63%2F63%20Passing-155C46?style=for-the-badge&labelColor=18332A" alt="Tests Passing" /></a>
+    <img src="https://img.shields.io/badge/Memory-~50%20MB%20RSS-245E9B?style=for-the-badge&labelColor=18332A" alt="Memory Footprint" />
+    <img src="https://img.shields.io/badge/Languages-EN%20%7C%20%E0%A4%B9%E0%A4%BF%E0%A4%82%E0%A4%A6%E0%A5%80-155C46?style=for-the-badge&labelColor=18332A" alt="Bilingual Support" />
   </p>
 
   <p>
-    Built for the <strong>Deploy With Embarko Student Challenge 2026</strong> (<code>#DeployWithEmbarko</code>)
+    Built for the <strong>Deploy With Embarko Student Challenge 2026</strong> ·
     <a href="https://baitcheck.embarko.app"><strong>Launch Live App</strong></a> ·
     <a href="docs/DEMO_GUIDE.md"><strong>Demo Guide</strong></a> ·
     <a href="docs/reports/TEST_REPORT.md"><strong>Test &amp; Security Report</strong></a>
@@ -25,14 +21,40 @@
 
 ---
 
-## Why BaitCheck?
+## Overview
 
-Modern scams no longer rely on typos-they hijack **15 seconds of human panic**:
-1. **AI Voice / "Digital Arrest" Video Calls** demanding forced isolation and instant "refundable security deposits".
-2. **Disguised `.pdf.apk` Chat Lures** (fake electricity cutoff bills or delivery notices) capturing SMS OTPs and Android Accessibility control.
-3. **UPI Cashback / Refund Collect Traps** exploiting confusion around UPI PINs (`PIN only sends money out, never receives it`).
+Modern scams rarely rely on obvious typos. Instead, they create urgency and social pressure across phone calls, video calls, chat attachments, and payment requests:
 
-Passive awareness posters fail under pressure, caller-ID apps are reactive, and OS-level scam filters are hardware-gated. **BaitCheck** trains real decision reflexes in 60 seconds inside any mobile browser-with zero login walls-paired with a real-time forensic scanner and shareable family readiness links.
+1. **Fake Authority & "Digital Arrest" Calls** that demand isolation and instant "refundable security deposits".
+2. **Disguised `.pdf.apk` Attachments** (such as fake electricity disconnection notices) designed to steal SMS OTPs.
+3. **UPI Cashback / Refund Collect Traps** that exploit confusion around UPI PINs (`a UPI PIN only sends money out, never receives it`).
+
+**BaitCheck** gives families, older adults, and students a calm, no-login browser space to practice spotting scams step by step, inspect suspicious messages and payment links, and share practice links with family members. Everything runs with fictional examples, bilingual **English and Hindi (`EN` / `हिंदी`)** support, an **`A+` large-text toggle**, and responsive layouts for mobile, tablet, and desktop.
+
+---
+
+## Screenshots
+
+### Desktop Start Page (1280x800)
+
+![BaitCheck Desktop Start Page](docs/screenshots/start-desktop.png)
+
+### Check a Message & Warning Sign Highlighter
+
+![BaitCheck Message Checker](docs/screenshots/message-check.png)
+
+### Tablet & Mobile Responsive Views
+
+<table>
+  <tr>
+    <th width="62%">Tablet (768x1024)</th>
+    <th width="38%">Mobile (390x844)</th>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/start-tablet.png" alt="BaitCheck Tablet Start Page" width="100%" /></td>
+    <td><img src="docs/screenshots/start-mobile.png" alt="BaitCheck Mobile Start Page" width="100%" /></td>
+  </tr>
+</table>
 
 ---
 
@@ -40,9 +62,9 @@ Passive awareness posters fail under pressure, caller-ID apps are reactive, and 
 
 | Mode | What It Does | Key Engineering Highlights |
 |---|---|---|
-| **01 · 60s Panic Drill** (`/`, `/c/:id`) | Drops users directly onto a pulsing simulated incoming call (`Central Cyber Desk`), followed by `.pdf.apk` utility lure and UPI collect traps-each on a 15-second clock with `EN \| हिंदी` always-on `>=18px` captions. | Tap-to-unlock WebAudio `AudioContext` cues, conditional `en-IN`/`hi-IN` `speechSynthesis`, mid-drill tab-switch timer pause/resume, `-₹50,000` simulated loss debriefs, `1080×1350` Canvas Verdict Ticket PNG + `1930` Golden-Hour checklist. |
-| **02 · Link, Message & UPI X-Ray** (`/?tab=xray`, `POST /api/scan`) | Deterministically dissects arbitrary SMS text, URLs, `.apk` filenames, or `upi://pay?...` strings in `<5 ms` with 4 one-tap real-world presets. | Detects Punycode (`xn--`), mixed Cyrillic/Greek homoglyphs (zero Devanagari false positives), double-extension executables, `@` URL userinfo masking, raw IPv4 hosts, shorteners, disposable TLDs (`.xyz`/`.top`/`.click`), decoded UPI params, and bilingual pressure tokens. |
-| **03 · Family Challenge & Live Report** (`/?tab=challenge`, `/c/:id/report`) | Generates nickname-only personal challenge links (`/c/mom-7x2a`) to test parents, siblings, or friends and monitor results live. | SQLite persistence in `DATA_DIR` preserving Embarko Litestream `_litestream_*` tables, 4-second HTTP polling (zero WebSockets), human-readable `missed_flag` diagnostics, and `localStorage` recent challenge history. |
+| **Practice & Real-Life Simulator** (`/`, `/c/:id`) | Offers calm untimed 3-story practice, an optional 15-second timed round, and 8 multi-step real-life scam simulations with topic filters plus dedicated **Parent & Kid** and **Elder-Safe** guides. | Tap-to-unlock WebAudio cues, conditional `en-IN`/`hi-IN` speech synthesis, mid-drill timer pause/resume on tab switch, simulated loss debriefs, `1080x1350` Canvas Verdict Ticket PNG export, and a sticky `1930` Emergency Guide. |
+| **Check a Message (Link & UPI X-Ray)** (`/?tab=xray`, `POST /api/scan`) | Deterministically analyzes pasted SMS text, URLs, `.apk` filenames, or `upi://pay?...` strings in `<5 ms`, with 4 one-tap sample presets. | Detects Punycode (`xn--`), mixed Cyrillic/Greek homoglyphs (without Devanagari false positives), double-extension executables (`.pdf.apk`), `@` URL userinfo masking, raw IPv4 hosts, URL shorteners, disposable TLDs (`.xyz`, `.top`, `.click`), decoded UPI parameters, and bilingual pressure tokens. |
+| **Family Practice & Live Report** (`/?tab=challenge`, `/c/:id/report`) | Generates nickname-only shareable practice links (`/c/mom-7x2a`) so family members can complete drills while senders track live readiness scores and coaching tips. | SQLite persistence in `DATA_DIR` preserving Embarko Litestream `_litestream_*` tables, 4-second HTTP polling (no WebSockets), human-readable `missed_flag` coaching, and `localStorage` recent challenge history. |
 
 ---
 
@@ -50,7 +72,7 @@ Passive awareness posters fail under pressure, caller-ID apps are reactive, and 
 
 ```mermaid
 flowchart LR
-  U["Mobile Browser SPA (360×800 / Desktop)"] -->|HTTPS GET/POST| E["Express Server (server.js · 0.0.0.0:$PORT)"]
+  U["Responsive Browser SPA (Mobile / Tablet / Desktop)"] -->|HTTPS GET/POST| E["Express Server (server.js · 0.0.0.0:$PORT)"]
   E --> R1["src/routes/system.js (/health, /api/drills, /api/stats, /tasks/daily-stats)"]
   E --> R2["src/routes/forensic.js (/api/scan, /api/badge)"]
   E --> R3["src/routes/challenges.js (/api/challenge, /api/challenge/:id, /result)"]
@@ -59,12 +81,13 @@ flowchart LR
   R1 & R2 & R3 --> DB["src/db.js (node:sqlite / better-sqlite3 in DATA_DIR)"]
 ```
 
-### Strict Anti-Phishing & Embarko Hosting Guardrails
-- **Zero Real Brand/Agency Impersonation:** Uses fictional demo entities only (`Central Cyber Desk (Simulated)`, `Metro Power Utility (Demo)`, `PaySim Wallet Collect (Demo)`).
-- **Permanent Sticky Safety Ribbon:** Top bar across every route reads `SIMULATION • EDUCATIONAL SCAM DRILL - NO REAL DATA, OTPs, OR DOWNLOADS`.
-- **Zero Credential / Download Surfaces:** Zero `<input type="password">`, OTP boxes, card forms, UPI PIN keypads, or file downloads.
-- **Zero PII Stored:** `forensic_scans` records only `risk_score` and `rules_hit_json` (never raw scanned text or phone numbers).
-- **CSP-Safe & Lean Runtime:** Zero `innerHTML`, zero inline `<script>` / `onclick=` handlers, zero WebSockets, no `Dockerfile`, running at **~52–57 MB RSS** inside Embarko's **256 MB** RAM cap.
+### Safety & Hosting Guardrails
+
+- **Fictional Entities Only:** Uses simulated demo names (`Central Cyber Desk (Simulated)`, `Metro Power Utility (Demo)`, `PaySim Wallet Collect (Demo)`) with zero real bank or government agency impersonation.
+- **Permanent Training Banner:** Every route displays a top simulation notice confirming no real payments, OTPs, or file downloads occur.
+- **Zero Credential Surfaces:** No password inputs, OTP prompts, card forms, UPI PIN pads, or file downloads.
+- **Zero PII Logged:** `forensic_scans` records only `risk_score` and `rules_hit_json`, never raw scanned messages, URLs, or phone numbers.
+- **CSP-Safe & Lightweight Runtime:** Zero `innerHTML` usage, zero inline scripts/handlers, zero WebSockets, no `Dockerfile`, running around **~50 MB RSS**.
 
 ---
 
@@ -75,38 +98,36 @@ BaitCheck/
 ├── .github/workflows/
 │   └── ci.yml                       # GitHub Actions CI (Node 20 & 22 syntax, tests & audit)
 ├── docs/
-│   ├── DEMO_GUIDE.md                # Step-by-step live hackathon demonstration guide
+│   ├── DEMO_GUIDE.md                # Step-by-step live demonstration guide
+│   ├── screenshots/                 # Desktop, tablet, mobile & message-check UI screenshots
 │   ├── reports/
-│   │   ├── ENGINEERING_LOG.md       # Multi-agent engineering log & decisions
-│   │   ├── IMPLEMENTATION_ROADMAP.md# Prioritized feature roadmap & status
+│   │   ├── ENGINEERING_LOG.md       # Engineering log & technical decisions
+│   │   ├── IMPLEMENTATION_ROADMAP.md# Feature roadmap & completion status
 │   │   ├── PROJECT_ANALYSIS.md      # Requirements traceability & conflict register
 │   │   └── TEST_REPORT.md           # Automated test, security & benchmark report
-│   └── specs/
-│       ├── BaitCheck_Embarko_Hackathon_Dossier.pdf
-│       ├── design.md                # Bill-Poster & Print-Shop Editorial Design System
-│       ├── detailed_plan.md         # Execution schedule & API contracts
-│       ├── hackathon_requirement.md # Embarko Student Challenge rules & limits
-│       ├── prd.md                   # Product Requirements Document
-│       └── requirement.md           # Functional, forensic & SQLite specifications
+│   └── specs/                       # Design, PRD, and requirement specifications
 ├── public/
 │   ├── assets/
-│   │   ├── favicon.svg              # Custom Bill-Poster SVG mark
+│   │   ├── sim/                     # Bilingual training videos & SVG/JPG scenario visuals
+│   │   ├── favicon.svg              # App icon
 │   │   └── social-card.svg          # OpenGraph / social preview banner
 │   ├── js/
 │   │   ├── views/
-│   │   │   ├── challenge.js         # Tab 3 family challenge creator & recent history
-│   │   │   ├── companion.js         # Split-flap community benchmark & 1930 playbook
-│   │   │   ├── drill.js             # Screen 0 hero, 3 timed drills, debrief & finale
-│   │   │   ├── report.js            # /c/:id/report live readiness sheet (4s polling)
-│   │   │   └── xray.js              # Tab 2 forensic workbench & lossless highlighter
-│   │   ├── audio.js                 # WebAudio synthesizer & conditional speechSynthesis
-│   │   ├── dom.js                   # Safe createElement helpers & geometric SVG builders
+│   │   │   ├── challenge.js         # Family Practice link creator & recent history
+│   │   │   ├── companion.js         # Emergency 1930 guide & cohort stats panel
+│   │   │   ├── drill.js             # Start hero, practice drills, debrief & verdict ticket
+│   │   │   ├── report.js            # /c/:id/report live readiness view (4s polling)
+│   │   │   ├── simulator.js         # Multi-step scam simulator, Parent/Kid & Elder modes
+│   │   │   └── xray.js              # Check a Message workbench & lossless highlighter
+│   │   ├── audio.js                 # WebAudio cues & conditional speechSynthesis
+│   │   ├── dom.js                   # Safe createElement helpers & SVG builders
 │   │   ├── i18n.js                  # EN & हिंदी copy, X-Ray rule localization & flags
 │   │   ├── main.js                  # Bootstrap, API sync, top bar & SPA router
+│   │   ├── scenarios.js             # 8 multi-step real-life scam scenarios & parent quizzes
 │   │   ├── state.js                 # Centralized app state, route parser & localStorage
-│   │   └── ticketCanvas.js          # 1080×1350 Canvas Verdict Ticket PNG generator
-│   ├── index.html                   # CSP-clean mobile-first HTML shell
-│   └── styles.css                   # Bill-Poster editorial design tokens & breakpoints
+│   │   └── ticketCanvas.js          # 1080x1350 Canvas Verdict Ticket PNG generator
+│   ├── index.html                   # CSP-clean responsive HTML shell
+│   └── styles.css                   # Responsive mobile/tablet/desktop styles & themes
 ├── src/
 │   ├── routes/
 │   │   ├── challenges.js            # Challenge creation, report lookup & result ingestion
@@ -119,12 +140,9 @@ BaitCheck/
 ├── tests/
 │   ├── api.test.js                  # SQLite persistence, zero-PII & REST API integration tests
 │   ├── db.test.js                   # DATA_DIR path, IST dates & drill lookup unit tests
-│   ├── e2e.test.js                  # Headless Chrome CDP E2E tests (360×800 to 1280×800)
-│   ├── forensic.test.js             # 30+ forensic engine & brand-safety unit tests
+│   ├── e2e.test.js                  # Headless Chromium CDP E2E tests (360x800 to 1280x800)
+│   ├── forensic.test.js             # Forensic engine & brand-safety unit tests
 │   └── storage.test.js              # PNG magic-byte, filename & token-redaction tests
-├── .editorconfig
-├── .gitattributes
-├── .gitignore
 ├── embarko.json                     # Embarko appId & daily /tasks/daily-stats cron schedule
 ├── package.json
 ├── package-lock.json
@@ -136,20 +154,25 @@ BaitCheck/
 ## Getting Started Locally
 
 ### Prerequisites
+
 - **Node.js `20+`** (uses built-in `node:sqlite` on Node 22.5+/26+, with `better-sqlite3` in `optionalDependencies` for Node 20).
 
 ### Install & Run
+
 ```bash
 npm install
 npm start
 ```
-The server starts on `http://0.0.0.0:3000` (configurable via `PORT`).
+
+The server listens on `http://0.0.0.0:3000` (configurable via `PORT`). Open `http://localhost:3000` in your browser.
 
 ### Run Complete Verification Suite
+
 ```bash
 npm test
 ```
-Executes unit, SQLite persistence, storage, REST API integration, and real headless Chromium CDP end-to-end tests (`60/60` passing).
+
+Runs all unit, SQLite persistence, storage, REST API integration, and headless Chromium CDP end-to-end tests (**63/63 passing**).
 
 ---
 
@@ -159,20 +182,20 @@ Executes unit, SQLite persistence, storage, REST API integration, and real headl
 |---|---|---|
 | `GET /health` | Runtime health & memory telemetry | Returns `{ ok: true, memoryMb, uptime }` |
 | `GET /api/drills` | Bilingual drills, `1930` playbook & X-Ray presets | Hydrates frontend dynamically |
-| `GET /api/stats` | Community benchmark split-flap stats | Aggregates baseline `daily_stats` + live results |
+| `GET /api/stats` | Aggregate practice activity stats | Combines baseline `daily_stats` + live results |
 | `POST /api/scan` | Deterministic link/message/UPI forensic analysis | Max `2,000` chars; logs zero PII |
-| `POST /api/challenge` | Creates shareable `/c/:id` challenge slug | Nicknames `1–40` chars only (`en` \| `hi`) |
+| `POST /api/challenge` | Creates shareable `/c/:id` challenge slug | Nicknames `1-40` chars only (`en` \| `hi`) |
 | `GET /api/challenge/:id` | Challenge metadata, drill results & weighted summary | Used by `/c/:id` and 4s polling on `/c/:id/report` |
 | `POST /api/challenge/:id/result` | Persists a completed drill (`passed`, `reactionMs`, `missedFlag`) | Strict boolean validation (`400` on invalid input) |
-| `POST /api/badge` | Optional `1080×1350` PNG upload to `STORAGE_URL` | Gracefully falls back to local download when unset |
+| `POST /api/badge` | Optional `1080x1350` PNG upload to `STORAGE_URL` | Falls back to local download when unset |
 | `GET /tasks/daily-stats` | Daily benchmark rollup (`embarko.json` `0 9 * * *` IST) | Validates `Authorization: Bearer $CRON_SECRET` when set |
 
 ---
 
 ## Documentation & Reports
 
-- **[Operator Demo Guide](docs/DEMO_GUIDE.md)** - Cold-start 60–90s demo flow, environment variables, sample payloads & troubleshooting.
+- **[Operator Demo Guide](docs/DEMO_GUIDE.md)** - Cold-start 60-90s demo flow, environment variables, sample payloads & troubleshooting.
 - **[Test & Security Report](docs/reports/TEST_REPORT.md)** - `npm audit`, XSS/CSP/brand-safety checks, memory benchmarks & verbatim test output.
-- **[Project Analysis](docs/reports/PROJECT_ANALYSIS.md)** - Complete requirements traceability matrix & specification conflict register.
-- **[Implementation Roadmap](docs/reports/IMPLEMENTATION_ROADMAP.md)** - Prioritized feature breakdown and verification status.
-- **[Engineering Log](docs/reports/ENGINEERING_LOG.md)** - Multi-agent architecture decisions, bug discoveries & fixes.
+- **[Project Analysis](docs/reports/PROJECT_ANALYSIS.md)** - Requirements traceability matrix & specification conflict register.
+- **[Implementation Roadmap](docs/reports/IMPLEMENTATION_ROADMAP.md)** - Feature breakdown and verification status.
+- **[Engineering Log](docs/reports/ENGINEERING_LOG.md)** - Architecture decisions, bug discoveries & fixes.

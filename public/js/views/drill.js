@@ -320,20 +320,32 @@
         }
 
         const card = createEl('div', 'incoming-call-card practice-welcome');
-        card.appendChild(createEl('p', 'eyebrow eyebrow--dark', t('heroEyebrow')));
+        const heroGrid = createEl('div', 'hero-split-grid');
+        const copyCol = createEl('div', 'hero-copy-col');
+
+        const eyebrowPill = createEl('span', 'hero-eyebrow-pill', t('heroEyebrow'));
+        copyCol.appendChild(eyebrowPill);
 
         const h1 = createEl('h1', 'display-xl');
         h1.appendChild(document.createTextNode(t('heroHeadlinePre')));
         h1.appendChild(createEl('span', 'highlight-mark', t('heroHeadlineMark')));
-        card.appendChild(h1);
+        copyCol.appendChild(h1);
 
-        card.appendChild(createEl('p', 'hero-value-prop', t('heroValueProp')));
+        copyCol.appendChild(createEl('p', 'hero-value-prop', t('heroValueProp')));
 
+        const metaPills = createEl('div', 'hero-meta-pills');
+        const pillItems = [t('statTrapsVal'), t('statClockVal'), t('statLangVal')];
+        for (let i = 0; i < pillItems.length; i++) {
+          metaPills.appendChild(createEl('span', 'hero-meta-pill', pillItems[i]));
+        }
+        copyCol.appendChild(metaPills);
+
+        const ctaGroup = createEl('div', 'hero-cta-group');
         const answerBtn = createEl('button', 'button-primary button-full', t('answerCta'));
         answerBtn.type = 'button';
         answerBtn.id = 'answer-start-drill-btn';
         answerBtn.addEventListener('click', () => startDrillSequence('calm'));
-        card.appendChild(answerBtn);
+        ctaGroup.appendChild(answerBtn);
 
         const timedDetails = createEl('details', 'timed-practice-details');
         timedDetails.appendChild(createEl('summary', '', t('timedPracticeDisclosure')));
@@ -342,7 +354,35 @@
         timedBtn.id = 'timed-challenge-btn';
         timedBtn.addEventListener('click', () => startDrillSequence('timed'));
         timedDetails.appendChild(timedBtn);
-        card.appendChild(timedDetails);
+        ctaGroup.appendChild(timedDetails);
+        copyCol.appendChild(ctaGroup);
+
+        const visualCol = createEl('div', 'hero-visual-col');
+        const previewCard = createEl('div', 'hero-preview-card');
+        previewCard.appendChild(createEl('span', 'hero-preview-eyebrow', t('heroPreviewEyebrow')));
+        previewCard.appendChild(createEl('h2', 'hero-preview-title', t('heroPreviewTitle')));
+
+        const stepsList = createEl('ol', 'hero-preview-steps');
+        const previewSteps = [
+          [t('heroPreviewStep1Title'), t('heroPreviewStep1Desc')],
+          [t('heroPreviewStep2Title'), t('heroPreviewStep2Desc')],
+          [t('heroPreviewStep3Title'), t('heroPreviewStep3Desc')]
+        ];
+        for (let i = 0; i < previewSteps.length; i++) {
+          const li = createEl('li', 'hero-preview-step');
+          li.appendChild(createEl('span', 'hero-preview-num', String(i + 1)));
+          const txtWrap = createEl('div', 'hero-preview-txt');
+          txtWrap.appendChild(createEl('strong', 'hero-preview-step-title', previewSteps[i][0]));
+          txtWrap.appendChild(createEl('span', 'hero-preview-step-desc', previewSteps[i][1]));
+          li.appendChild(txtWrap);
+          stepsList.appendChild(li);
+        }
+        previewCard.appendChild(stepsList);
+        visualCol.appendChild(previewCard);
+
+        heroGrid.appendChild(copyCol);
+        heroGrid.appendChild(visualCol);
+        card.appendChild(heroGrid);
 
         wall.appendChild(card);
         if (typeof renderSimulatorHub === 'function') {

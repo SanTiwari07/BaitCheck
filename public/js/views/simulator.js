@@ -484,20 +484,20 @@
       img.alt = loc(scam.title);
       img.loading = 'eager';
       thumbWrap.appendChild(img);
-      thumbWrap.appendChild(createEl('span', 'sim-card-badge', loc(scam.badge)));
       card.appendChild(thumbWrap);
 
       const body = createEl('div', 'sim-card-body');
+      const badgeRow = createEl('div', 'sim-card-badge-row');
+      badgeRow.appendChild(createEl('span', 'sim-card-badge', loc(scam.badge)));
+      const stepWord = scam.steps.length === 1 ? t('simStepSingular') : t('simStepsPlural');
+      badgeRow.appendChild(
+        createEl('span', 'mono-tabular sim-steps-pill', `${scam.steps.length} ${stepWord}`)
+      );
+      body.appendChild(badgeRow);
+
       const metaRow = createEl('div', 'sim-card-meta');
       metaRow.appendChild(
         createEl('span', 'edu-lesson-num', `${t('lessonPrefix')} ${lessonNum} • ${loc(scam.categoryLabel)}`)
-      );
-      metaRow.appendChild(
-        createEl(
-          'span',
-          'mono-tabular sim-steps-pill',
-          `${scam.steps.length} ${t('simStepPrefix')}${state.lang === 'en' && scam.steps.length > 1 ? 'S' : ''}`
-        )
       );
       body.appendChild(metaRow);
 
