@@ -4,8 +4,9 @@ const path = require('path');
 const express = require('express');
 const { initDb } = require('./src/db');
 const { analyzeInput } = require('./src/forensicEngine');
-const { DRILLS, GOLDEN_HOUR_PLAYBOOK, XRAY_PRESETS, getDrillById } = require('./src/drills');
+const { DRILLS, getDrillById } = require('./src/drills');
 const { uploadVerdictBadge, PNG_FILENAME_RE, isPngBuffer } = require('./src/storage');
+const { createSystemRouter } = require('./src/routes/system');
 
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const INDEX_HTML_PATH = path.join(PUBLIC_DIR, 'index.html');
@@ -226,26 +227,7 @@ function createApp(options = {}) {
     return defaultJsonParser(req, res, next);
   });
   app.use(express.static(PUBLIC_DIR));
-
-  app.get('/health', (_req, res) => {
-    res.status(200).json({
-      ok: true,
-      memoryMb: Number((process.memoryUsage().rss / 1024 / 1024).toFixed(2)),
-      uptime: Math.round(process.uptime())
-    });
-  });
-
-  app.get('/api/drills', (_req, res) => {
-    res.status(200).json({
-      drills: DRILLS,
-      playbook: GOLDEN_HOUR_PLAYBOOK,
-      presets: XRAY_PRESETS
-    });
-  });
-
-  app.get('/api/stats', (_req, res) => {
-    res.status(200).json(db.getCohortStats());
-  });
+  app.use(createSystemRouter({ db }));
 
   app.post('/api/scan', (req, res) => {
     const text =
@@ -409,15 +391,6 @@ function createApp(options = {}) {
         code: (err && err.code) || 'STORAGE_UPSTREAM_ERROR'
       });
     }
-  });
-
-  app.get('/tasks/daily-stats', (req, res) => {
-    const cronSecret = process.env.CRON_SECRET || '';
-    if (cronSecret && req.get('authorization') !== `Bearer ${cronSecret}`) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
-    const stats = db.refreshDailyStats();
-    return res.status(200).json({ ok: true, stats });
   });
 
   app.get('/c/:id', serveAppShell);
