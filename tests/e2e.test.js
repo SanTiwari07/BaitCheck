@@ -10,14 +10,37 @@ const path = require('node:path');
 const { createApp } = require('../server');
 
 const CHROME_CANDIDATES = [
+  process.env.CHROME_PATH,
+  process.env.PUPPETEER_EXECUTABLE_PATH,
+  '/usr/bin/google-chrome',
+  '/usr/bin/google-chrome-stable',
+  '/usr/bin/chromium',
+  '/usr/bin/chromium-browser',
+  '/snap/bin/chromium',
+  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-  'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
-];
+  'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+  'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+  'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe'
+].filter(Boolean);
 
 function findBrowserExecutable() {
   for (const candidate of CHROME_CANDIDATES) {
     if (fs.existsSync(candidate)) {
       return candidate;
+    }
+  }
+  if (process.platform !== 'win32') {
+    for (const cmd of ['google-chrome', 'chromium', 'chromium-browser']) {
+      try {
+        const resolved = execFileSync('which', [cmd], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+        if (resolved && fs.existsSync(resolved)) {
+          return resolved;
+        }
+      } catch {
+        // Continue checking remaining browser command names.
+      }
     }
   }
   throw new Error(
@@ -31,23 +54,24 @@ function delay(ms) {
 
 async function launchHeadlessBrowser(userDataDir) {
   const exePath = findBrowserExecutable();
-  const proc = spawn(
-    exePath,
-    [
-      '--headless=new',
-      '--disable-gpu',
-      '--no-first-run',
-      '--no-default-browser-check',
-      '--disable-background-networking',
-      '--disable-extensions',
-      '--remote-debugging-port=0',
-      `--user-data-dir=${userDataDir}`,
-      'about:blank'
-    ],
-    {
-      stdio: ['ignore', 'pipe', 'pipe']
-    }
-  );
+  const args = [
+    '--headless=new',
+    '--disable-gpu',
+    '--no-first-run',
+    '--no-default-browser-check',
+    '--disable-background-networking',
+    '--disable-extensions',
+    '--remote-debugging-port=0',
+    `--user-data-dir=${userDataDir}`
+  ];
+  if (process.platform === 'linux') {
+    args.push('--no-sandbox', '--disable-dev-shm-usage');
+  }
+  args.push('about:blank');
+
+  const proc = spawn(exePath, args, {
+    stdio: ['ignore', 'pipe', 'pipe']
+  });
 
   let stderrBuf = '';
   proc.stderr.on('data', (chunk) => {
