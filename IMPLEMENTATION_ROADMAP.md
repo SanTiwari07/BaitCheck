@@ -19,7 +19,7 @@
   - `GET /health` returns `{ ok: true, memoryMb, uptime }` with HTTP 200 and RSS `<75 MB`.
   - `embarko.json` declares `/tasks/daily-stats` schedule (`0 9 * * *`, `Asia/Kolkata`).
 - **Test Cases:** Health endpoint returns 200 + numeric `memoryMb` < 75; `/c/demo` and `/c/demo/report` return HTML 200.
-- **Completion Status:** Pending
+- **Completion Status:** Completed and verified
 
 ### Feature 1.2: Persistent SQLite Database Layer (`src/db.js`) & Cohort Stats API
 - **Objective:** Implement idempotent SQLite persistence in `DATA_DIR/baitcheck.db` preserving Litestream tables and storing zero PII.

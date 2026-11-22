@@ -1,0 +1,11 @@
+{
+  "$schema": "https://embarko.ai/schema/embarko.json",
+  "schedules": [
+    {
+      "cron": "0 9 * * *",
+      "path": "/tasks/daily-stats",
+      "timezone": "Asia/Kolkata",
+      "name": "Refresh daily anonymized BaitCheck trap benchmark"
+    }
+  ]
+}

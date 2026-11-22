@@ -28,3 +28,11 @@ This log records agent role assignments, architectural decisions, implementation
   - Resolved 5 specification conflicts (deadline buffer, `target_label`/`parent_label` compatibility, 3-choice Drill 3 weights `35+35+30`, `<60 MB` RAM target, self-hosted assets + HTTPS font fallback).
   - Created `PROJECT_ANALYSIS.md`, `IMPLEMENTATION_ROADMAP.md`, and `ENGINEERING_LOG.md`.
 - **Next Action:** Initialize Git repository cleanly with `.gitignore` and commit initial analysis & baseline docs, define specialized engineering subagents, and start Priority 1 implementation (Feature 1.1 -> 1.4).
+
+### 2026-11-22 — Feature 1.1: Runtime Scaffold, Embarko Config & Health Endpoint (`backend-engineer` + `orchestrator`)
+- **Completed:**
+  - Created `package.json`, `package-lock.json`, `embarko.json`, and `server.js` (`0.0.0.0:$PORT`, `/health`, static `public/`, `/c/:id` & `/c/:id/report` shell routing).
+  - Discovered `better-sqlite3@^11.8.1` C++ compilation fails on local Node `v26.13.0` (`v8::Object::GetPrototype` removed in V8), whereas Node's built-in `node:sqlite` (`DatabaseSync`) works natively at `33.53 MB` RSS. Moved `better-sqlite3` to `optionalDependencies` so `npm install` succeeds cleanly on both Node 26+ (`node:sqlite`) and Node 20 (`better-sqlite3`).
+- **Verification:**
+  - `npm install` exited 0 with 0 vulnerabilities.
+  - `GET /health` returned `200 {"ok":true,"memoryMb":50.52,"uptime":0}`; `/`, `/c/demo`, `/c/demo/report` returned `200` with `SIMULATION` ribbon.
