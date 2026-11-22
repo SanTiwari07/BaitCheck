@@ -1,5 +1,6 @@
 {
   "$schema": "https://embarko.ai/schema/embarko.json",
+  "appId": "cmwreolah0hv4nr784oiqhjkq",
   "schedules": [
     {
       "cron": "0 9 * * *",
