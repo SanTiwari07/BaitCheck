@@ -730,15 +730,30 @@ textarea:focus-visible {
   color: var(--on-dark-muted);
 }
 
-.quick-links-row {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--sp-sm);
+.timed-practice-details {
   margin-top: var(--sp-sm);
+  text-align: center;
+}
+
+.timed-practice-details summary {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--sp-md);
+  color: var(--on-dark);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.timed-practice-details summary:focus-visible {
+  outline: 3px solid var(--on-dark);
+  outline-offset: 2px;
 }
 
 .timed-practice-link {
-  margin-top: var(--sp-sm);
+  margin-top: var(--sp-xs);
   min-height: 48px;
   font-size: 0.9rem;
 }

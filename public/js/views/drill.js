@@ -359,23 +359,14 @@
         answerBtn.addEventListener('click', () => startDrillSequence('calm'));
         card.appendChild(answerBtn);
 
+        const timedDetails = createEl('details', 'timed-practice-details');
+        timedDetails.appendChild(createEl('summary', '', t('timedPracticeDisclosure')));
         const timedBtn = createEl('button', 'button-ghost-light button-full timed-practice-link', t('timedPracticeCta'));
         timedBtn.type = 'button';
         timedBtn.id = 'timed-challenge-btn';
         timedBtn.addEventListener('click', () => startDrillSequence('timed'));
-        card.appendChild(timedBtn);
-
-        const quickRow = createEl('div', 'quick-links-row');
-        const qXray = createEl('button', 'button-dark', t('quickXrayBtn'));
-        qXray.type = 'button';
-        qXray.addEventListener('click', () => navigateTo('/?tab=xray'));
-        quickRow.appendChild(qXray);
-
-        const qChal = createEl('button', 'button-dark', t('quickChallengeBtn'));
-        qChal.type = 'button';
-        qChal.addEventListener('click', () => navigateTo('/?tab=challenge'));
-        quickRow.appendChild(qChal);
-        card.appendChild(quickRow);
+        timedDetails.appendChild(timedBtn);
+        card.appendChild(timedDetails);
 
         wall.appendChild(card);
         renderLearningLibrary(wall);

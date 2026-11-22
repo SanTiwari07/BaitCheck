@@ -496,6 +496,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     await cdp.navigate(`${baseUrl}/`);
     await cdp.waitFor('document.querySelector("#answer-start-drill-btn")', 'Hero CTA');
 
+    await cdp.clickSelector('.timed-practice-details summary');
     await cdp.clickSelector('#timed-challenge-btn');
     await cdp.waitFor(
       'document.querySelector("#drill-countdown-time") && document.querySelector(".caption-script")',
