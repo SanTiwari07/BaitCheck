@@ -132,11 +132,12 @@
       const mediaWrap = createEl('div', 'sim-media-stage');
       if (step.video) {
         const video = createEl('video', 'sim-evidence-video');
-        video.src = step.video;
+        video.src = loc(step.video);
         if (step.image) video.poster = step.image;
         video.autoplay = true;
         video.loop = true;
         video.muted = true;
+        video.controls = true;
         video.playsInline = true;
         video.setAttribute('autoplay', '');
         video.setAttribute('loop', '');

@@ -506,9 +506,11 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     const drill1State = await cdp.eval(`(() => {
       const cap = document.querySelector('.caption-script');
       const timer = document.querySelector('#drill-countdown-time');
+      const vid = document.querySelector('.drill-stage-video');
       return {
         bodyText: document.querySelector('#view-drill')?.textContent || '',
         timerText: timer ? timer.textContent.trim() : '',
+        videoSrc: vid ? vid.getAttribute('src') : '',
         captionFontSize: cap ? parseFloat(getComputedStyle(cap).fontSize) : 0,
         scrollWidth: document.documentElement.scrollWidth
       };
@@ -516,6 +518,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
 
     assert.match(drill1State.bodyText, /Central Cyber Desk \(Simulated\)/);
     assert.match(drill1State.timerText, /^\d+\.\ds$/);
+    assert.equal(drill1State.videoSrc, '/assets/sim/digital-arrest-call-en.mp4');
     assert.ok(
       drill1State.captionFontSize >= 18,
       `Expected >=18px caption fontSize, got ${drill1State.captionFontSize}px`
@@ -1016,8 +1019,14 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     await cdp.setViewport(360, 800, true);
     await cdp.navigate(`${baseUrl}/`);
     await cdp.waitFor(
+      'document.querySelectorAll("#real-life-simulator-hub .sim-card-img").length >= 2 && Array.from(document.querySelectorAll("#real-life-simulator-hub .sim-card-img")).every((i) => i.complete && i.naturalWidth > 0)',
+      'Real-Life Simulator Hub initial cards with loaded images'
+    );
+
+    await cdp.clickSelector('.sim-show-more-btn');
+    await cdp.waitFor(
       'document.querySelectorAll("#real-life-simulator-hub .sim-card-img").length === 8 && Array.from(document.querySelectorAll("#real-life-simulator-hub .sim-card-img")).every((i) => i.complete && i.naturalWidth > 0)',
-      'Real-Life Simulator Hub with loaded images'
+      'Real-Life Simulator Hub with all 8 loaded images'
     );
 
     const hubState = await cdp.eval(`(() => {
@@ -1034,11 +1043,13 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     assert.equal(hubState.loadedImages, 8, 'Expected all simulator card images to load cleanly');
     assert.ok(hubState.scrollWidth <= 360, `Expected <=360px overflow on simulator hub, got ${hubState.scrollWidth}`);
 
-    // Filter by CALLS & VIDEO then back to ALL
-    await cdp.clickByText('.sim-filter-row button', 'CALLS & VIDEO');
+    // Open topic filters, filter by Calls then back to All situations
+    await cdp.clickSelector('.sim-filter-summary');
+    await cdp.waitFor('document.querySelector(".sim-filter-disclosure")?.open', 'Filter disclosure opened');
+    await cdp.clickByText('.sim-filter-row button', 'Calls');
     const filteredCount = await cdp.eval('document.querySelectorAll(".sim-scam-card").length');
     assert.equal(filteredCount, 3);
-    await cdp.clickByText('.sim-filter-row button', 'ALL');
+    await cdp.clickByText('.sim-filter-row button', 'All situations');
 
     // Launch Fake Police "Cyber Lock" & Digital Arrest Call
     await cdp.clickSelector('button[data-sim-id="digital-arrest-cyber-lock"]');
@@ -1057,16 +1068,28 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
       };
     })()`);
 
-    assert.equal(step1.src, '/assets/sim/police-video-call.mp4');
+    assert.equal(step1.src, '/assets/sim/digital-arrest-call-en.mp4');
     assert.equal(step1.poster, '/assets/sim/police-video-poster.jpg');
     assert.match(step1.text, /CYBER LOCK/);
-    assert.match(step1.text, /WHAT WILL YOU DO NEXT\?/);
+    assert.match(step1.text, /What would you do next\?/);
     assert.ok(step1.scrollWidth <= 360);
+
+    // Switch to Hindi and confirm Hindi Digital Arrest video loads
+    await cdp.clickSelector('#lang-hi-btn');
+    await cdp.waitFor(
+      '(document.querySelector(".sim-evidence-video")?.getAttribute("src") || "") === "/assets/sim/digital-arrest-call-hi.mp4"',
+      'Hindi Digital Arrest video active'
+    );
+    await cdp.clickSelector('#lang-en-btn');
+    await cdp.waitFor(
+      '(document.querySelector(".sim-evidence-video")?.getAttribute("src") || "") === "/assets/sim/digital-arrest-call-en.mp4"',
+      'English Digital Arrest video restored'
+    );
 
     // Step 1: Choose escalating action to experience Step 2
     await cdp.clickByText('#view-drill .choices-list button', 'Stay on the video call');
     await cdp.waitFor('document.querySelector(".trap-alert-banner")', 'Step 1 escalation debrief');
-    await cdp.clickByText('.sim-outcome-actions button', 'SEE WHAT SCAMMER DOES NEXT');
+    await cdp.clickByText('.sim-outcome-actions button', 'Continue');
 
     // Step 2: Forged Cyber Lock warrant
     await cdp.waitFor(
@@ -1080,7 +1103,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
 
     await cdp.clickByText('#view-drill .choices-list button', 'Lock the room door');
     await cdp.waitFor('document.querySelector(".trap-alert-banner")', 'Step 2 escalation debrief');
-    await cdp.clickByText('.sim-outcome-actions button', 'SEE WHAT SCAMMER DOES NEXT');
+    await cdp.clickByText('.sim-outcome-actions button', 'Continue');
 
     // Step 3: Refuse payment & complete simulation
     await cdp.waitFor(
@@ -1089,10 +1112,10 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     );
     await cdp.clickByText('#view-drill .choices-list button', 'Refuse all payment');
     await cdp.waitFor('document.querySelector(".safe-pass-banner")', 'Step 3 safe debrief');
-    await cdp.clickByText('.sim-outcome-actions button', 'VIEW FULL SCAM ANATOMY');
+    await cdp.clickByText('.sim-outcome-actions button', 'See the key lessons');
 
     await cdp.waitFor(
-      '(document.querySelector("#view-drill")?.textContent || "").includes("HOW THIS SCAM WORKS IN REAL LIFE")',
+      '(document.querySelector("#view-drill")?.textContent || "").includes("How this scam works")',
       'Full scam anatomy report'
     );
     const anatomyOverflow = await cdp.eval('document.documentElement.scrollWidth');
@@ -1113,7 +1136,9 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
   it('9. Parent & Kid Mode, Elder-Safe Guide, A/B/C choice badges & scroll-to-top on Next', async () => {
     await cdp.setViewport(360, 800, true);
     await cdp.navigate(`${baseUrl}/`);
-    await cdp.waitFor('document.querySelector("button[data-audience-mode=\'parent-kid\']")', 'Audience mode buttons');
+    await cdp.waitFor('document.querySelector(".edu-audience-summary")', 'Audience mode disclosure');
+    await cdp.clickSelector('.edu-audience-summary');
+    await cdp.waitFor('document.querySelector(".edu-audience-wrap")?.open', 'Audience mode drawer open');
 
     // Test Parent & Kid Mode
     await cdp.clickSelector('button[data-audience-mode="parent-kid"]');
@@ -1149,7 +1174,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     await cdp.eval('window.scrollTo(0, 600)');
     await cdp.clickByText('#view-drill .choices-list button', 'Stay on the video call');
     await cdp.waitFor('document.querySelector(".sim-outcome-actions button")', 'Outcome actions ready');
-    await cdp.clickByText('.sim-outcome-actions button', 'SEE WHAT SCAMMER DOES NEXT');
+    await cdp.clickByText('.sim-outcome-actions button', 'Continue');
     await cdp.waitFor(
       '(document.querySelector(".sim-evidence-img")?.getAttribute("src") || "").includes("cyber-lock-warrant.svg")',
       'Step 2 loaded'

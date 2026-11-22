@@ -33,7 +33,11 @@
         {
           stepNumber: 1,
           uiMode: 'video-call',
-          image: '/assets/sim/police-officer-call.svg',
+          video: {
+            en: '/assets/sim/digital-arrest-call-en.mp4',
+            hi: '/assets/sim/digital-arrest-call-hi.mp4'
+          },
+          image: '/assets/sim/police-video-poster.jpg',
           imageAlt: {
             en: 'Simulated video call showing a stern person in khaki uniform at a cyber desk',
             hi: 'सिम्युलेटेड वीडियो कॉल जिसमें वर्दी पहने एक व्यक्ति डेस्क पर बैठा दिख रहा है'
@@ -185,7 +189,11 @@
         {
           stepNumber: 3,
           uiMode: 'video-call',
-          image: '/assets/sim/police-officer-call.svg',
+          video: {
+            en: '/assets/sim/digital-arrest-call-en.mp4',
+            hi: '/assets/sim/digital-arrest-call-hi.mp4'
+          },
+          image: '/assets/sim/police-video-poster.jpg',
           imageAlt: {
             en: 'Simulated video call demanding refundable security deposit',
             hi: 'सिम्युलेटेड वीडियो कॉल जिसमें रिफंडेबल सिक्योरिटी राशि मांगी जा रही है'
@@ -804,7 +812,11 @@
         {
           stepNumber: 2,
           uiMode: 'video-call',
-          image: '/assets/sim/police-officer-call.svg',
+          video: {
+            en: '/assets/sim/digital-arrest-call-en.mp4',
+            hi: '/assets/sim/digital-arrest-call-hi.mp4'
+          },
+          image: '/assets/sim/police-video-poster.jpg',
           imageAlt: {
             en: 'Fictional training scene showing a parcel scam escalating into a fake police call',
             hi: 'पार्सल कॉल से नकली साइबर पुलिस वीडियो कॉल में बदलाव'

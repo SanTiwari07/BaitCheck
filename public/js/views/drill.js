@@ -432,10 +432,21 @@
           frame.appendChild(topInfo);
 
           const simVideo = createEl('video', 'drill-stage-video');
-          const callScene = createEl('img', 'drill-stage-img drill-stage-img--spaced');
-          callScene.src = '/assets/sim/police-officer-call.svg';
-          callScene.alt = loc(drill.title);
-          frame.appendChild(callScene);
+          simVideo.src = state.lang === 'hi'
+            ? '/assets/sim/digital-arrest-call-hi.mp4'
+            : '/assets/sim/digital-arrest-call-en.mp4';
+          simVideo.poster = '/assets/sim/police-video-poster.jpg';
+          simVideo.autoplay = true;
+          simVideo.loop = true;
+          simVideo.muted = true;
+          simVideo.controls = true;
+          simVideo.playsInline = true;
+          simVideo.setAttribute('autoplay', '');
+          simVideo.setAttribute('loop', '');
+          simVideo.setAttribute('muted', '');
+          simVideo.setAttribute('playsinline', '');
+          simVideo.setAttribute('aria-label', loc(drill.title));
+          frame.appendChild(simVideo);
 
           drillCard.appendChild(frame);
         } else if (drill.mode === 'chat-attachment') {
