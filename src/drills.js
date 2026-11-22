@@ -50,8 +50,8 @@ const DRILLS = [
         loss_label: null,
         simulated_loss_inr: 0,
         label: {
-          en: 'Spot Red Flag: Agencies never arrest or demand money on video calls',
-          hi: 'खतरा पहचानें: असली एजेंसियां वीडियो कॉल पर गिरफ्तारी या पैसे नहीं मांगतीं'
+          en: 'Ask for an official written warrant & hang up',
+          hi: 'आधिकारिक लिखित वारंट मांगें और कॉल काट दें'
         }
       },
       {
@@ -62,8 +62,8 @@ const DRILLS = [
         loss_label: '-₹50,000',
         simulated_loss_inr: 50000,
         label: {
-          en: 'Comply & Stay Alone on Call (Simulated)',
-          hi: 'मान लें और कॉल पर अकेले रहें (सिम्युलेटेड)'
+          en: 'Stay on the video call & pay the refundable deposit',
+          hi: 'वीडियो कॉल पर बने रहें और रिफंडेबल राशि जमा करें'
         }
       },
       {
@@ -74,8 +74,8 @@ const DRILLS = [
         loss_label: null,
         simulated_loss_inr: 0,
         label: {
-          en: 'Spot Red Flag: Forced isolation & instant payment threat',
-          hi: 'खतरा पहचानें: अकेले रहने का दबाव और तुरंत भुगतान की धमकी'
+          en: 'Disconnect immediately & verify via 1930 helpline',
+          hi: 'तुरंत कॉल काटें और 1930 हेल्पलाइन से जांच करें'
         }
       }
     ]
@@ -130,8 +130,8 @@ const DRILLS = [
         loss_label: '-₹50,000',
         simulated_loss_inr: 50000,
         label: {
-          en: 'Tap File to Install & Clear ₹12 Fee (Simulated)',
-          hi: 'फाइल इंस्टॉल करें और ₹12 शुल्क भरें (सिम्युलेटेड)'
+          en: 'Open MetroBill_Notice.pdf.apk to clear ₹12 fee',
+          hi: '₹12 शुल्क भरने के लिए MetroBill_Notice.pdf.apk खोलें'
         }
       },
       {
@@ -142,8 +142,8 @@ const DRILLS = [
         loss_label: null,
         simulated_loss_inr: 0,
         label: {
-          en: 'Spot Red Flag: Panic 9:30 PM cutoff & unknown file',
-          hi: 'खतरा पहचानें: रात 9:30 बजे बिजली कटने का डर और अनजान फाइल'
+          en: 'Pay only through your official power board app',
+          hi: 'केवल आधिकारिक बिजली बोर्ड ऐप से बिल जांचें व भरें'
         }
       },
       {
@@ -154,8 +154,8 @@ const DRILLS = [
         loss_label: null,
         simulated_loss_inr: 0,
         label: {
-          en: 'Spot Red Flag: Fake .apk app disguised as a .pdf bill',
-          hi: 'खतरा पहचानें: .pdf बिल के रूप में छिपा नकली .apk ऐप'
+          en: 'Check the .apk extension & delete the message',
+          hi: 'फाइल का .apk एक्सटेंशन जांचें और मैसेज डिलीट करें'
         }
       }
     ]
@@ -211,8 +211,8 @@ const DRILLS = [
         loss_label: null,
         simulated_loss_inr: 0,
         label: {
-          en: 'Decline Request & Report Collect Trap',
-          hi: 'रिक्वेस्ट अस्वीकार करें और कलेक्ट ट्रैप रिपोर्ट करें'
+          en: 'Reject request & block sender without tapping Approve',
+          hi: 'Approve दबाए बिना रिक्वेस्ट अस्वीकार करें व ब्लॉक करें'
         }
       },
       {
@@ -223,8 +223,8 @@ const DRILLS = [
         loss_label: '-₹4,500',
         simulated_loss_inr: 4500,
         label: {
-          en: 'Approve & Enter PIN to Claim ₹4,500 (Simulated)',
-          hi: '₹4,500 पाने के लिए Approve करें और पिन डालें (सिम्युलेटेड)'
+          en: 'Tap Approve & enter UPI PIN to claim ₹4,500',
+          hi: '₹4,500 पाने के लिए Approve दबाएं और UPI PIN डालें'
         }
       },
       {
@@ -235,8 +235,8 @@ const DRILLS = [
         loss_label: null,
         simulated_loss_inr: 0,
         label: {
-          en: 'Spot Red Flag: UPI PIN is NEVER needed to receive money',
-          hi: 'खतरा पहचानें: पैसे पाने के लिए कभी भी UPI PIN नहीं डालना होता'
+          en: 'Decline — a UPI PIN only sends money out',
+          hi: 'अस्वीकार करें — UPI PIN से पैसे केवल कटते हैं, आते नहीं'
         }
       }
     ]

@@ -381,6 +381,17 @@ describe('Full HTTP API Lifecycle & Zero-PII Integration', () => {
     });
     assert.equal(badScenario.status, 400);
 
+    // Non-boolean passed values ("yes", "FALSE") -> 400 { error: 'passed must be a boolean' }
+    for (const badPassed of ['yes', 'FALSE']) {
+      const badPassedRes = await fetch(`${baseUrl}/api/challenge/${c1.id}/result`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ scenarioId: 'drill-1-call', passed: badPassed, reactionMs: 2500 })
+      });
+      assert.equal(badPassedRes.status, 400, `Expected 400 for passed=${badPassed}`);
+      assert.deepEqual(await badPassedRes.json(), { error: 'passed must be a boolean' });
+    }
+
     // Unknown challenge -> 404
     const unknownChallenge = await fetch(`${baseUrl}/api/challenge/unknown-1234/result`, {
       method: 'POST',
@@ -496,6 +507,190 @@ describe('Full HTTP API Lifecycle & Zero-PII Integration', () => {
       assert.equal(statsAfter.totalScans, statsBefore.totalScans);
     } finally {
       delete process.env.CRON_SECRET;
+    }
+  });
+
+  it('GET /api/nonexistent returns 404 JSON and GET /nonexistent-page returns 404 HTML with SIMULATION ribbon', async () => {
+    const apiNotFound = await fetch(`${baseUrl}/api/nonexistent`);
+    assert.equal(apiNotFound.status, 404);
+    assert.deepEqual(await apiNotFound.json(), { error: 'Not found' });
+
+    const pageNotFound = await fetch(`${baseUrl}/nonexistent-page`);
+    assert.equal(pageNotFound.status, 404);
+    assert.match(pageNotFound.headers.get('content-type') || '', /text\/html/i);
+    const html = await pageNotFound.text();
+    assert.match(html, /SIMULATION/);
+    assert.match(html, /404/);
+  });
+});
+
+describe('POST /api/badge Storage Upload & Fallback Guardrails', () => {
+  const VALID_PNG_BYTES = Buffer.from([
+    0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a,
+    0x00, 0x00, 0x00, 0x0d, 0x49, 0x48, 0x44, 0x52,
+    0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+    0x08, 0x06, 0x00, 0x00, 0x00, 0x1f, 0x15, 0xc4,
+    0x89, 0x00, 0x00, 0x00, 0x0a, 0x49, 0x44, 0x41,
+    0x54, 0x78, 0x9c, 0x63, 0x00, 0x01, 0x00, 0x00,
+    0x05, 0x00, 0x01, 0x0d, 0x0a, 0x2d, 0xb4, 0x00,
+    0x00, 0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae,
+    0x42, 0x60, 0x82
+  ]);
+  const VALID_PNG_DATA_URL = `data:image/png;base64,${VALID_PNG_BYTES.toString('base64')}`;
+
+  async function withTestApp(options, fn) {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'baitcheck-badge-'));
+    const dbPath = path.join(tmpDir, 'badge.db');
+    const app = createApp({ dbPath, ...options });
+    const server = app.listen(0, '127.0.0.1');
+    await new Promise((resolve) => server.once('listening', resolve));
+    const addr = server.address();
+    const baseUrl = `http://127.0.0.1:${addr.port}`;
+    try {
+      await fn(baseUrl);
+    } finally {
+      await new Promise((resolve) => server.close(resolve));
+      app.locals.db.close();
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+  }
+
+  it('returns 200 unconfigured fallback when STORAGE_URL/STORAGE_TOKEN are absent', async () => {
+    const origUrl = process.env.STORAGE_URL;
+    const origToken = process.env.STORAGE_TOKEN;
+    delete process.env.STORAGE_URL;
+    delete process.env.STORAGE_TOKEN;
+
+    try {
+      await withTestApp({}, async (baseUrl) => {
+        const res = await fetch(`${baseUrl}/api/badge`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            filename: 'verdict-ticket-1.png',
+            dataUrl: VALID_PNG_DATA_URL
+          })
+        });
+        assert.equal(res.status, 200);
+        const body = await res.json();
+        assert.equal(body.uploaded, false);
+        assert.equal(body.configured, false);
+        assert.equal(body.url, null);
+        assert.match(body.message, /STORAGE_URL not configured/);
+      });
+    } finally {
+      if (origUrl === undefined) delete process.env.STORAGE_URL;
+      else process.env.STORAGE_URL = origUrl;
+      if (origToken === undefined) delete process.env.STORAGE_TOKEN;
+      else process.env.STORAGE_TOKEN = origToken;
+    }
+  });
+
+  it('rejects invalid filename and invalid PNG payloads with 400', async () => {
+    await withTestApp({}, async (baseUrl) => {
+      for (const badName of ['../evil.png', 'ab.png', 'bad name.png', 'ticket.jpg', '']) {
+        const res = await fetch(`${baseUrl}/api/badge`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ filename: badName, dataUrl: VALID_PNG_DATA_URL })
+        });
+        assert.equal(res.status, 400, `Expected 400 for filename "${badName}"`);
+        const body = await res.json();
+        assert.equal(body.code, 'INVALID_FILENAME');
+      }
+
+      const badPayloads = [
+        'data:image/jpeg;base64,/9j/4AAQ',
+        'data:image/png;base64,not!valid!base64',
+        `data:image/png;base64,${Buffer.from('NOT_A_PNG_HEADER_1234').toString('base64')}`,
+        null
+      ];
+      for (const dataUrl of badPayloads) {
+        const res = await fetch(`${baseUrl}/api/badge`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ filename: 'valid-ticket.png', dataUrl })
+        });
+        assert.equal(res.status, 400, `Expected 400 for invalid dataUrl: ${String(dataUrl)}`);
+        const body = await res.json();
+        assert.equal(body.code, 'INVALID_PNG');
+      }
+    });
+  });
+
+  it('returns 200 with uploaded URL when mock uploader succeeds', async () => {
+    let seenFilename = null;
+    let seenByteLength = 0;
+
+    await withTestApp(
+      {
+        uploader: async ({ filename, pngBuffer }) => {
+          seenFilename = filename;
+          seenByteLength = pngBuffer.length;
+          return {
+            uploaded: true,
+            configured: true,
+            url: `https://storage.example/apps/baitcheck/files/${filename}`,
+            message: 'Verdict badge uploaded.'
+          };
+        }
+      },
+      async (baseUrl) => {
+        const res = await fetch(`${baseUrl}/api/badge`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            filename: 'mom-7x2a-verdict.png',
+            dataUrl: VALID_PNG_DATA_URL
+          })
+        });
+        assert.equal(res.status, 200);
+        const body = await res.json();
+        assert.equal(body.uploaded, true);
+        assert.equal(body.configured, true);
+        assert.equal(body.url, 'https://storage.example/apps/baitcheck/files/mom-7x2a-verdict.png');
+        assert.equal(body.message, 'Verdict badge uploaded.');
+        assert.equal(seenFilename, 'mom-7x2a-verdict.png');
+        assert.equal(seenByteLength, VALID_PNG_BYTES.length);
+      }
+    );
+  });
+
+  it('returns 502 on upstream failure and redacts STORAGE_TOKEN from error responses', async () => {
+    const origToken = process.env.STORAGE_TOKEN;
+    const secretToken = 'embarko-super-secret-storage-token-9988';
+    process.env.STORAGE_TOKEN = secretToken;
+
+    try {
+      await withTestApp(
+        {
+          uploader: async () => {
+            const err = new Error(`Upstream rejected Bearer ${secretToken} with HTTP 500`);
+            err.status = 502;
+            err.code = 'STORAGE_UPSTREAM_REJECTED';
+            throw err;
+          }
+        },
+        async (baseUrl) => {
+          const res = await fetch(`${baseUrl}/api/badge`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              filename: 'verdict-fail-test.png',
+              dataUrl: VALID_PNG_DATA_URL
+            })
+          });
+          assert.equal(res.status, 502);
+          const rawText = await res.text();
+          assert.equal(rawText.includes(secretToken), false, 'STORAGE_TOKEN leaked in 502 response');
+          const body = JSON.parse(rawText);
+          assert.equal(body.code, 'STORAGE_UPSTREAM_REJECTED');
+          assert.match(body.error, /\[REDACTED\]/);
+        }
+      );
+    } finally {
+      if (origToken === undefined) delete process.env.STORAGE_TOKEN;
+      else process.env.STORAGE_TOKEN = origToken;
     }
   });
 });

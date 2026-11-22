@@ -1151,6 +1151,28 @@ textarea:focus-visible {
   border: 1px solid var(--ink);
 }
 
+.ticket-preview-box {
+  background: var(--ink);
+  border: 1px solid var(--hairline-dark);
+  padding: var(--sp-md);
+}
+
+.ticket-preview-img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--primary);
+  border-radius: 0;
+}
+
+.ticket-preview-hint {
+  margin: 0;
+  color: var(--primary);
+  font-weight: 700;
+  text-align: center;
+}
+
 /* =========================================================================
    Link X-Ray Workbench (Tab 2)
    ========================================================================= */
@@ -1375,6 +1397,34 @@ mark.hl-warn {
   color: var(--muted);
 }
 
+.recent-challenge-row {
+  background: var(--paper);
+  border: 1px solid var(--hairline-strong);
+  padding: var(--sp-sm) var(--sp-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
+
+.recent-challenge-meta {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.recent-challenge-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--sp-sm);
+  align-items: stretch;
+}
+
+.recent-challenge-actions .button-primary,
+.recent-challenge-actions .button-ghost-light {
+  min-height: 44px;
+  padding: var(--sp-xs) var(--sp-md);
+  font-size: 0.85rem;
+}
+
 /* =========================================================================
    Companion Sidebar / Lower Bands (Cohort Counter + 1930 Playbook)
    ========================================================================= */
@@ -1502,4 +1552,58 @@ mark.hl-warn {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+}
+
+/* =========================================================================
+   Compact Small-Mobile Fold (<420px: 360x640 / 360x800 above-the-fold CTA)
+   ========================================================================= */
+
+@media (max-width: 419px) {
+  .top-nav-inner {
+    padding: 8px 12px;
+    gap: 6px;
+  }
+
+  .poster-wall {
+    padding: 12px 12px 16px;
+  }
+
+  .incoming-call-card {
+    padding: 14px 12px;
+  }
+
+  .call-header-meta {
+    margin-bottom: 10px;
+  }
+
+  .caller-ring-stage {
+    padding: 10px;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .pulse-frame {
+    width: 56px;
+    height: 56px;
+  }
+
+  .incoming-call-card .display-xl {
+    font-size: 2rem;
+    line-height: 0.96;
+  }
+
+  .hero-value-prop,
+  .hero-sub {
+    margin: 8px 0 10px;
+    font-size: 0.92rem;
+    line-height: 1.38;
+  }
+
+  .hero-checklist {
+    margin-bottom: 10px;
+  }
+
+  .hero-stat-chip {
+    padding: 6px 4px;
+  }
 }

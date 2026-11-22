@@ -3,6 +3,8 @@
 (function () {
   const MAX_XRAY_LENGTH = 2000;
   const REPORT_POLL_MS = 4000;
+  const RECENT_CHALLENGES_KEY = 'baitcheck_recent_challenges_v1';
+  const MAX_RECENT_CHALLENGES = 5;
 
   const I18N = {
     en: {
@@ -56,7 +58,7 @@
       timeoutTitle: 'TIME EXPIRED — PANIC TRAP TRIGGERED',
       nextDrillBtn: 'NEXT DRILL →',
       viewVerdictBtn: 'VIEW VERDICT TICKET →',
-      savingResult: 'Saving drill telemetry to challenge report…',
+      savingResult: 'Saving drill progress to challenge report…',
       savedResult: 'Saved to live family readiness report.',
       saveResultErr: 'Could not sync result to report (local score still shown).',
       reactionLabel: 'REACTION',
@@ -80,11 +82,25 @@
       pendingTag: 'PENDING',
       downloadTicketBtn: 'DOWNLOAD VERDICT TICKET (1080×1350 PNG)',
       downloadSuccess: 'Downloaded baitcheck-verdict-ticket.png (1080×1350).',
+      ticketPreviewLabel: 'VERDICT TICKET PREVIEW (1080×1350 PNG)',
+      ticketPreviewHint: 'Long-press image on mobile to save',
+      ticketBadgeUrlLabel: 'PERMANENT BADGE LINK',
+      ticketRibbon: 'SIMULATION • EDUCATIONAL SCAM DRILL — NO REAL DATA OR OTPs',
+      ticketSerialPrefix: 'NO. ',
+      ticketSubDefault: '60-SECOND FAMILY SCAM SURVIVAL VERDICT',
+      ticketSubChallengePrefix: 'CHALLENGE: ',
+      ticketSubChallengeFrom: 'FROM ',
+      ticketStubVertical: 'VERDICT STUB • ',
+      ticketLossRetry: ' — RETRY TO SHARPEN REFLEX',
+      ticketLossZero: 'SIMULATED LOSS: ₹0 — ALL 3 SCAM TRAPS SPOTTED!',
+      ticketPlaybookTitle: '1930 GOLDEN-HOUR RULE:',
+      ticketPlaybookSteps: '1. Airplane Mode if .apk tapped  •  2. Call 1930  •  3. Report at cybercrime.gov.in',
+      ticketFooterTagline: 'TEST YOUR FAMILY IN 60 SECONDS',
       challengeFamilyBtn: 'CHALLENGE FAMILY →',
       openChallengeReportBtn: 'OPEN LIVE REPORT →',
       replayDrillBtn: 'REPLAY 60s DRILL',
 
-      xrayEyebrow: '02 · DETERMINISTIC FORENSIC ENGINE',
+      xrayEyebrow: '02 · INSTANT LINK & UPI X-RAY',
       xrayTitle: 'LINK, MESSAGE & UPI X-RAY',
       xraySub:
         'Paste any suspicious SMS, chat forward, URL, or upi://pay link—or tap a real-world preset below to dissect Punycode, .pdf.apk lures, and UPI collect traps locally.',
@@ -95,11 +111,14 @@
       xrayAnalyzeBtn: 'RUN FORENSIC X-RAY →',
       xrayScanningBtn: 'ANALYZING…',
       xrayEmptyErr: 'Please paste a message, URL, or UPI string (or tap a preset above).',
+      xrayFailErr: 'Could not analyze input. Please check the text and try again.',
+      xrayNetErr: 'Network error while running Link & UPI X-Ray.',
       xrayRiskScoreLbl: 'RISK SCORE',
       xrayLatencyLbl: 'LATENCY',
       xrayHighlightTitle: 'TOKEN X-RAY PREVIEW',
       xrayUpiTitle: 'DECODED UPI PAYLOAD',
       xrayFindingsTitle: 'FORENSIC FINDINGS',
+      xrayRiskUnit: 'RISK',
       xraySafeTitle: 'NO KNOWN TRAP PATTERNS DETECTED',
       xraySafeBody:
         'No Punycode, double-extension executable, URL masking, UPI collect mismatch, or panic trigger phrases matched. Still verify unknown senders via official channels.',
@@ -117,12 +136,19 @@
       challengeLangLbl: 'DEFAULT DRILL LANGUAGE',
       challengeSubmitBtn: 'CREATE CHALLENGE LINK →',
       challengeCreatingBtn: 'CREATING LINK…',
+      challengeRequiredErr: 'Please enter both nicknames (1–40 characters each).',
+      challengeCreatorErr: 'Please enter your nickname (1–40 characters).',
+      challengeTargetErr: 'Please enter who this challenge is for (1–40 characters).',
+      challengeFailErr: 'Could not create challenge link. Please try again.',
+      challengeNetErr: 'Network error while creating challenge.',
       challengeReadyTitle: 'CHALLENGE LINK READY',
       copyLinkBtn: 'COPY LINK',
       copiedBtn: 'COPIED!',
       whatsappBtn: 'SHARE ON WHATSAPP',
       openLiveReportBtn: 'OPEN LIVE REPORT →',
       testChallengeNowBtn: 'TEST THIS LINK NOW',
+      recentChallengesTitle: 'RECENT SENT CHALLENGES',
+      recentReportBtn: 'OPEN LIVE REPORT',
 
       reportEyebrow: 'LIVE READINESS REPORT',
       reportFor: 'REPORT FOR',
@@ -136,9 +162,9 @@
       reportRunBtn: 'RUN THIS CHALLENGE',
       reportBackBtn: 'BACK TO 60s DRILL',
 
-      cohortEyebrow: 'COHORT TELEMETRY • SQLITE',
+      cohortEyebrow: 'COMMUNITY BENCHMARK • LIVE + BASELINE',
       cohortTitle: 'PUBLIC SCAM BENCHMARK',
-      cohortDrillsLbl: 'DRILLS LOGGED',
+      cohortDrillsLbl: 'DRILLS COMPLETED',
       cohortPassLbl: 'PASS RATE',
       cohortScansLbl: 'X-RAYS RUN',
       cohortTopMissedLbl: 'TOP MISSED TRAP',
@@ -220,11 +246,25 @@
       pendingTag: 'बाकी',
       downloadTicketBtn: 'निर्णय टिकट डाउनलोड करें (1080×1350 PNG)',
       downloadSuccess: 'baitcheck-verdict-ticket.png (1080×1350) डाउनलोड हो गया।',
+      ticketPreviewLabel: 'निर्णय टिकट पूर्वावलोकन (1080×1350 PNG)',
+      ticketPreviewHint: 'मोबाइल पर सेव करने के लिए इमेज को दबाकर रखें (Long-press)',
+      ticketBadgeUrlLabel: 'स्थायी बैज लिंक',
+      ticketRibbon: 'सिम्युलेशन • शैक्षणिक स्कैम अभ्यास — कोई असली डेटा या OTP नहीं',
+      ticketSerialPrefix: 'क्र. ',
+      ticketSubDefault: '60-सेकंड पारिवारिक स्कैम सुरक्षा निर्णय',
+      ticketSubChallengePrefix: 'चुनौती: ',
+      ticketSubChallengeFrom: 'भेजने वाले: ',
+      ticketStubVertical: 'निर्णय स्टब • ',
+      ticketLossRetry: ' — अभ्यास दोहराएं',
+      ticketLossZero: 'सिम्युलेटेड नुकसान: ₹0 — सभी 3 स्कैम जाल पहचाने!',
+      ticketPlaybookTitle: '1930 गोल्डन-आवर सुरक्षा नियम:',
+      ticketPlaybookSteps: '1. .apk दबाया हो तो एयरप्लेन मोड • 2. 1930 कॉल • 3. cybercrime.gov.in',
+      ticketFooterTagline: '60 सेकंड में अपने परिवार की जांच करें',
       challengeFamilyBtn: 'परिवार को चुनौती दें →',
       openChallengeReportBtn: 'लाइव रिपोर्ट देखें →',
       replayDrillBtn: '60s ड्रिल दोबारा खेलें',
 
-      xrayEyebrow: '02 · फॉरेंसिक लिंक और मैसेज जांच',
+      xrayEyebrow: '02 · त्वरित लिंक और UPI X-RAY',
       xrayTitle: 'लिंक, मैसेज और UPI X-RAY',
       xraySub:
         'कोई भी संदिग्ध SMS, चैट मैसेज, लिंक या upi://pay स्ट्रिंग यहां पेस्ट करें—या नीचे दिए सैंपल पर 1-टैप करके जांच देखें।',
@@ -235,11 +275,14 @@
       xrayAnalyzeBtn: 'फॉरेंसिक X-RAY चलाएं →',
       xrayScanningBtn: 'जांच जारी है…',
       xrayEmptyErr: 'कृपया जांच के लिए कोई मैसेज, लिंक या ऊपर से एक सैंपल चुनें।',
+      xrayFailErr: 'इनपुट की जांच नहीं हो सकी। कृपया टेक्स्ट जांचें और पुनः प्रयास करें।',
+      xrayNetErr: 'लिंक और UPI X-RAY चलाते समय नेटवर्क त्रुटि हुई।',
       xrayRiskScoreLbl: 'जोखिम स्कोर',
       xrayLatencyLbl: 'जांच गति',
       xrayHighlightTitle: 'खतरनाक शब्दों की पहचान',
       xrayUpiTitle: 'डिकोड किया गया UPI डेटा',
       xrayFindingsTitle: 'फॉरेंसिक निष्कर्ष',
+      xrayRiskUnit: 'जोखिम',
       xraySafeTitle: 'कोई ज्ञात स्कैम पैटर्न नहीं मिला',
       xraySafeBody:
         'इसमें कोई Punycode, नकली .apk फाइल, URL धोखा या UPI कलेक्ट जाल नहीं मिला। फिर भी अनजान भेजने वाले की आधिकारिक जांच करें।',
@@ -257,12 +300,19 @@
       challengeLangLbl: 'ड्रिल की भाषा',
       challengeSubmitBtn: 'चुनौती लिंक बनाएं →',
       challengeCreatingBtn: 'लिंक बन रहा है…',
+      challengeRequiredErr: 'कृपया दोनों उपनाम दर्ज करें (प्रत्येक 1–40 अक्षर)।',
+      challengeCreatorErr: 'कृपया अपना उपनाम दर्ज करें (1–40 अक्षर)।',
+      challengeTargetErr: 'कृपया बताएं कि यह चुनौती किसके लिए है (1–40 अक्षर)।',
+      challengeFailErr: 'चुनौती लिंक नहीं बन सका। कृपया पुनः प्रयास करें।',
+      challengeNetErr: 'चुनौती बनाते समय नेटवर्क त्रुटि हुई।',
       challengeReadyTitle: 'चुनौती लिंक तैयार है',
       copyLinkBtn: 'लिंक कॉपी करें',
       copiedBtn: 'कॉपी हो गया!',
       whatsappBtn: 'WHATSAPP पर भेजें',
       openLiveReportBtn: 'लाइव रिपोर्ट खोलें →',
       testChallengeNowBtn: 'अभी लिंक टेस्ट करें',
+      recentChallengesTitle: 'हाल ही में भेजी गई चुनौतियाँ',
+      recentReportBtn: 'लाइव रिपोर्ट खोलें',
 
       reportEyebrow: 'लाइव सुरक्षा रिपोर्ट',
       reportFor: 'रिपोर्ट:',
@@ -276,14 +326,119 @@
       reportRunBtn: 'यह चुनौती खुद चलाएं',
       reportBackBtn: '60s ड्रिल पर वापस जाएं',
 
-      cohortEyebrow: 'कोहोर्ट आंकड़े • SQLITE',
+      cohortEyebrow: 'सामुदायिक बेंचमार्क • लाइव + बेसलाइन',
       cohortTitle: 'सार्वजनिक स्कैम बेंचमार्क',
-      cohortDrillsLbl: 'कुल अभ्यास',
+      cohortDrillsLbl: 'पूर्ण अभ्यास',
       cohortPassLbl: 'सफलता दर',
       cohortScansLbl: 'कुल X-RAY',
       cohortTopMissedLbl: 'सबसे कठिन जाल',
       playbookEyebrow: '1930 गोल्डन-आवर आपातकालीन गाइड',
       playbookHint: 'यह 3-कदम सुरक्षा योजना याद रखें'
+    }
+  };
+
+  const XRAY_VERDICT_LABELS = {
+    high: {
+      en: 'HIGH RISK — LIKELY SCAM TRAP',
+      hi: 'उच्च जोखिम — संभावित स्कैम जाल'
+    },
+    medium: {
+      en: 'CAUTION — SUSPICIOUS SIGNALS',
+      hi: 'सावधान — संदिग्ध संकेत'
+    },
+    low: {
+      en: 'LOW RISK — NO KNOWN TRAP TOKENS',
+      hi: 'कम जोखिम — कोई ज्ञात जाल पैटर्न नहीं'
+    }
+  };
+
+  const XRAY_RULE_I18N = {
+    punycode_homoglyph: {
+      en: {
+        title: 'Punycode / Lookalike Homoglyph Domain',
+        detail:
+          'Detected an internationalized Punycode (xn--) domain or mixed Cyrillic/Greek lookalike characters used to impersonate trusted sites.'
+      },
+      hi: {
+        title: 'Punycode / हमशक्ल (Homoglyph) नकली डोमेन',
+        detail:
+          'असली वेबसाइट की नकल करने के लिए Punycode (xn--) डोमेन या मिलते-जुलते विदेशी अक्षरों (Cyrillic/Greek) का उपयोग पाया गया।'
+      }
+    },
+    double_extension_apk: {
+      en: {
+        title: 'Disguised Double-Extension / Executable Lure',
+        detail:
+          'Found an executable (.apk/.exe/.bat) or double-extension file disguised as a document. Installing unknown APKs can steal SMS OTPs and device control.'
+      },
+      hi: {
+        title: 'दस्तावेज़ के रूप में छिपी .apk / खतरनाक फाइल',
+        detail:
+          'दस्तावेज़ (.pdf/.jpg) के नाम के पीछे छिपी .apk/.exe इंस्टॉलर फाइल मिली। अनजान APK इंस्टॉल करने से SMS OTP और फोन का नियंत्रण चोरी हो सकता है।'
+      }
+    },
+    url_deception: {
+      en: {
+        title: 'Deceptive or Masked URL Pattern',
+        detail:
+          'Detected URL credential masking (@), a raw IPv4 host, a shortened link, or a high-risk disposable TLD (.xyz/.top/.click) with lure keywords.'
+      },
+      hi: {
+        title: 'भ्रामक या छिपा हुआ URL पैटर्न',
+        detail:
+          'लिंक में "@" द्वारा असली वेबसाइट छिपाने, सीधे IP पते, शॉर्ट लिंक, या संदिग्ध डिस्पोज़ेबल TLD (.xyz/.top/.click) के साथ झांसे वाले शब्दों का उपयोग पाया गया।'
+      }
+    },
+    upi_collect_trap: {
+      en: {
+        title: 'UPI Collect / PIN-to-Receive Trap',
+        detail:
+          'Detected a UPI debit/collect pattern paired with refund, prize, or PIN claims. Entering a UPI PIN only sends money out and never credits money.'
+      },
+      hi: {
+        title: 'UPI कलेक्ट / पिन से पैसे पाने का जाल',
+        detail:
+          'रिफंड, इनाम या कैशबैक के नाम पर UPI भुगतान/कलेक्ट जाल पाया गया। UPI PIN डालने से पैसा हमेशा बाहर जाता है, कभी खाते में आता नहीं।'
+      }
+    },
+    social_engineering_pressure: {
+      en: {
+        title: 'High-Pressure / Authority Manipulation Language',
+        detail:
+          'Found panic, isolation, fake legal/KYC suspension, or urgency phrases engineered to force action before verifying.'
+      },
+      hi: {
+        title: 'डराने, जल्दबाज़ी या नकली कानूनी दबाव की भाषा',
+        detail:
+          'बिना सोचे-समझे तुरंत कार्रवाई कराने के लिए डर, अकेले रहने, बिजली कटने, KYC बंद होने या गिरफ्तारी जैसी दबाव वाली भाषा मिली।'
+      }
+    }
+  };
+
+  const MISSED_FLAG_LABELS = {
+    'digital-arrest-compliance': {
+      en: 'Stayed on fake Digital Arrest call instead of hanging up',
+      hi: 'फर्जी डिजिटल अरेस्ट कॉल पर बने रहे (कॉल नहीं काटी)'
+    },
+    'digital-arrest-timeout': {
+      en: 'Timed out under Digital Arrest panic pressure',
+      hi: 'डिजिटल अरेस्ट के दबाव में समय समाप्त हो गया'
+    },
+    'apk-disguised-extension': {
+      en: 'Tapped disguised .pdf.apk utility bill installer',
+      hi: 'नकली .pdf.apk बिजली बिल ऐप इंस्टॉल करने के लिए टैप किया'
+    },
+    'apk-disguised-timeout': {
+      en: 'Timed out on disguised .pdf.apk chat lure',
+      hi: 'नकली .pdf.apk चैट जाल में समय समाप्त हो गया'
+    },
+    'upi-pin-collect-trap': {
+      en: 'Approved UPI collect request thinking PIN receives cashback',
+      hi: 'कैशबैक पाने के लिए UPI PIN कलेक्ट रिक्वेस्ट मंज़ूर कर दी'
+    },
+    'upi-collect-timeout': {
+      en: 'Timed out on UPI cashback collect trap',
+      hi: 'UPI कैशबैक कलेक्ट जाल में समय समाप्त हो गया'
     }
   };
 
@@ -315,6 +470,8 @@
     apkNoticeShown: false,
     syncStatus: null, // null | 'saving' | 'saved' | 'error'
     ticketDownloadedMsg: '',
+    ticketPreviewUrl: '',
+    ticketBadgeUrl: '',
 
     // Active challenge context (when on /c/:id)
     activeChallenge: null,
@@ -324,7 +481,8 @@
     xrayInput: '',
     xraySelectedPresetId: null,
     xrayLoading: false,
-    xrayError: '',
+    xrayErrorKey: '',
+    xrayErrorCustom: '',
     xrayResult: null,
 
     // Challenge Creator state
@@ -332,8 +490,10 @@
     challengeTargetLabel: '',
     challengeFormLang: 'en',
     challengeSubmitting: false,
-    challengeError: '',
+    challengeErrorKey: '',
+    challengeErrorCustom: '',
     createdChallenge: null,
+    recentChallenges: [],
     copiedKey: '',
 
     // Live Report state
@@ -570,6 +730,63 @@
     }
   }
 
+  function pauseActiveDrillTimer() {
+    if (state.drillPhase === 'active' && !state.drillAnswered && state.drillTimerId !== null) {
+      const drill = state.drills[state.drillIndex];
+      const durationMs = ((drill && Number(drill.durationSec)) || 15) * 1000;
+      const elapsed = performance.now() - state.drillStartPerf;
+      state.drillRemainingMs = Math.max(0, Math.min(durationMs, durationMs - elapsed));
+    }
+    stopDrillTimer();
+  }
+
+  function startDrillCountdownInterval(drill, durationMs) {
+    stopDrillTimer();
+    state.drillTimerId = setInterval(() => {
+      if (state.drillPhase !== 'active' || state.drillAnswered) {
+        stopDrillTimer();
+        return;
+      }
+      const elapsed = performance.now() - state.drillStartPerf;
+      const remaining = Math.max(0, durationMs - elapsed);
+      state.drillRemainingMs = remaining;
+
+      const secCeil = Math.ceil(remaining / 1000);
+      if (secCeil !== state.drillLastTickSec) {
+        state.drillLastTickSec = secCeil;
+        if (secCeil > 0 && secCeil <= 5) {
+          playTickSound(secCeil <= 3);
+        }
+      }
+
+      updateCountdownDom(remaining, durationMs);
+
+      if (remaining <= 0) {
+        handleDrillTimeout();
+      }
+    }, 100);
+  }
+
+  function resumeActiveDrillTimer() {
+    if (state.drillPhase !== 'active' || state.drillAnswered) return;
+    const drill = state.drills[state.drillIndex];
+    if (!drill) return;
+
+    const durationMs = (Number(drill.durationSec) || 15) * 1000;
+    const remainingMs = Math.max(0, Math.min(durationMs, Number(state.drillRemainingMs) || 0));
+    state.drillRemainingMs = remainingMs;
+    state.drillStartPerf = performance.now() - (durationMs - remainingMs);
+    state.drillLastTickSec = Math.ceil(remainingMs / 1000);
+
+    if (remainingMs <= 0) {
+      handleDrillTimeout();
+      return;
+    }
+
+    updateCountdownDom(remainingMs, durationMs);
+    startDrillCountdownInterval(drill, durationMs);
+  }
+
   function stopReportPolling() {
     if (state.reportPollId !== null) {
       clearInterval(state.reportPollId);
@@ -579,7 +796,7 @@
 
   function navigateTo(urlPath, opts) {
     const options = opts || {};
-    stopDrillTimer();
+    pauseActiveDrillTimer();
     stopReportPolling();
     stopSpeech();
 
@@ -596,12 +813,20 @@
     const route = state.route;
 
     if (route.mode === 'challenge-drill') {
-      state.drillPhase = 'hero';
-      state.drillIndex = 0;
-      state.drillOutcomes = [];
-      state.activeChallenge = null;
-      state.challengeLoadError = null;
-      loadChallengeForDrill(route.challengeId);
+      const sameActiveChallenge =
+        state.activeChallenge &&
+        state.activeChallenge.id === route.challengeId &&
+        state.drillPhase === 'active';
+      if (!sameActiveChallenge) {
+        state.drillPhase = 'hero';
+        state.drillIndex = 0;
+        state.drillOutcomes = [];
+        state.ticketPreviewUrl = '';
+        state.ticketBadgeUrl = '';
+        state.activeChallenge = null;
+        state.challengeLoadError = null;
+        loadChallengeForDrill(route.challengeId);
+      }
     } else if (route.mode === 'report') {
       state.reportId = route.challengeId;
       state.reportLoading = true;
@@ -615,10 +840,18 @@
         state.drillPhase = 'hero';
         state.drillIndex = 0;
         state.drillOutcomes = [];
+        state.ticketPreviewUrl = '';
+        state.ticketBadgeUrl = '';
       }
     }
 
     renderAll();
+
+    const onDrillView =
+      route.mode === 'challenge-drill' || (route.mode === 'tab' && route.tab === 'drill');
+    if (onDrillView && state.drillPhase === 'active' && !state.drillAnswered) {
+      resumeActiveDrillTimer();
+    }
   }
 
   // =========================================================================
@@ -782,6 +1015,8 @@
     state.drillIndex = 0;
     state.drillOutcomes = [];
     state.ticketDownloadedMsg = '';
+    state.ticketPreviewUrl = '';
+    state.ticketBadgeUrl = '';
     beginCurrentDrill();
   }
 
@@ -806,30 +1041,7 @@
 
     renderDrillView();
     speakCaption(loc(drill.script), state.lang);
-
-    state.drillTimerId = setInterval(() => {
-      if (state.drillPhase !== 'active' || state.drillAnswered) {
-        stopDrillTimer();
-        return;
-      }
-      const elapsed = performance.now() - state.drillStartPerf;
-      const remaining = Math.max(0, durationMs - elapsed);
-      state.drillRemainingMs = remaining;
-
-      const secCeil = Math.ceil(remaining / 1000);
-      if (secCeil !== state.drillLastTickSec) {
-        state.drillLastTickSec = secCeil;
-        if (secCeil > 0 && secCeil <= 5) {
-          playTickSound(secCeil <= 3);
-        }
-      }
-
-      updateCountdownDom(remaining, durationMs);
-
-      if (remaining <= 0) {
-        handleDrillTimeout();
-      }
-    }, 100);
+    startDrillCountdownInterval(drill, durationMs);
   }
 
   function updateCountdownDom(remainingMs, totalMs) {
@@ -962,7 +1174,77 @@
   // 1080x1350 Verdict Ticket PNG Canvas Generator (Feature 3.1)
   // =========================================================================
 
-  function downloadVerdictTicketPng() {
+  function triggerDataUrlDownload(dataUrl, filename) {
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function triggerCanvasDownload(canvas, dataUrl, filename) {
+    if (typeof canvas.toBlob === 'function') {
+      canvas.toBlob((blob) => {
+        if (blob && typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function') {
+          const objUrl = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = objUrl;
+          link.download = filename;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          setTimeout(() => {
+            try {
+              URL.revokeObjectURL(objUrl);
+            } catch {
+              // Ignore object URL revoke failure.
+            }
+          }, 4000);
+          return;
+        }
+        triggerDataUrlDownload(dataUrl, filename);
+      }, 'image/png');
+    } else {
+      triggerDataUrlDownload(dataUrl, filename);
+    }
+  }
+
+  async function uploadTicketBadge(dataUrl) {
+    try {
+      const res = await fetch('/api/badge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          filename: 'baitcheck-verdict-' + Date.now() + '.png',
+          dataUrl
+        })
+      });
+      if (!res.ok) return;
+      const payload = await res.json();
+      if (payload && payload.uploaded && payload.url) {
+        state.ticketBadgeUrl = payload.url;
+        if (state.drillPhase === 'finale') {
+          renderDrillView();
+        }
+      }
+    } catch {
+      // Quietly rely on local PNG download + inline preview when badge storage is off.
+    }
+  }
+
+  async function downloadVerdictTicketPng() {
+    try {
+      if (document.fonts && document.fonts.ready) {
+        await Promise.race([
+          document.fonts.ready,
+          new Promise((resolve) => setTimeout(resolve, 300))
+        ]);
+      }
+    } catch {
+      // Proceed cleanly with system fallback fonts.
+    }
+
     const metrics = computeFinaleMetrics();
     const canvas = document.createElement('canvas');
     canvas.width = 1080;
@@ -980,7 +1262,7 @@
     ctx.fillStyle = '#0D0D0D';
     ctx.font = 'bold 21px Archivo, Arial, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('SIMULATION • EDUCATIONAL SCAM DRILL — NO REAL DATA OR OTPs', 540, 39);
+    ctx.fillText(t('ticketRibbon'), 540, 39, 1020);
 
     // 3. Brand stamp + serial header
     ctx.textAlign = 'left';
@@ -988,41 +1270,42 @@
     ctx.fillRect(64, 104, 240, 56);
     ctx.fillStyle = '#0D0D0D';
     ctx.font = '800 32px "Archivo Narrow", Impact, sans-serif';
-    ctx.fillText('BAITCHECK®', 88, 143);
+    ctx.fillText('BAITCHECK®', 88, 143, 200);
 
-    const serialNo = 'NO. BC-' + String(Math.floor(1000 + Math.random() * 9000));
+    const serialCode = 'BC-' + String(Math.floor(1000 + Math.random() * 9000));
+    const serialNo = t('ticketSerialPrefix') + serialCode;
     ctx.fillStyle = '#B5B1A6';
     ctx.font = 'bold 24px Consolas, monospace';
     ctx.textAlign = 'right';
-    ctx.fillText(serialNo, 1016, 142);
+    ctx.fillText(serialNo, 1016, 142, 340);
 
     // 4. Main Verdict Headline
     ctx.textAlign = 'left';
     ctx.fillStyle = '#F7F5EF';
-    ctx.font = '800 84px "Archivo Narrow", Impact, sans-serif';
+    ctx.font = '800 80px "Archivo Narrow", Impact, sans-serif';
     const headline =
       metrics.immunity === 100
-        ? 'BAIT DODGED'
+        ? t('finaleDodged')
         : metrics.immunity >= 65
-          ? 'PARTIAL SURVIVAL'
-          : 'TRAP TRIGGERED';
-    ctx.fillText(headline, 64, 256);
+          ? t('finalePartial')
+          : t('finaleTrapped');
+    ctx.fillText(headline, 64, 256, 952);
 
     ctx.fillStyle = '#FEC917';
     ctx.font = 'bold 26px Archivo, Arial, sans-serif';
     const subLine = state.activeChallenge
-      ? `CHALLENGE: ${state.activeChallenge.target_label} (FROM ${state.activeChallenge.creator_name})`
-      : '60-SECOND FAMILY SCAM SURVIVAL VERDICT';
-    ctx.fillText(subLine.slice(0, 48), 64, 304);
+      ? `${t('ticketSubChallengePrefix')}${state.activeChallenge.target_label} (${t('ticketSubChallengeFrom')}${state.activeChallenge.creator_name})`
+      : t('ticketSubDefault');
+    ctx.fillText(subLine, 64, 304, 952);
 
     // 5. Split-Flap Metrics Row
     const boxW = 296;
     const boxY = 342;
     const boxH = 166;
     const boxes = [
-      { val: metrics.immunity + '%', lbl: 'IMMUNITY SCORE' },
-      { val: metrics.avgSecStr, lbl: 'AVG REACTION' },
-      { val: `${metrics.dodgedCount}/${metrics.totalDrills}`, lbl: 'TRAPS DODGED' }
+      { val: metrics.immunity + '%', lbl: t('metricImmunity') },
+      { val: metrics.avgSecStr, lbl: t('metricAvgSpeed') },
+      { val: `${metrics.dodgedCount}/${metrics.totalDrills}`, lbl: t('metricDodged') }
     ];
 
     for (let i = 0; i < boxes.length; i++) {
@@ -1033,22 +1316,22 @@
       ctx.lineWidth = 3;
       ctx.strokeRect(bx, boxY, boxW, boxH);
 
-      // Split-flap horizontal line
+      // Split-flap horizontal line centered cleanly across tile digits
       ctx.strokeStyle = 'rgba(255,255,255,0.16)';
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(bx, boxY + 86);
-      ctx.lineTo(bx + boxW, boxY + 86);
+      ctx.moveTo(bx, boxY + 76);
+      ctx.lineTo(bx + boxW, boxY + 76);
       ctx.stroke();
 
       ctx.fillStyle = '#FEC917';
       ctx.textAlign = 'center';
-      ctx.font = '800 66px "Archivo Narrow", Impact, sans-serif';
-      ctx.fillText(boxes[i].val, bx + boxW / 2, boxY + 94);
+      ctx.font = '800 64px "Archivo Narrow", Impact, sans-serif';
+      ctx.fillText(boxes[i].val, bx + boxW / 2, boxY + 96, boxW - 24);
 
       ctx.fillStyle = '#B5B1A6';
       ctx.font = 'bold 20px Archivo, Arial, sans-serif';
-      ctx.fillText(boxes[i].lbl, bx + boxW / 2, boxY + 142);
+      ctx.fillText(boxes[i].lbl, bx + boxW / 2, boxY + 142, boxW - 24);
     }
 
     // 6. Perforated Ticket Card
@@ -1095,14 +1378,14 @@
     ctx.fillStyle = '#0D0D0D';
     ctx.textAlign = 'left';
     ctx.font = '800 28px "Archivo Narrow", Impact, sans-serif';
-    ctx.fillText('VERDICT STUB • ' + serialNo, 0, 0);
+    ctx.fillText(t('ticketStubVertical') + serialCode, 0, 0, 350);
     ctx.restore();
 
     // Ticket body rows
     ctx.textAlign = 'left';
     ctx.fillStyle = '#0D0D0D';
     ctx.font = '800 34px "Archivo Narrow", Impact, sans-serif';
-    ctx.fillText('SCENARIO BREAKDOWN', cardX + 216, cardY + 64);
+    ctx.fillText(t('ticketHeadline'), cardX + 216, cardY + 64, 700);
 
     const outcomes = state.drillOutcomes;
     for (let i = 0; i < outcomes.length; i++) {
@@ -1114,14 +1397,19 @@
       ctx.lineWidth = 2;
       ctx.strokeRect(cardX + 216, ry, 700, 92);
 
-      const titleTxt = (o.title && o.title.en) ? o.title.en : o.scenarioId;
+      const titleTxt = loc(o.title) || o.scenarioId;
       ctx.fillStyle = '#0D0D0D';
-      ctx.font = 'bold 25px Archivo, Arial, sans-serif';
-      ctx.fillText((i + 1) + '. ' + titleTxt.slice(0, 32), cardX + 236, ry + 38);
+      ctx.font = 'bold 24px Archivo, Arial, sans-serif';
+      ctx.fillText((i + 1) + '. ' + titleTxt, cardX + 236, ry + 38, 474);
 
       ctx.fillStyle = '#5A5850';
       ctx.font = 'bold 21px Consolas, monospace';
-      ctx.fillText('REACTION: ' + (o.reactionMs / 1000).toFixed(1) + 's', cardX + 236, ry + 72);
+      ctx.fillText(
+        `${t('reactionLabel')}: ${(o.reactionMs / 1000).toFixed(1)}s`,
+        cardX + 236,
+        ry + 72,
+        474
+      );
 
       const badgeW = 170;
       const badgeX = cardX + 730;
@@ -1130,65 +1418,127 @@
       ctx.fillStyle = '#FFFFFF';
       ctx.textAlign = 'center';
       ctx.font = '800 22px "Archivo Narrow", Impact, sans-serif';
-      ctx.fillText(o.passed ? 'DODGED' : (o.lossLabel || 'TRAPPED'), badgeX + badgeW / 2, ry + 54);
+      ctx.fillText(
+        o.passed ? t('passTag') : (o.lossLabel || t('failTag')),
+        badgeX + badgeW / 2,
+        ry + 54,
+        badgeW - 16
+      );
       ctx.textAlign = 'left';
     }
 
     // Simulated loss summary line inside ticket
     ctx.fillStyle = metrics.totalLossInr > 0 ? '#D92D20' : '#067647';
-    ctx.font = '800 26px Archivo, Arial, sans-serif';
+    ctx.font = '800 25px Archivo, Arial, sans-serif';
     const lossLine =
       metrics.totalLossInr > 0
-        ? `SIMULATED LOSS: -₹${metrics.totalLossInr.toLocaleString('en-IN')} — RETRY TO SHARPEN REFLEX`
-        : 'SIMULATED LOSS: ₹0 — ALL 3 SCAM TRAPS SPOTTED!';
-    ctx.fillText(lossLine, cardX + 216, cardY + 482);
+        ? `${t('ticketLostTag')} -₹${metrics.totalLossInr.toLocaleString('en-IN')}${t('ticketLossRetry')}`
+        : t('ticketLossZero');
+    ctx.fillText(lossLine, cardX + 216, cardY + 482, 700);
 
     // 7. 1930 Golden-Hour Strip & Footer
     ctx.fillStyle = '#F2EFE7';
     ctx.fillRect(64, 1110, 952, 116);
     ctx.fillStyle = '#0D0D0D';
     ctx.font = '800 24px "Archivo Narrow", Impact, sans-serif';
-    ctx.fillText('1930 GOLDEN-HOUR RULE:', 88, 1152);
-    ctx.font = 'bold 22px Archivo, Arial, sans-serif';
-    ctx.fillText('1. Airplane Mode if .apk tapped  •  2. Call 1930  •  3. Report at cybercrime.gov.in', 88, 1194);
+    ctx.fillText(t('ticketPlaybookTitle'), 88, 1152, 904);
+    ctx.font = 'bold 21px Archivo, Arial, sans-serif';
+    ctx.fillText(t('ticketPlaybookSteps'), 88, 1194, 904);
 
     ctx.fillStyle = '#FEC917';
     ctx.font = 'bold 28px Consolas, monospace';
     ctx.textAlign = 'left';
-    ctx.fillText('baitcheck.embarko.app', 64, 1292);
+    ctx.fillText('baitcheck.embarko.app', 64, 1292, 420);
 
     ctx.fillStyle = '#B5B1A6';
     ctx.font = 'bold 20px Archivo, Arial, sans-serif';
     ctx.textAlign = 'right';
-    ctx.fillText('TEST YOUR FAMILY IN 60 SECONDS', 1016, 1292);
+    ctx.fillText(t('ticketFooterTagline'), 1016, 1292, 500);
 
     const dataUrl = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.href = dataUrl;
-    link.download = 'baitcheck-verdict-ticket.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
+    state.ticketPreviewUrl = dataUrl;
     state.ticketDownloadedMsg = t('downloadSuccess');
+    triggerCanvasDownload(canvas, dataUrl, 'baitcheck-verdict-ticket.png');
     renderDrillView();
+    uploadTicketBadge(dataUrl);
   }
 
   // =========================================================================
-  // Link X-Ray Actions
+  // Localization Helpers & Link X-Ray Actions
   // =========================================================================
+
+  function localizeXrayVerdict(res) {
+    const level = res && res.verdictLevel ? res.verdictLevel : 'low';
+    const pack = XRAY_VERDICT_LABELS[level];
+    if (pack) {
+      return pack[state.lang] || pack.en;
+    }
+    return (res && res.verdict) || '';
+  }
+
+  function localizeXrayFinding(f) {
+    const entry = f && f.ruleId ? XRAY_RULE_I18N[f.ruleId] : null;
+    if (entry) {
+      const langPack = entry[state.lang] || entry.en;
+      return {
+        title: langPack.title,
+        detail: langPack.detail
+      };
+    }
+    return {
+      title: (f && f.title) || '',
+      detail: (f && f.detail) || ''
+    };
+  }
+
+  function localizeUpiWarning(upiDecoded) {
+    if (!upiDecoded) return '';
+    if (state.lang !== 'hi') {
+      return upiDecoded.warning || '';
+    }
+    const rawWarn = String(upiDecoded.warning || '');
+    const am = upiDecoded.am;
+    if (rawWarn.startsWith('Collect-Trap Alert:') && am) {
+      return `कलेक्ट-जाल चेतावनी: यह लिंक कैशबैक/रिफंड/इनाम का झांसा देकर आपके खाते से ₹${am} काटने की कोशिश कर रहा है। UPI PIN डालने से पैसा हमेशा बाहर जाता है, कभी अंदर नहीं आता।`;
+    }
+    if (rawWarn.startsWith('Debit Alert:') && am) {
+      return `डेबिट चेतावनी: इस UPI लिंक को मंज़ूर करके UPI PIN डालने पर आपके खाते से ₹${am} कट जाएंगे। पैसे प्राप्त करने के लिए कभी भी UPI PIN नहीं डालना होता।`;
+    }
+    return 'सुनहरा नियम: UPI PIN डालने से पैसा हमेशा आपके खाते से बाहर जाता है, कभी अंदर नहीं आता।';
+  }
+
+  function formatMissedFlag(flag) {
+    if (!flag) return '';
+    const entry = MISSED_FLAG_LABELS[flag];
+    if (entry) {
+      return entry[state.lang] || entry.en;
+    }
+    return flag;
+  }
+
+  function getXrayErrorText() {
+    if (state.xrayErrorKey) return t(state.xrayErrorKey);
+    return state.xrayErrorCustom || '';
+  }
+
+  function getChallengeErrorText() {
+    if (state.challengeErrorKey) return t(state.challengeErrorKey);
+    return state.challengeErrorCustom || '';
+  }
 
   async function runForensicScan() {
     const trimmed = state.xrayInput.trim();
     if (!trimmed) {
-      state.xrayError = t('xrayEmptyErr');
+      state.xrayErrorKey = 'xrayEmptyErr';
+      state.xrayErrorCustom = '';
       state.xrayResult = null;
       renderXrayView();
       return;
     }
 
     state.xrayLoading = true;
-    state.xrayError = '';
+    state.xrayErrorKey = '';
+    state.xrayErrorCustom = '';
     renderXrayView();
 
     try {
@@ -1199,14 +1549,24 @@
       });
       const payload = await res.json();
       if (!res.ok) {
-        state.xrayError = payload.error || 'Scan failed';
+        if (payload && payload.code === 'EMPTY_INPUT') {
+          state.xrayErrorKey = 'xrayEmptyErr';
+          state.xrayErrorCustom = '';
+        } else if (payload && payload.error && state.lang === 'en') {
+          state.xrayErrorKey = '';
+          state.xrayErrorCustom = payload.error;
+        } else {
+          state.xrayErrorKey = 'xrayFailErr';
+          state.xrayErrorCustom = '';
+        }
         state.xrayResult = null;
       } else {
         state.xrayResult = payload;
         refreshCohortStats();
       }
     } catch {
-      state.xrayError = 'Network error while running forensic X-Ray.';
+      state.xrayErrorKey = 'xrayNetErr';
+      state.xrayErrorCustom = '';
       state.xrayResult = null;
     }
 
@@ -1215,8 +1575,43 @@
   }
 
   // =========================================================================
-  // Challenge Creator Actions
+  // Challenge Creator Actions & Local Recent History
   // =========================================================================
+
+  function loadRecentChallenges() {
+    try {
+      const raw = window.localStorage.getItem(RECENT_CHALLENGES_KEY);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      return parsed
+        .filter((item) => item && typeof item.id === 'string' && typeof item.reportUrl === 'string')
+        .slice(0, MAX_RECENT_CHALLENGES);
+    } catch {
+      return [];
+    }
+  }
+
+  function saveRecentChallenge(data) {
+    if (!data || !data.id) return;
+    const entry = {
+      id: String(data.id),
+      creator_name: String(data.creator_name || ''),
+      target_label: String(data.target_label || ''),
+      lang: data.lang === 'hi' ? 'hi' : 'en',
+      challengeUrl: String(data.challengeUrl || '/c/' + data.id),
+      reportUrl: String(data.reportUrl || '/c/' + data.id + '/report'),
+      createdAt: data.created_at || new Date().toISOString()
+    };
+    const existing = loadRecentChallenges().filter((item) => item.id !== entry.id);
+    const updated = [entry, ...existing].slice(0, MAX_RECENT_CHALLENGES);
+    state.recentChallenges = updated;
+    try {
+      window.localStorage.setItem(RECENT_CHALLENGES_KEY, JSON.stringify(updated));
+    } catch {
+      // Ignore storage quota or private-browsing errors cleanly.
+    }
+  }
 
   async function submitChallengeForm(e) {
     e.preventDefault();
@@ -1224,18 +1619,21 @@
     const targetLabel = state.challengeTargetLabel.trim();
 
     if (!creatorName || creatorName.length > 40) {
-      state.challengeError = 'Please enter your nickname (1–40 characters).';
+      state.challengeErrorKey = 'challengeCreatorErr';
+      state.challengeErrorCustom = '';
       renderChallengeView();
       return;
     }
     if (!targetLabel || targetLabel.length > 40) {
-      state.challengeError = 'Please enter who this challenge is for (1–40 characters).';
+      state.challengeErrorKey = 'challengeTargetErr';
+      state.challengeErrorCustom = '';
       renderChallengeView();
       return;
     }
 
     state.challengeSubmitting = true;
-    state.challengeError = '';
+    state.challengeErrorKey = '';
+    state.challengeErrorCustom = '';
     renderChallengeView();
 
     try {
@@ -1250,13 +1648,21 @@
       });
       const data = await res.json();
       if (!res.ok) {
-        state.challengeError = data.error || 'Could not create challenge.';
+        if (data && data.error && state.lang === 'en') {
+          state.challengeErrorKey = '';
+          state.challengeErrorCustom = data.error;
+        } else {
+          state.challengeErrorKey = 'challengeFailErr';
+          state.challengeErrorCustom = '';
+        }
       } else {
         state.createdChallenge = data;
         state.copiedKey = '';
+        saveRecentChallenge(data);
       }
     } catch {
-      state.challengeError = 'Network error while creating challenge.';
+      state.challengeErrorKey = 'challengeNetErr';
+      state.challengeErrorCustom = '';
     }
 
     state.challengeSubmitting = false;
@@ -1747,6 +2153,25 @@
       actions.appendChild(createEl('p', 'caption-txt', state.ticketDownloadedMsg));
     }
 
+    if (state.ticketPreviewUrl) {
+      const previewWrap = createEl('div', 'ticket-preview-box stack-sm');
+      previewWrap.appendChild(createEl('span', 'eyebrow eyebrow--dark', t('ticketPreviewLabel')));
+      const img = createEl('img', 'ticket-preview-img');
+      img.src = state.ticketPreviewUrl;
+      img.alt = t('ticketPreviewLabel');
+      previewWrap.appendChild(img);
+      previewWrap.appendChild(createEl('p', 'caption-txt ticket-preview-hint', t('ticketPreviewHint')));
+      if (state.ticketBadgeUrl) {
+        previewWrap.appendChild(createEl('span', 'eyebrow eyebrow--dark', t('ticketBadgeUrlLabel')));
+        const badgeLink = createEl('a', 'share-url-box', state.ticketBadgeUrl);
+        badgeLink.href = state.ticketBadgeUrl;
+        badgeLink.target = '_blank';
+        badgeLink.rel = 'noopener noreferrer';
+        previewWrap.appendChild(badgeLink);
+      }
+      actions.appendChild(previewWrap);
+    }
+
     if (state.route.mode === 'challenge-drill' && state.route.challengeId) {
       const reportBtn = createEl('button', 'button-dark button-full', t('openChallengeReportBtn'));
       reportBtn.type = 'button';
@@ -1768,6 +2193,8 @@
       state.drillIndex = 0;
       state.drillOutcomes = [];
       state.ticketDownloadedMsg = '';
+      state.ticketPreviewUrl = '';
+      state.ticketBadgeUrl = '';
       renderDrillView();
     });
     actions.appendChild(replayBtn);
@@ -1801,7 +2228,8 @@
       chip.addEventListener('click', () => {
         state.xraySelectedPresetId = preset.id;
         state.xrayInput = preset.text;
-        state.xrayError = '';
+        state.xrayErrorKey = '';
+        state.xrayErrorCustom = '';
         runForensicScan();
       });
       presetGrid.appendChild(chip);
@@ -1850,14 +2278,16 @@
       state.xrayInput = '';
       state.xraySelectedPresetId = null;
       state.xrayResult = null;
-      state.xrayError = '';
+      state.xrayErrorKey = '';
+      state.xrayErrorCustom = '';
       renderXrayView();
     });
     btnRow.appendChild(clearBtn);
     inputWrap.appendChild(btnRow);
 
-    if (state.xrayError) {
-      inputWrap.appendChild(createEl('div', 'trap-alert-banner', state.xrayError));
+    const xrayErrorText = getXrayErrorText();
+    if (xrayErrorText) {
+      inputWrap.appendChild(createEl('div', 'trap-alert-banner', xrayErrorText));
     }
     sheet.appendChild(inputWrap);
 
@@ -1880,7 +2310,7 @@
           : res.verdictLevel === 'medium'
             ? 'status-tag--warn'
             : 'status-tag--pass';
-      rightMeta.appendChild(createEl('span', 'status-tag ' + verdictClass, res.verdict));
+      rightMeta.appendChild(createEl('span', 'status-tag ' + verdictClass, localizeXrayVerdict(res)));
       rightMeta.appendChild(createEl('span', 'mono-tabular', `${t('xrayLatencyLbl')}: ${res.elapsedMs} ms`));
       scoreRow.appendChild(rightMeta);
       meterCard.appendChild(scoreRow);
@@ -1920,19 +2350,20 @@
 
         const warnBox = createEl('div', 'trap-alert-banner');
         warnBox.style.marginTop = '0';
-        warnBox.appendChild(createEl('strong', 'body-md', res.upiDecoded.warning || ''));
+        warnBox.appendChild(createEl('strong', 'body-md', localizeUpiWarning(res.upiDecoded)));
         upiCard.appendChild(warnBox);
 
         const table = createEl('table', 'upi-table');
         const tbody = createEl('tbody');
+        const isHi = state.lang === 'hi';
         const fields = [
-          ['pa (Payee VPA)', res.upiDecoded.pa],
-          ['pn (Payee Name)', res.upiDecoded.pn],
-          ['am (Amount ₹)', res.upiDecoded.am],
-          ['cu (Currency)', res.upiDecoded.cu],
-          ['tn (Note)', res.upiDecoded.tn],
+          [isHi ? 'pa (भुगतान VPA)' : 'pa (Payee VPA)', res.upiDecoded.pa],
+          [isHi ? 'pn (पाने वाले का नाम)' : 'pn (Payee Name)', res.upiDecoded.pn],
+          [isHi ? 'am (राशि ₹)' : 'am (Amount ₹)', res.upiDecoded.am],
+          [isHi ? 'cu (मुद्रा)' : 'cu (Currency)', res.upiDecoded.cu],
+          [isHi ? 'tn (विवरण)' : 'tn (Note)', res.upiDecoded.tn],
           ['mode', res.upiDecoded.mode],
-          ['tr (Ref)', res.upiDecoded.tr]
+          [isHi ? 'tr (संदर्भ)' : 'tr (Ref)', res.upiDecoded.tr]
         ];
         for (let i = 0; i < fields.length; i++) {
           if (!fields[i][1]) continue;
@@ -1953,19 +2384,20 @@
       if (Array.isArray(res.findings) && res.findings.length > 0) {
         for (let i = 0; i < res.findings.length; i++) {
           const f = res.findings[i];
+          const locF = localizeXrayFinding(f);
           const sw = createEl('div', 'finding-swatch' + (f.severity === 'danger' ? ' is-danger' : ''));
           const top = createEl('div', 'row-wrap');
           top.style.justifyContent = 'space-between';
-          top.appendChild(createEl('strong', 'title-card', f.title));
+          top.appendChild(createEl('strong', 'title-card', locF.title));
           top.appendChild(
             createEl(
               'span',
               'status-tag ' + (f.severity === 'danger' ? 'status-tag--fail' : 'status-tag--warn'),
-              `+${f.points} RISK`
+              `+${f.points} ${t('xrayRiskUnit')}`
             )
           );
           sw.appendChild(top);
-          sw.appendChild(createEl('p', 'body-md', f.detail));
+          sw.appendChild(createEl('p', 'body-md', locF.detail));
 
           if (Array.isArray(f.matchedTokens) && f.matchedTokens.length > 0) {
             const chips = createEl('div', 'token-chips');
@@ -2062,8 +2494,9 @@
     langGroup.appendChild(radioRow);
     formCard.appendChild(langGroup);
 
-    if (state.challengeError) {
-      formCard.appendChild(createEl('div', 'trap-alert-banner', state.challengeError));
+    const chalErr = getChallengeErrorText();
+    if (chalErr) {
+      formCard.appendChild(createEl('div', 'trap-alert-banner', chalErr));
     }
 
     const submitBtn = createEl(
@@ -2110,10 +2543,59 @@
 
       const testNowBtn = createEl('button', 'button-ghost-light button-full', t('testChallengeNowBtn'));
       testNowBtn.type = 'button';
-      testNowBtn.addEventListener('click', () => navigateTo(ch.challengeUrl));
+      testNowBtn.addEventListener('click', () => {
+        state.drillPhase = 'hero';
+        state.drillIndex = 0;
+        state.drillOutcomes = [];
+        state.ticketPreviewUrl = '';
+        state.ticketBadgeUrl = '';
+        navigateTo(ch.challengeUrl);
+      });
       readyCard.appendChild(testNowBtn);
 
       sheet.appendChild(readyCard);
+    }
+
+    if (state.recentChallenges.length > 0) {
+      const recentCard = createEl('div', 'paper-card stack-sm');
+      recentCard.appendChild(createEl('h2', 'title-card', t('recentChallengesTitle')));
+      const recentList = createEl('div', 'stack-sm');
+
+      for (let i = 0; i < state.recentChallenges.length; i++) {
+        const item = state.recentChallenges[i];
+        const row = createEl('div', 'recent-challenge-row');
+
+        const meta = createEl('div', 'recent-challenge-meta');
+        meta.appendChild(createEl('strong', 'body-md', `${item.creator_name} → ${item.target_label}`));
+        meta.appendChild(
+          createEl('div', 'mono-tabular', `${item.challengeUrl} • ${(item.lang || 'en').toUpperCase()}`)
+        );
+        row.appendChild(meta);
+
+        const rowActions = createEl('div', 'recent-challenge-actions');
+        const reportBtn = createEl('button', 'button-primary', t('recentReportBtn'));
+        reportBtn.type = 'button';
+        reportBtn.addEventListener('click', () => navigateTo(item.reportUrl));
+        rowActions.appendChild(reportBtn);
+
+        const copyKey = 'recent-' + item.id;
+        const copyItemBtn = createEl(
+          'button',
+          'button-ghost-light',
+          state.copiedKey === copyKey ? t('copiedBtn') : t('copyLinkBtn')
+        );
+        copyItemBtn.type = 'button';
+        copyItemBtn.addEventListener('click', () =>
+          copyTextSafe(window.location.origin + item.challengeUrl, copyKey)
+        );
+        rowActions.appendChild(copyItemBtn);
+
+        row.appendChild(rowActions);
+        recentList.appendChild(row);
+      }
+
+      recentCard.appendChild(recentList);
+      sheet.appendChild(recentCard);
     }
 
     container.appendChild(sheet);
@@ -2240,7 +2722,9 @@
           )
         );
         if (!passed && latest.missed_flag) {
-          left.appendChild(createEl('div', 'caption-txt', `${t('reportMissedFlagLbl')} ${latest.missed_flag}`));
+          left.appendChild(
+            createEl('div', 'caption-txt', `${t('reportMissedFlagLbl')} ${formatMissedFlag(latest.missed_flag)}`)
+          );
         }
         row.appendChild(left);
         row.appendChild(
@@ -2279,7 +2763,14 @@
 
     const runBtn = createEl('button', 'button-dark button-full', t('reportRunBtn'));
     runBtn.type = 'button';
-    runBtn.addEventListener('click', () => navigateTo('/c/' + encodeURIComponent(challenge.id)));
+    runBtn.addEventListener('click', () => {
+      state.drillPhase = 'hero';
+      state.drillIndex = 0;
+      state.drillOutcomes = [];
+      state.ticketPreviewUrl = '';
+      state.ticketBadgeUrl = '';
+      navigateTo('/c/' + encodeURIComponent(challenge.id));
+    });
     actions.appendChild(runBtn);
 
     const backBtn = createEl('button', 'button-ghost-light button-full', t('reportBackBtn'));
@@ -2308,9 +2799,14 @@
     };
 
     const grid = createEl('div', 'split-flap-grid split-flap-grid--two');
-    const topMissedObj = state.drills.find((d) => d.id === stats.topMissedScenario);
-    const topMissedLabel = topMissedObj
-      ? (state.lang === 'hi' ? 'बिल .APK' : '.PDF.APK')
+    const TOP_MISSED_SHORT_LABELS = {
+      'drill-1-call': { en: 'DIGITAL ARREST', hi: 'डिजिटल अरेस्ट' },
+      'drill-2-apk': { en: '.PDF.APK', hi: 'बिल .APK' },
+      'drill-3-upi': { en: 'UPI COLLECT', hi: 'UPI कलेक्ट' }
+    };
+    const mappedMissed = TOP_MISSED_SHORT_LABELS[stats.topMissedScenario];
+    const topMissedLabel = mappedMissed
+      ? loc(mappedMissed)
       : String(stats.topMissedScenario || 'DRILL-2');
 
     const tiles = [
@@ -2408,6 +2904,8 @@
       state.drillPhase = 'hero';
       state.drillIndex = 0;
       state.drillOutcomes = [];
+      state.ticketPreviewUrl = '';
+      state.ticketBadgeUrl = '';
       navigateTo('/');
     });
 
@@ -2438,16 +2936,29 @@
     els.tabChallengeBtn.addEventListener('click', () => navigateTo('/?tab=challenge'));
 
     window.addEventListener('popstate', () => {
-      stopDrillTimer();
+      pauseActiveDrillTimer();
       stopReportPolling();
       stopSpeech();
       state.route = parseRoute(window.location.pathname, window.location.search);
       syncRouteView();
     });
+
+    document.addEventListener('visibilitychange', () => {
+      const onDrillView =
+        state.route.mode === 'challenge-drill' ||
+        (state.route.mode === 'tab' && state.route.tab === 'drill');
+      if (!onDrillView) return;
+      if (document.hidden) {
+        pauseActiveDrillTimer();
+      } else if (state.drillPhase === 'active' && !state.drillAnswered) {
+        resumeActiveDrillTimer();
+      }
+    });
   }
 
   document.addEventListener('DOMContentLoaded', () => {
     bindStaticControls();
+    state.recentChallenges = loadRecentChallenges();
     state.route = parseRoute(window.location.pathname, window.location.search);
     syncRouteView();
     fetchDrillsAndStats();

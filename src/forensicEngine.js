@@ -12,6 +12,15 @@ const SHORTENER_HOSTS = new Set([
   'goo.gl'
 ]);
 
+const HIGH_RISK_TLDS = new Set([
+  'xyz', 'top', 'click', 'tk', 'shop', 'buzz', 'cfd', 'rest'
+]);
+
+const SUSPICIOUS_URL_KEYWORDS = [
+  'kyc', 'verify', 'login', 'refund', 'bank',
+  'parcel', 'bill', 'update', 'claim', 'pay'
+];
+
 const DOUBLE_EXT_DOC = new Set(['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx', 'xls', 'xlsx']);
 const EXECUTABLE_EXT = new Set(['apk', 'exe', 'bat', 'scr', 'msi']);
 
@@ -99,6 +108,21 @@ function isValidIpv4Host(host) {
     if (n < 0 || n > 255) return false;
   }
   return true;
+}
+
+/**
+ * Extracts the TLD (final dot-separated label) from a domain host, or null if invalid/IPv4.
+ * @param {string} host
+ * @returns {string | null}
+ */
+function extractDomainTld(host) {
+  if (!host || isValidIpv4Host(host)) return null;
+  const labels = host.toLowerCase().split('.');
+  if (labels.length < 2) return null;
+  for (let i = 0; i < labels.length; i++) {
+    if (!labels[i]) return null;
+  }
+  return labels[labels.length - 1];
 }
 
 /**
@@ -509,8 +533,24 @@ function analyzeInput(text) {
           ruleId: 'url_deception'
         });
       }
+
+      const tld = extractDomainTld(parsed.host);
+      if (
+        tld &&
+        HIGH_RISK_TLDS.has(tld) &&
+        containsAnyKeyword(trimmed.value.toLowerCase(), SUSPICIOUS_URL_KEYWORDS)
+      ) {
+        rule3Tokens.add(trimmed.value);
+        rule3Points = Math.max(rule3Points, 25);
+        highlightSpans.push({
+          start: trimmed.start,
+          end: trimmed.end,
+          severity: 'warn',
+          ruleId: 'url_deception'
+        });
+      }
     } else if (!trimmed.value.toLowerCase().startsWith('upi://')) {
-      // Catch bare shortener links without scheme (e.g. bit.ly/abc)
+      // Catch bare shortener links or high-risk TLD lure domains without scheme (e.g. bit.ly/abc, metrobank-kyc.xyz/login)
       const slashIdx = trimmed.value.indexOf('/');
       const hostPart = (slashIdx >= 0 ? trimmed.value.slice(0, slashIdx) : trimmed.value).toLowerCase();
       if (SHORTENER_HOSTS.has(hostPart) && slashIdx > 0 && trimmed.value.length > slashIdx + 1) {
@@ -523,6 +563,31 @@ function analyzeInput(text) {
           severity: 'warn',
           ruleId: 'url_deception'
         });
+      } else {
+        const delimIdx = trimmed.value.search(/[/?#]/);
+        const rawAuth = delimIdx >= 0 ? trimmed.value.slice(0, delimIdx) : trimmed.value;
+        if (!rawAuth.includes('@')) {
+          const colonIdx = rawAuth.lastIndexOf(':');
+          const bareHost =
+            colonIdx > 0 && /^\d+$/.test(rawAuth.slice(colonIdx + 1))
+              ? rawAuth.slice(0, colonIdx)
+              : rawAuth;
+          const tld = extractDomainTld(bareHost);
+          if (
+            tld &&
+            HIGH_RISK_TLDS.has(tld) &&
+            containsAnyKeyword(trimmed.value.toLowerCase(), SUSPICIOUS_URL_KEYWORDS)
+          ) {
+            rule3Tokens.add(trimmed.value);
+            rule3Points = Math.max(rule3Points, 25);
+            highlightSpans.push({
+              start: trimmed.start,
+              end: trimmed.end,
+              severity: 'warn',
+              ruleId: 'url_deception'
+            });
+          }
+        }
       }
     }
   }
@@ -533,7 +598,7 @@ function analyzeInput(text) {
       severity: rule3Severity,
       points: rule3Points,
       title: 'Deceptive or Masked URL Pattern',
-      detail: 'Detected URL credential masking (@), a raw IPv4 host, or a shortened link obscuring the true destination.',
+      detail: 'Detected URL credential masking (@), a raw IPv4 host, a shortened link, or a high-risk disposable TLD paired with sensitive lure keywords.',
       matchedTokens: Array.from(rule3Tokens)
     });
   }
@@ -693,7 +758,7 @@ function analyzeInput(text) {
   if (riskScore >= 50) {
     verdictLevel = 'high';
     verdict = 'HIGH RISK — LIKELY SCAM TRAP';
-  } else if (riskScore >= 25) {
+  } else if (riskScore > 0) {
     verdictLevel = 'medium';
     verdict = 'CAUTION — SUSPICIOUS SIGNALS';
   }

@@ -223,7 +223,7 @@ describe('Forensic Engine — Unit & Edge-Case Suite', () => {
         assert.equal(finding.severity, 'warn');
         assert.equal(finding.points, 20);
         assert.equal(res.riskScore, 20);
-        assert.equal(res.verdictLevel, 'low');
+        assert.equal(res.verdictLevel, 'medium');
       }
     });
 
@@ -313,6 +313,10 @@ describe('Forensic Engine — Unit & Edge-Case Suite', () => {
       const single = 'You are under digital arrest right now.';
       const r1 = analyzeInput(single);
       assertLosslessSegments(single, r1);
+      assert.equal(r1.riskScore, 15);
+      assert.equal(r1.verdictLevel, 'medium');
+      assert.notEqual(r1.verdictLevel, 'low');
+      assert.doesNotMatch(r1.verdict, /NO KNOWN TRAP TOKENS/i);
       const f1 = r1.findings.find((f) => f.ruleId === 'social_engineering_pressure');
       assert.ok(f1);
       assert.equal(f1.severity, 'warn');
@@ -453,6 +457,28 @@ describe('Forensic Engine — Unit & Edge-Case Suite', () => {
       const forbiddenBrandRe = /\b(SBI|HDFC|ICICI|Paytm|GPay|PhonePe|WhatsApp|CBI|TRAI|RBI)\b/i;
       const match = forbiddenBrandRe.exec(serialized);
       assert.equal(match, null, `Found forbidden real brand name: ${match && match[0]}`);
+    });
+  });
+
+  describe('12. Phase 8 Regression — High-risk disposable TLD + keyword lures vs benign domains', () => {
+    it('scores disposable TLD + lure keyword URLs at +25 (url_deception, medium) while benign domains score 0 (low)', () => {
+      for (const lure of ['http://metrobank-kyc.xyz/login', 'verify-bill.top/pay']) {
+        const res = analyzeInput(lure);
+        assertLosslessSegments(lure, res);
+        assert.equal(res.riskScore, 25, `Expected riskScore 25 for ${lure}`);
+        assert.equal(res.verdictLevel, 'medium', `Expected medium verdictLevel for ${lure}`);
+        const finding = res.findings.find((f) => f.ruleId === 'url_deception');
+        assert.ok(finding, `Expected url_deception finding for ${lure}`);
+        assert.equal(finding.points, 25);
+      }
+
+      for (const safe of ['https://example.xyz/about', 'https://cybercrime.gov.in']) {
+        const res = analyzeInput(safe);
+        assertLosslessSegments(safe, res);
+        assert.equal(res.riskScore, 0, `Expected riskScore 0 for ${safe}`);
+        assert.equal(res.verdictLevel, 'low', `Expected low verdictLevel for ${safe}`);
+        assert.equal(res.findings.length, 0, `Expected 0 findings for ${safe}`);
+      }
     });
   });
 });

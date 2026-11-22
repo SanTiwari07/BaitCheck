@@ -504,8 +504,45 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     );
     assert.ok(drill1State.scrollWidth <= 360);
 
+    // Mid-drill tab switch: pause countdown on X-Ray tab for 400ms, then resume on Drill tab and verify it still ticks down
+    await delay(250);
+    const timerBeforeSwitch = await cdp.eval(
+      'parseFloat(document.querySelector("#drill-countdown-time")?.textContent || "0")'
+    );
+    assert.ok(timerBeforeSwitch > 5, `Expected active countdown > 5s, got ${timerBeforeSwitch}`);
+
+    await cdp.clickSelector('#tab-xray-btn');
+    await cdp.waitFor(
+      '!document.querySelector("#view-xray")?.classList.contains("is-hidden")',
+      'X-Ray tab visible mid-drill'
+    );
+    await delay(400);
+
+    await cdp.clickSelector('#tab-drill-btn');
+    await cdp.waitFor(
+      '!document.querySelector("#view-drill")?.classList.contains("is-hidden") && document.querySelector("#drill-countdown-time")',
+      'Drill tab restored mid-drill'
+    );
+    const timerOnReturn = await cdp.eval(
+      'parseFloat(document.querySelector("#drill-countdown-time")?.textContent || "0")'
+    );
+    assert.ok(timerOnReturn > 0, `Expected positive countdown on return, got ${timerOnReturn}`);
+    assert.ok(
+      timerBeforeSwitch - timerOnReturn <= 0.35,
+      `Expected countdown to pause while on X-Ray tab (before=${timerBeforeSwitch}, return=${timerOnReturn})`
+    );
+
+    await delay(450);
+    const timerAfterResume = await cdp.eval(
+      'parseFloat(document.querySelector("#drill-countdown-time")?.textContent || "0")'
+    );
+    assert.ok(
+      timerAfterResume < timerOnReturn,
+      `Expected resumed countdown to tick down without freezing (return=${timerOnReturn}, after=${timerAfterResume})`
+    );
+
     // Drill 1: Choose trap option
-    await cdp.clickByText('#view-drill .choices-list button', 'Comply & Stay Alone');
+    await cdp.clickByText('#view-drill .choices-list button', 'Stay on the video call & pay the refundable deposit');
     await cdp.waitFor('document.querySelector(".trap-alert-banner")', 'Drill 1 trap debrief');
     const d1Debrief = await cdp.eval(
       'document.querySelector(".trap-alert-banner")?.textContent || ""'
@@ -529,7 +566,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     );
     assert.match(apkNotice, /SIMULATION SAFE/);
 
-    await cdp.clickByText('#view-drill .choices-list button', 'Spot Red Flag: Fake .apk app');
+    await cdp.clickByText('#view-drill .choices-list button', 'Check the .apk extension & delete the message');
     await cdp.waitFor('document.querySelector(".safe-pass-banner")', 'Drill 2 pass debrief');
     const d2Debrief = await cdp.eval(
       'document.querySelector(".safe-pass-banner")?.textContent || ""'
@@ -545,7 +582,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     );
     await cdp.clickByText(
       '#view-drill .choices-list button',
-      'Spot Red Flag: UPI PIN is NEVER needed'
+      'Decline — a UPI PIN only sends money out'
     );
     await cdp.waitFor('document.querySelector(".safe-pass-banner")', 'Drill 3 pass debrief');
     const d3Debrief = await cdp.eval(
@@ -585,8 +622,23 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
 
     await cdp.clickByText('#view-drill button.button-primary', 'DOWNLOAD VERDICT TICKET');
     await cdp.waitFor(
-      '(document.querySelector("#view-drill")?.textContent || "").includes("baitcheck-verdict-ticket.png")',
-      'PNG download confirmation message'
+      '(document.querySelector("#view-drill")?.textContent || "").includes("baitcheck-verdict-ticket.png") && document.querySelector("#view-drill .ticket-preview-img")',
+      'PNG download confirmation message and .ticket-preview-img preview'
+    );
+
+    const previewImg = await cdp.eval(`(() => {
+      const img = document.querySelector('#view-drill .ticket-preview-img');
+      return img ? {
+        src: img.getAttribute('src') || '',
+        complete: img.complete,
+        naturalWidth: img.naturalWidth,
+        naturalHeight: img.naturalHeight
+      } : null;
+    })()`);
+    assert.ok(previewImg, 'Expected .ticket-preview-img to render after downloading PNG');
+    assert.ok(
+      previewImg.src.startsWith('data:image/png;base64,'),
+      'Expected .ticket-preview-img src to be a PNG data URL'
     );
 
     const canvasCapture = await cdp.eval(`(() => {
@@ -708,6 +760,31 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     assert.ok(slugMatch, `Expected /c/mom-... URL, got "${shareUrl}"`);
     const challengePath = `/c/${slugMatch[1]}`;
 
+    // Verify localStorage recent challenges persistence & Tab 3 recent list rendering
+    const recentState = await cdp.eval(`(() => {
+      const raw = window.localStorage.getItem('baitcheck_recent_challenges_v1');
+      const rows = Array.from(document.querySelectorAll('#view-challenge .recent-challenge-row')).map(
+        (r) => r.textContent || ''
+      );
+      return { raw, rows };
+    })()`);
+    assert.ok(recentState.raw, 'Expected baitcheck_recent_challenges_v1 in localStorage');
+    const parsedRecent = JSON.parse(recentState.raw);
+    assert.ok(Array.isArray(parsedRecent) && parsedRecent.length >= 1);
+    assert.ok(
+      parsedRecent.some(
+        (entry) =>
+          entry.id === slugMatch[1] &&
+          entry.creator_name === 'Aarav' &&
+          entry.target_label === 'Mom'
+      ),
+      `Expected created challenge ${slugMatch[1]} in localStorage, got ${recentState.raw}`
+    );
+    assert.ok(
+      recentState.rows.some((txt) => txt.includes('Aarav') && txt.includes('Mom') && txt.includes(challengePath)),
+      `Expected recent challenge row in Tab 3, got ${JSON.stringify(recentState.rows)}`
+    );
+
     // Navigate directly to /c/mom-...
     await cdp.navigate(`${baseUrl}${challengePath}`);
     await cdp.waitFor(
@@ -725,7 +802,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
 
     // Drill 1 Pass
     await cdp.waitFor('document.querySelector("#view-drill .choices-list button")', 'Drill 1 choices');
-    await cdp.clickByText('#view-drill .choices-list button', 'Spot Red Flag: Agencies never arrest');
+    await cdp.clickByText('#view-drill .choices-list button', 'Ask for an official written warrant & hang up');
     await cdp.waitFor(
       '(document.querySelector("#view-drill")?.textContent || "").includes("Saved to live family readiness report.")',
       'Drill 1 telemetry saved'
@@ -734,7 +811,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
 
     // Drill 2 Pass
     await cdp.waitFor('document.querySelector(".apk-pill-btn")', 'Drill 2 choices');
-    await cdp.clickByText('#view-drill .choices-list button', 'Spot Red Flag: Fake .apk app');
+    await cdp.clickByText('#view-drill .choices-list button', 'Check the .apk extension & delete the message');
     await cdp.waitFor(
       '(document.querySelector("#view-drill")?.textContent || "").includes("Saved to live family readiness report.")',
       'Drill 2 telemetry saved'
@@ -746,7 +823,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
       '(document.querySelector("#view-drill")?.textContent || "").includes("PaySim Wallet Collect (Demo)")',
       'Drill 3 choices'
     );
-    await cdp.clickByText('#view-drill .choices-list button', 'Decline Request & Report Collect Trap');
+    await cdp.clickByText('#view-drill .choices-list button', 'Reject request & block sender without tapping Approve');
     await cdp.waitFor(
       '(document.querySelector("#view-drill")?.textContent || "").includes("Saved to live family readiness report.")',
       'Drill 3 telemetry saved'
@@ -808,6 +885,90 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
       layout.scrollWidth <= 1280,
       `Expected zero horizontal overflow at 1280px, got ${layout.scrollWidth}`
     );
+
+    assert.deepEqual(
+      cdp.consoleErrors,
+      [],
+      `Expected zero browser console errors, observed: ${JSON.stringify(cdp.consoleErrors)}`
+    );
+    assert.deepEqual(
+      cdp.pageExceptions,
+      [],
+      `Expected zero uncaught page exceptions, observed: ${JSON.stringify(cdp.pageExceptions)}`
+    );
+  });
+
+  it('6. Responsive 390x844 & 768x1024 zero overflow + /c/nonexistent-999 friendly 404 recovery', async () => {
+    // iPhone 14 (390x844) across primary tabs
+    await cdp.setViewport(390, 844, true);
+    await cdp.navigate(`${baseUrl}/`);
+    await cdp.waitFor('document.querySelector("#answer-start-drill-btn")', '390x844 hero ready');
+    const iphoneHeroOverflow = await cdp.eval('document.documentElement.scrollWidth');
+    assert.ok(
+      iphoneHeroOverflow <= 390,
+      `Expected zero horizontal overflow on 390x844 hero, got scrollWidth=${iphoneHeroOverflow}`
+    );
+
+    await cdp.clickSelector('#tab-xray-btn');
+    await cdp.waitFor(
+      '!document.querySelector("#view-xray")?.classList.contains("is-hidden")',
+      '390x844 X-Ray tab visible'
+    );
+    const iphoneXrayOverflow = await cdp.eval('document.documentElement.scrollWidth');
+    assert.ok(
+      iphoneXrayOverflow <= 390,
+      `Expected zero horizontal overflow on 390x844 X-Ray, got scrollWidth=${iphoneXrayOverflow}`
+    );
+
+    await cdp.clickSelector('#tab-challenge-btn');
+    await cdp.waitFor(
+      '!document.querySelector("#view-challenge")?.classList.contains("is-hidden")',
+      '390x844 Challenge tab visible'
+    );
+    const iphoneChalOverflow = await cdp.eval('document.documentElement.scrollWidth');
+    assert.ok(
+      iphoneChalOverflow <= 390,
+      `Expected zero horizontal overflow on 390x844 Challenge, got scrollWidth=${iphoneChalOverflow}`
+    );
+
+    // Tablet (768x1024)
+    await cdp.setViewport(768, 1024, false);
+    await cdp.navigate(`${baseUrl}/`);
+    await cdp.waitFor('document.querySelector("#answer-start-drill-btn")', '768x1024 hero ready');
+    const tabletOverflow = await cdp.eval('document.documentElement.scrollWidth');
+    assert.ok(
+      tabletOverflow <= 768,
+      `Expected zero horizontal overflow on 768x1024 tablet, got scrollWidth=${tabletOverflow}`
+    );
+
+    // Friendly 404 recovery on /c/nonexistent-999
+    await cdp.setViewport(390, 844, true);
+    await cdp.navigate(`${baseUrl}/c/nonexistent-999`);
+    await cdp.waitFor(
+      '(document.querySelector("#view-drill .eyebrow")?.textContent || "").includes("404 • CHALLENGE")',
+      '404 • CHALLENGE recovery screen'
+    );
+
+    const notFoundState = await cdp.eval(`(() => ({
+      eyebrow: document.querySelector('#view-drill .eyebrow')?.textContent?.trim() || '',
+      heading: document.querySelector('#view-drill h1')?.textContent?.trim() || '',
+      bodyText: document.querySelector('#view-drill')?.textContent || '',
+      scrollWidth: document.documentElement.scrollWidth,
+      buttons: Array.from(document.querySelectorAll('#view-drill button')).map((b) => ({
+        text: (b.textContent || '').trim(),
+        height: b.getBoundingClientRect().height
+      }))
+    }))()`);
+
+    assert.equal(notFoundState.eyebrow, '404 • CHALLENGE');
+    assert.equal(notFoundState.heading, 'CHALLENGE LINK NOT FOUND');
+    assert.ok(notFoundState.scrollWidth <= 390, `Expected <=390px overflow on 404 view, got ${notFoundState.scrollWidth}`);
+    assert.ok(notFoundState.buttons.some((b) => b.text.includes('START 60s DRILL') && b.height >= 44));
+    assert.ok(notFoundState.buttons.some((b) => b.text.includes('CREATE NEW CHALLENGE') && b.height >= 44));
+
+    // Verify recovery CTA navigates back to working 60s drill hero
+    await cdp.clickByText('#view-drill button', 'START 60s DRILL');
+    await cdp.waitFor('document.querySelector("#answer-start-drill-btn")', 'Recovered to fresh 60s drill hero');
 
     assert.deepEqual(
       cdp.consoleErrors,
