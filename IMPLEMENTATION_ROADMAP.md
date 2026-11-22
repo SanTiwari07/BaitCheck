@@ -82,7 +82,7 @@
   - All touch targets `>=44px` (`>=48px` primary CTAs).
   - Exact Bill-Poster palette (`#FEC917`, `#0D0D0D`, `#161616`, `#F2EFE7`), `0px` radii, condensed `Archivo Narrow` display type.
 - **Test Cases:** Browser viewport tests at `360×800` and `1280×800`, verifying zero horizontal overflow and zero console/CSP errors.
-- **Completion Status:** Pending
+- **Completion Status:** Completed and verified
 
 ### Feature 2.2: 60-Second Interactive Panic Drill Runner, WebAudio & Finale
 - **Objective:** Implement tap-to-unlock WebAudio `AudioContext`, optional `speechSynthesis` (`en-IN`/`hi-IN`), 15s countdown bar, Drills 1–3 interactive screens, `-₹50,000` simulated loss debrief, Immunity % finale, and `1930` Golden-Hour swatch playbook.
@@ -96,7 +96,7 @@
   - Measures accurate `reaction_ms` per drill; handles timer expiry (`0.0s`) gracefully as missed/timed-out.
   - Updates cleanly in both `EN` and `हिंदी`.
 - **Test Cases:** End-to-end drill playthrough (all-pass, all-trap, timeout, `/c/:id` persistence) in headless browser.
-- **Completion Status:** Pending
+- **Completion Status:** Completed and verified
 
 ### Feature 2.3: Forensic Link, Message & UPI X-Ray Workbench (`Tab 2`)
 - **Objective:** Wire Tab 2 UI to `POST /api/scan` with 4 one-tap real-world presets, `0–100` risk meter, itemized X-Ray verdict cards, decoded UPI table, and XSS-safe inline red/amber token highlighting.
@@ -110,7 +110,7 @@
   - XSS payloads like `<script>alert(1)</script>` render safely as escaped text.
   - Clear error state on empty or oversized input.
 - **Test Cases:** Preset scans, custom UPI/homoglyph/APK scan, XSS payload safety test in browser.
-- **Completion Status:** Pending
+- **Completion Status:** Completed and verified
 
 ### Feature 2.4: Shareable Family Challenge Creator & Live Readiness Report (`Tab 3`, `/c/:id`, `/c/:id/report`)
 - **Objective:** Enable creating named challenge links (zero PII), sharing/copying URL + WhatsApp share text, running `/c/:id` drills for a recipient, and live-polling `/c/:id/report` every 4 seconds.
@@ -124,7 +124,7 @@
   - `/c/:id/report` updates live within 4s after `/c/:id` drill completion without WebSockets.
   - Unknown `/c/invalid-id` displays clean 404/empty state with CTA back to home drill.
 - **Test Cases:** E2E multi-step journey: create challenge -> open `/c/:id` -> complete 3 drills -> open `/c/:id/report` -> verify exact scores and reaction times rendered.
-- **Completion Status:** Pending
+- **Completion Status:** Completed and verified
 
 ---
 
@@ -141,7 +141,7 @@
   - Generates valid `1080×1350` PNG blob (`image/png`) client-side without external image tainting.
   - Works 100% offline/locally via browser download even when `STORAGE_URL` is unset.
 - **Test Cases:** Verify Canvas dimensions (`1080×1350`), non-empty PNG output, and `/api/badge` handling with/without env vars.
-- **Completion Status:** Pending
+- **Completion Status:** Completed and verified
 
 ### Feature 3.2: UI/UX Polish, Responsive Desktop Grid & Accessibility Audit
 - **Objective:** Refine tablet/desktop `>=1024px` split view (interactive stage + live cohort/1930 sidebar), keyboard accessibility, ARIA labels, focus outlines, and cohort split-flap counter section.
@@ -154,7 +154,7 @@
   - `360×800`, `390×844`, `768×1024`, and `1280×800` all pass layout & overflow checks.
   - Zero missing `alt`/ARIA labels on buttons and interactive elements.
 - **Test Cases:** Multi-viewport Playwright/Chrome headless screenshot & DOM audit.
-- **Completion Status:** Pending
+- **Completion Status:** Completed and verified
 
 ---
 

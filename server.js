@@ -5,10 +5,13 @@ const express = require('express');
 const { initDb } = require('./src/db');
 const { analyzeInput } = require('./src/forensicEngine');
 const { DRILLS, GOLDEN_HOUR_PLAYBOOK, XRAY_PRESETS, getDrillById } = require('./src/drills');
+const { uploadVerdictBadge, PNG_FILENAME_RE, isPngBuffer } = require('./src/storage');
 
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const INDEX_HTML_PATH = path.join(PUBLIC_DIR, 'index.html');
 const CHALLENGE_ID_RE = /^[a-z0-9-]{2,40}$/;
+const PNG_DATA_URL_PREFIX = 'data:image/png;base64,';
+const BASE64_BODY_RE = /^[A-Za-z0-9+/]+={0,2}$/;
 
 const PLACEHOLDER_HTML = `<!DOCTYPE html>
 <html lang="en">
@@ -121,17 +124,63 @@ function computeChallengeSummary(results) {
 }
 
 /**
+ * Validates and decodes a base64 PNG data URL (`data:image/png;base64,...`).
+ * Returns null if format, base64 encoding, PNG magic bytes, or size is invalid.
+ * @param {unknown} dataUrl
+ * @returns {Buffer | null}
+ */
+function parsePngDataUrl(dataUrl) {
+  if (typeof dataUrl !== 'string') {
+    return null;
+  }
+  const trimmed = dataUrl.trim();
+  if (!trimmed.toLowerCase().startsWith(PNG_DATA_URL_PREFIX)) {
+    return null;
+  }
+  const base64Body = trimmed.slice(PNG_DATA_URL_PREFIX.length).replace(/\s+/g, '');
+  if (!base64Body || base64Body.length % 4 !== 0 || !BASE64_BODY_RE.test(base64Body)) {
+    return null;
+  }
+  const decoded = Buffer.from(base64Body, 'base64');
+  if (!isPngBuffer(decoded)) {
+    return null;
+  }
+  return decoded;
+}
+
+/**
+ * Strips process.env.STORAGE_TOKEN from any error string before sending to clients.
+ * @param {string} message
+ * @returns {string}
+ */
+function redactStorageToken(message) {
+  const token = typeof process.env.STORAGE_TOKEN === 'string' ? process.env.STORAGE_TOKEN.trim() : '';
+  if (!token || typeof message !== 'string') {
+    return message;
+  }
+  return message.split(token).join('[REDACTED]');
+}
+
+/**
  * Builds and configures the Express application without binding a network port.
- * @param {{ dbPath?: string }} [options]
+ * @param {{ dbPath?: string, uploader?: (params: { filename: string, pngBuffer: Buffer }) => Promise<object> }} [options]
  * @returns {import('express').Express}
  */
 function createApp(options = {}) {
   const app = express();
   const db = initDb(options.dbPath);
+  const uploader = typeof options.uploader === 'function' ? options.uploader : uploadVerdictBadge;
+  const defaultJsonParser = express.json({ limit: '32kb' });
+  const badgeJsonParser = express.json({ limit: '2mb' });
 
   app.locals.db = db;
   app.disable('x-powered-by');
-  app.use(express.json({ limit: '32kb' }));
+  app.use((req, res, next) => {
+    if (req.path === '/api/badge') {
+      return badgeJsonParser(req, res, next);
+    }
+    return defaultJsonParser(req, res, next);
+  });
   app.use(express.static(PUBLIC_DIR));
 
   app.get('/health', (_req, res) => {
@@ -272,6 +321,47 @@ function createApp(options = {}) {
       result,
       summary: computeChallengeSummary(updated?.results)
     });
+  });
+
+  app.post('/api/badge', async (req, res) => {
+    const filename = typeof req.body?.filename === 'string' ? req.body.filename.trim() : '';
+    if (!PNG_FILENAME_RE.test(filename)) {
+      return res.status(400).json({
+        error: 'Invalid filename: must match ^[a-zA-Z0-9_-]{3,48}\\.png$',
+        code: 'INVALID_FILENAME'
+      });
+    }
+
+    const pngBuffer = parsePngDataUrl(req.body?.dataUrl);
+    if (!pngBuffer) {
+      return res.status(400).json({
+        error: 'Invalid PNG payload: expected base64 data:image/png;base64,...',
+        code: 'INVALID_PNG'
+      });
+    }
+
+    try {
+      const result = await uploader({ filename, pngBuffer });
+      return res.status(200).json({
+        uploaded: Boolean(result?.uploaded),
+        configured: Boolean(result?.configured),
+        url: typeof result?.url === 'string' ? redactStorageToken(result.url) : null,
+        message: typeof result?.message === 'string' ? redactStorageToken(result.message) : ''
+      });
+    } catch (err) {
+      if (err && err.status === 400) {
+        return res.status(400).json({
+          error: redactStorageToken(err.message || 'Invalid PNG payload'),
+          code: err.code || 'INVALID_PNG'
+        });
+      }
+      return res.status(502).json({
+        error: redactStorageToken(
+          err && err.status === 502 && err.message ? err.message : 'Badge storage upload failed'
+        ),
+        code: (err && err.code) || 'STORAGE_UPSTREAM_ERROR'
+      });
+    }
   });
 
   app.get('/tasks/daily-stats', (req, res) => {

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0D0D0D" />
+  <meta name="description" content="BaitCheck — 60-second simulated scam survival drill, forensic link & UPI X-Ray, and family challenge readiness trainer." />
+  <title>BaitCheck — 60s Scam Survival Drill &amp; Link X-Ray (Simulated)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@700;800&family=Archivo:wght@400;500;700;800&display=swap" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="safety-ribbon" role="status" aria-live="polite">
+    <span id="safety-ribbon-text">SIMULATION • EDUCATIONAL SCAM DRILL — NO REAL DATA, OTPs, OR DOWNLOADS</span>
+  </div>
+
+  <header class="top-nav">
+    <div class="top-nav-inner">
+      <div class="top-nav-row">
+        <button type="button" id="brand-home-btn" class="brand-stamp" aria-label="BaitCheck Home">
+          BAITCHECK®
+        </button>
+
+        <div class="nav-controls">
+          <div class="lang-toggle" role="group" aria-label="Language Switcher">
+            <button type="button" id="lang-en-btn" class="lang-btn is-active" data-lang="en" aria-pressed="true">EN</button>
+            <button type="button" id="lang-hi-btn" class="lang-btn" data-lang="hi" aria-pressed="false">हिंदी</button>
+          </div>
+          <button type="button" id="sound-toggle-btn" class="sound-btn" aria-pressed="true">
+            <span id="sound-toggle-label">SOUND: ON</span>
+          </button>
+        </div>
+      </div>
+
+      <nav class="tab-bar" aria-label="Primary Modes">
+        <button type="button" id="tab-drill-btn" class="tab-btn is-active" data-tab="drill" aria-current="page">
+          <span class="tab-num">01</span>
+          <span id="tab-drill-label">60s DRILL</span>
+        </button>
+        <button type="button" id="tab-xray-btn" class="tab-btn" data-tab="xray">
+          <span class="tab-num">02</span>
+          <span id="tab-xray-label">LINK X-RAY</span>
+        </button>
+        <button type="button" id="tab-challenge-btn" class="tab-btn" data-tab="challenge">
+          <span class="tab-num">03</span>
+          <span id="tab-challenge-label">CHALLENGE</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <div class="workspace-grid">
+      <section class="stage-column" aria-live="polite">
+        <div id="view-drill" class="view-panel"></div>
+        <div id="view-xray" class="view-panel is-hidden"></div>
+        <div id="view-challenge" class="view-panel is-hidden"></div>
+        <div id="view-report" class="view-panel is-hidden"></div>
+      </section>
+
+      <aside class="companion-column" aria-label="Live Cohort Stats and 1930 Emergency Playbook">
+        <section id="cohort-panel" class="cohort-band" aria-labelledby="cohort-heading"></section>
+        <section id="playbook-panel" class="playbook-band" aria-labelledby="playbook-heading"></section>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="colophon-footer">
+    <div class="colophon-inner">
+      <div class="colophon-brand">
+        <span class="brand-stamp">BAITCHECK®</span>
+        <span class="mono-tag">baitcheck.embarko.app</span>
+      </div>
+      <p id="footer-disclaimer" class="colophon-copy">
+        Educational anti-scam flight simulator &amp; deterministic forensic link dissector. Fictional entities only. Zero passwords, OTPs, bank details, or file downloads.
+      </p>
+    </div>
+  </footer>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
