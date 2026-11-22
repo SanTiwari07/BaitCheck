@@ -221,7 +221,7 @@ components:
 **Key Characteristics:**
 - **Alternating High-Contrast Walls & Paper:** Deep ink walls (`{colors.ink}`, `{colors.wall}`) strictly alternate with warm newsprint (`{colors.canvas}`) and crisp paper (`{colors.surface-card}`) bands.
 - **Zero-Radius Physical Geometry (`{rounded.none}`):** Cards, buttons, tags, and tickets use sharp `0px` corners; only mechanical ticket punch holes use `{rounded.pill-hole}`.
-- **Signal Yellow Focus:** `{colors.primary}` is the sole chromatic brand accent—deployed as slightly rotated highlighter blocks (`-1deg`), active CTA fills, perforated stubs, and countdown bars.
+- **Signal Yellow Focus:** `{colors.primary}` is the sole chromatic brand accent-deployed as slightly rotated highlighter blocks (`-1deg`), active CTA fills, perforated stubs, and countdown bars.
 - **Tactile Print Metaphors Over Blur/Gradients:** Hierarchy comes from massive condensed uppercase headlines (`{typography.display-xl}`), `1px solid` ink borders (`{colors.hairline-strong}`), masking-tape strips (`{colors.tape}`), split-flap reaction counters (`{components.split-flap-tile}`), and dashed tear-off stubs (`{components.ticket-stub}`).
 - **Mobile-First First-Screen Wow:** Fits cleanly in a `360px–430px` mobile viewport with zero horizontal scroll, instant tap-to-unlock audio, and `>=18px` always-on bilingual captions (`{typography.body-lg}`).
 
@@ -230,19 +230,19 @@ components:
 ## Colors
 
 ### Brand & Accent
-- `primary` (`#FEC917`): Signal Yellow — sole chromatic brand accent for the `BAITCHECK®` stamp, primary drill start button, active tabs, highlighter blocks behind key words (`SCAM`, `60 SECONDS`, `TRAP`), and perforated verdict stubs.
-- `on-primary` (`#0D0D0D`): Deep Ink Black — text and icons placed over Signal Yellow surfaces (`>= 13:1` contrast).
+- `primary` (`#FEC917`): Signal Yellow - sole chromatic brand accent for the `BAITCHECK` stamp, primary drill start button, active tabs, highlighter blocks behind key words (`SCAM`, `60 SECONDS`, `TRAP`), and perforated verdict stubs.
+- `on-primary` (`#0D0D0D`): Deep Ink Black - text and icons placed over Signal Yellow surfaces (`>= 13:1` contrast).
 
 ### Surface
-- `ink` (`#0D0D0D`): Deep Ink Black — header navigation bar, incoming-call hero wall, split-flap counter backdrop, and colophon footer.
-- `wall` (`#161616`): Charcoal Paste-Up Wall — secondary dark wall background behind pinned call/flyer sheets.
-- `surface-dark` (`#1A1A1A`): Charcoal Card/Button — dark secondary action buttons and dark swatch strips.
-- `canvas` (`#F2EFE7`): Warm Newsprint Cream — primary light surface for the Link X-Ray workbench, FAQ small-print, and challenge creator sections.
-- `paper` (`#FCFAF6`): Warm Off-White Sheet — slightly brighter sheet for interactive drill choice cards and debriefs.
-- `surface-card` (`#FFFFFF`): Pure Paper White — crisp cards, pinned notices, and Verdict Ticket body.
-- `tape` (`#F1EDE5`): Masking Tape Strip — semi-matte warm cream rectangle pinning cards onto dark walls.
-- `surface-muted` (`#EFEFEF`): Soft Newsprint Gray — inactive swatch strip and subtle table striping.
-- `stone` (`#8E8B80`): Olive-Taupe Ink — secondary swatch strip and subtle metadata accents.
+- `ink` (`#0D0D0D`): Deep Ink Black - header navigation bar, incoming-call hero wall, split-flap counter backdrop, and colophon footer.
+- `wall` (`#161616`): Charcoal Paste-Up Wall - secondary dark wall background behind pinned call/flyer sheets.
+- `surface-dark` (`#1A1A1A`): Charcoal Card/Button - dark secondary action buttons and dark swatch strips.
+- `canvas` (`#F2EFE7`): Warm Newsprint Cream - primary light surface for the Link X-Ray workbench, FAQ small-print, and challenge creator sections.
+- `paper` (`#FCFAF6`): Warm Off-White Sheet - slightly brighter sheet for interactive drill choice cards and debriefs.
+- `surface-card` (`#FFFFFF`): Pure Paper White - crisp cards, pinned notices, and Verdict Ticket body.
+- `tape` (`#F1EDE5`): Masking Tape Strip - semi-matte warm cream rectangle pinning cards onto dark walls.
+- `surface-muted` (`#EFEFEF`): Soft Newsprint Gray - inactive swatch strip and subtle table striping.
+- `stone` (`#8E8B80`): Olive-Taupe Ink - secondary swatch strip and subtle metadata accents.
 
 ### Hairlines
 - `hairline` (`rgba(13, 13, 13, 0.16)`): Subtle rule dividers inside tables, FAQ rows, and split-flap borders.
@@ -271,15 +271,15 @@ BaitCheck sets all display shouting in **`Archivo Narrow` / `Archivo Condensed`*
 
 | Role Token | Family | Size | Weight | Line Height | Tracking | Case & Usage |
 |---|---|---:|---:|---:|---:|---|
-| `display-xl` | `Archivo Narrow` | `2.35rem` | `800` | `0.92` | `-0.025em` | **ALL CAPS** — Hero & Finale verdicts (`INCOMING CALL`, `BAIT DODGED`). |
-| `display-md` | `Archivo Narrow` | `1.65rem` | `800` | `0.95` | `-0.02em` | **ALL CAPS** — Section titles & split-flap counter digits (`92%`, `4.2s`). |
-| `title-card` | `Archivo Narrow` | `1.2rem` | `800` | `1.05` | `-0.015em` | **ALL CAPS** — Drill card headers & Verdict Ticket headings. |
-| `eyebrow` | `Archivo` | `0.6875rem` | `700` | `1.2` | `0.10em` | **ALL CAPS** — Numbered section tags (`01 · DRILL`, `02 · X-RAY`, `03 · REPORT`). |
-| `body-lg` | `Archivo` | `1.125rem` | `500` | `1.45` | `0em` | Sentence case — Always-on EN/हिंदी drill captions (`>=18px` elder readability). |
-| `body-md` | `Archivo` | `0.9375rem` | `400` | `1.50` | `0em` | Sentence case — Choice card labels, debrief notes, FAQ answers. |
+| `display-xl` | `Archivo Narrow` | `2.35rem` | `800` | `0.92` | `-0.025em` | **ALL CAPS** - Hero & Finale verdicts (`INCOMING CALL`, `BAIT DODGED`). |
+| `display-md` | `Archivo Narrow` | `1.65rem` | `800` | `0.95` | `-0.02em` | **ALL CAPS** - Section titles & split-flap counter digits (`92%`, `4.2s`). |
+| `title-card` | `Archivo Narrow` | `1.2rem` | `800` | `1.05` | `-0.015em` | **ALL CAPS** - Drill card headers & Verdict Ticket headings. |
+| `eyebrow` | `Archivo` | `0.6875rem` | `700` | `1.2` | `0.10em` | **ALL CAPS** - Numbered section tags (`01 · DRILL`, `02 · X-RAY`, `03 · REPORT`). |
+| `body-lg` | `Archivo` | `1.125rem` | `500` | `1.45` | `0em` | Sentence case - Always-on EN/हिंदी drill captions (`>=18px` elder readability). |
+| `body-md` | `Archivo` | `0.9375rem` | `400` | `1.50` | `0em` | Sentence case - Choice card labels, debrief notes, FAQ answers. |
 | `caption` | `Archivo` | `0.78rem` | `500` | `1.35` | `0.02em` | Sublines, preset chips, reaction-time tags. |
 | `mono-tabular` | `Consolas` / Mono | `0.78rem` | `700` | `1.25` | `0.06em` | Uppercase serial stamps (`NO. 0042`, `15.0s`, `xn--` Punycode tokens). |
-| `button` | `Archivo Narrow` | `0.95rem` | `800` | `1.10` | `0.03em` | **ALL CAPS** — Crisp action labels (`ANSWER & START ->`). |
+| `button` | `Archivo Narrow` | `0.95rem` | `800` | `1.10` | `0.03em` | **ALL CAPS** - Crisp action labels (`ANSWER & START ->`). |
 
 ### Principles
 1. **Condensed Shout, Clean Read:** Headlines use tight `{typography.display-xl}` condensation; drill dialogue never uses all-caps so elders and kids scan captions effortlessly at `{typography.body-lg}`.
@@ -302,7 +302,7 @@ Load `Archivo` and `Archivo Narrow` from Google Fonts (`https://fonts.googleapis
 
 Physical print layering replaces soft SaaS drop shadows:
 - **Level 0 (Wall / Floor):** Flat `{colors.wall}`, `{colors.ink}`, or `{colors.canvas}` surfaces separated by `1px solid {colors.hairline-strong}`.
-- **Level 1 (Pasted Sheet):** `{colors.surface-card}` pinned with a top-center `{components.masking-tape}` rectangle and subtle `-0.8deg` / `+0.8deg` tilt (optional `3px 3px 0px {colors.ink}` hard offset ink shadow on active focus cards—never blurry `box-shadow`).
+- **Level 1 (Pasted Sheet):** `{colors.surface-card}` pinned with a top-center `{components.masking-tape}` rectangle and subtle `-0.8deg` / `+0.8deg` tilt (optional `3px 3px 0px {colors.ink}` hard offset ink shadow on active focus cards-never blurry `box-shadow`).
 - **Level 2 (Sticky Safety Header):** Top `{components.safety-ribbon}` (`position: sticky; top: 0; z-index: 50`) guaranteeing simulation visibility across all scroll positions.
 
 ---
@@ -311,9 +311,9 @@ Physical print layering replaces soft SaaS drop shadows:
 
 Every component key below maps 1:1 with the YAML `components:` registry:
 
-- **`safety-ribbon`**: Full-width top strip using `{colors.primary}`, `{colors.on-primary}`, `{colors.hairline-strong}`, `{spacing.xs}`, `{spacing.base}`, `{typography.eyebrow}`, and `{rounded.none}`. Displays `SIMULATION • EDUCATIONAL SCAM DRILL — NO REAL DATA`.
+- **`safety-ribbon`**: Full-width top strip using `{colors.primary}`, `{colors.on-primary}`, `{colors.hairline-strong}`, `{spacing.xs}`, `{spacing.base}`, `{typography.eyebrow}`, and `{rounded.none}`. Displays `SIMULATION • EDUCATIONAL SCAM DRILL - NO REAL DATA`.
 - **`top-nav`**: Dark `{colors.ink}` bar with `{colors.on-dark}`, `{colors.hairline-dark}`, `{spacing.md}`, `{spacing.base}` holding the brand stamp on the left and `[EN | हिंदी]` + `[MENU / TABS]` on the right.
-- **`brand-stamp`**: Rectangular `{colors.primary}` badge for `BAITCHECK®` with `{colors.on-primary}`, `{spacing.xs}`, `{spacing.sm}`, `{typography.button}`, `{rounded.none}`.
+- **`brand-stamp`**: Rectangular `{colors.primary}` badge for `BAITCHECK` with `{colors.on-primary}`, `{spacing.xs}`, `{spacing.sm}`, `{typography.button}`, `{rounded.none}`.
 - **`button-primary`**: Signal Yellow CTA using `{colors.primary}`, `{colors.on-primary}`, `{colors.hairline-strong}`, `{spacing.md}`, `{spacing.base}`, `{typography.button}`, `{rounded.none}` (`min-height: 48px`).
 - **`button-primary-active`**: Inverted pressed/selected state using `{colors.ink}` background, `{colors.primary}` text/border, `{spacing.md}`, `{spacing.base}`, `{typography.button}`, `{rounded.none}`.
 - **`button-dark`**: Secondary charcoal CTA using `{colors.surface-dark}`, `{colors.on-dark}`, `{colors.hairline-strong}`, `{spacing.md}`, `{spacing.base}`, `{typography.button}`, `{rounded.none}`.
@@ -337,7 +337,7 @@ Every component key below maps 1:1 with the YAML `components:` registry:
 
 | Breakpoint | Width Range | Layout & Navigation Behavior |
 |---|---|---|
-| **Mobile (Primary Target)** | `320px – 719px` | Full-width single-column stack (`16px` gutters), sticky `safety-ribbon`, compact `[BAITCHECK®]` + `[EN/हिं]` + `[TABS]` header, stacked `verdict-ticket` (stub on top), `100%` width `drill-choice-card`s. |
+| **Mobile (Primary Target)** | `320px – 719px` | Full-width single-column stack (`16px` gutters), sticky `safety-ribbon`, compact `[BAITCHECK]` + `[EN/हिं]` + `[TABS]` header, stacked `verdict-ticket` (stub on top), `100%` width `drill-choice-card`s. |
 | **Tablet** | `720px – 1023px` | Centered `540px` editorial sheet over `{colors.wall}` desk backdrop; 2-column split-flap counters and horizontal `ticket-stub`. |
 | **Desktop** | `1024px – 1399px` | Centered `560px` phone-frame interactive stage on left + live 3-step `swatch-strip` / Cohort Split-Flap panel alongside on `1040px` max grid. |
 | **Wide** | `1400px+` | Capped at `1120px` container (`margin: 0 auto`) so poster typography and line lengths remain punchy and scannable. |

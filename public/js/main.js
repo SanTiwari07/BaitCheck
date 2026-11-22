@@ -494,6 +494,7 @@
 
   function renderTopBar() {
     document.documentElement.lang = state.lang;
+    document.documentElement.classList.toggle('large-text', state.largeText);
     els.safetyRibbonText.textContent = t('safetyRibbon');
     els.footerDisclaimer.textContent = t('footerDisclaimer');
 
@@ -505,6 +506,9 @@
     els.soundToggleLabel.textContent = state.muted ? t('soundOff') : t('soundOn');
     els.soundToggleBtn.classList.toggle('is-muted', state.muted);
     els.soundToggleBtn.setAttribute('aria-pressed', state.muted ? 'false' : 'true');
+    els.textSizeToggleBtn.setAttribute('aria-pressed', state.largeText ? 'true' : 'false');
+    els.textSizeToggleBtn.setAttribute('aria-label', t(state.largeText ? 'textSizeStandard' : 'textSizeLarge'));
+    els.textSizeToggleBtn.classList.toggle('is-muted', !state.largeText);
 
     els.tabDrillLabel.textContent = t('tabDrill');
     els.tabXrayLabel.textContent = t('tabXray');
@@ -626,6 +630,7 @@
     els.langHiBtn = document.getElementById('lang-hi-btn');
     els.soundToggleBtn = document.getElementById('sound-toggle-btn');
     els.soundToggleLabel = document.getElementById('sound-toggle-label');
+    els.textSizeToggleBtn = document.getElementById('text-size-toggle-btn');
     els.tabDrillBtn = document.getElementById('tab-drill-btn');
     els.tabXrayBtn = document.getElementById('tab-xray-btn');
     els.tabChallengeBtn = document.getElementById('tab-challenge-btn');
@@ -667,6 +672,21 @@
         stopSpeech();
       } else {
         unlockAudio();
+      }
+      renderTopBar();
+    });
+
+    try {
+      state.largeText = window.localStorage.getItem('baitcheck_large_text') === 'true';
+    } catch {
+      state.largeText = false;
+    }
+    els.textSizeToggleBtn.addEventListener('click', () => {
+      state.largeText = !state.largeText;
+      try {
+        window.localStorage.setItem('baitcheck_large_text', String(state.largeText));
+      } catch {
+        // Text size remains available for this page if storage is unavailable.
       }
       renderTopBar();
     });

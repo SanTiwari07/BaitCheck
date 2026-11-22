@@ -64,7 +64,7 @@ const PRESSURE_RULES = [
   { id: 'immediately', label: 'immediately', regex: /\bimmediately\b/gi },
   { id: 'cashback refund', label: 'cashback refund', regex: /\bcashback\s+refund\b/gi },
   { id: 'claim', label: 'claim', regex: /\bclaim\b/gi },
-  // Hindi (Devanagari) pressure phrases — matched explicitly via indexOf (ReDoS-free)
+  // Hindi (Devanagari) pressure phrases - matched explicitly via indexOf (ReDoS-free)
   { id: 'hi-bijli-cut', literal: 'बिजली कट' },
   { id: 'hi-giraftari', literal: 'गिरफ्तारी' },
   { id: 'hi-akele-rahen', literal: 'अकेले रहें' },
@@ -754,13 +754,13 @@ function analyzeInput(text) {
   const riskScore = Math.min(100, rawScore);
 
   let verdictLevel = 'low';
-  let verdict = 'LOW RISK — NO KNOWN TRAP TOKENS';
+  let verdict = 'LOW RISK - NO KNOWN TRAP TOKENS';
   if (riskScore >= 50) {
     verdictLevel = 'high';
-    verdict = 'HIGH RISK — LIKELY SCAM TRAP';
+    verdict = 'HIGH RISK - LIKELY SCAM TRAP';
   } else if (riskScore > 0) {
     verdictLevel = 'medium';
-    verdict = 'CAUTION — SUSPICIOUS SIGNALS';
+    verdict = 'CAUTION - SUSPICIOUS SIGNALS';
   }
 
   const highlightedSegments = buildHighlightedSegments(text, highlightSpans);

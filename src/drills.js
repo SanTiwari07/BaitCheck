@@ -116,7 +116,7 @@ const DRILLS = [
         hi: 'जाल से बचाव (+35 इम्यूनिटी)'
       },
       explanation: {
-        en: 'MetroBill_Notice.pdf.apk is NOT a PDF—it is an Android .apk installer disguised as a bill. Installing it can grant SMS OTP & Accessibility access to drain bank accounts.',
+        en: 'MetroBill_Notice.pdf.apk is NOT a PDF-it is an Android .apk installer disguised as a bill. Installing it can grant SMS OTP & Accessibility access to drain bank accounts.',
         hi: 'MetroBill_Notice.pdf.apk कोई PDF नहीं बल्कि बिल के रूप में छिपा Android .apk ऐप है। इसे इंस्टॉल करने पर स्कैमर आपके SMS OTP और फोन का नियंत्रण पा सकते हैं।'
       }
     },
@@ -235,8 +235,8 @@ const DRILLS = [
         loss_label: null,
         simulated_loss_inr: 0,
         label: {
-          en: 'Decline — a UPI PIN only sends money out',
-          hi: 'अस्वीकार करें — UPI PIN से पैसे केवल कटते हैं, आते नहीं'
+          en: 'Decline - a UPI PIN only sends money out',
+          hi: 'अस्वीकार करें - UPI PIN से पैसे केवल कटते हैं, आते नहीं'
         }
       }
     ]
@@ -248,44 +248,44 @@ const DRILLS = [
  */
 const GOLDEN_HOUR_PLAYBOOK = {
   title: {
-    en: '1930 Golden-Hour Emergency Playbook',
-    hi: '1930 गोल्डन-आवर आपातकालीन गाइड'
+    en: 'What to do after a scam',
+    hi: 'ठगी के बाद क्या करें'
   },
   steps: [
     {
       step: 1,
       code: 'AIRPLANE_MODE',
       title: {
-        en: 'Switch to Airplane Mode if an .apk was tapped',
-        hi: 'यदि .apk फाइल दबा दी हो तो तुरंत एयरप्लेन मोड ऑन करें'
+        en: 'Installed an unknown app? Turn on Airplane Mode.',
+        hi: 'अनजान ऐप इंस्टॉल किया? एयरप्लेन मोड चालू करें।'
       },
       detail: {
-        en: 'Disconnects mobile data and Wi-Fi immediately to block remote OTP forwarding and malicious app commands.',
-        hi: 'मोबाइल डेटा और वाई-फाई बंद होने से स्कैमर आपके SMS OTP या फोन तक नहीं पहुंच पाएंगे।'
+        en: 'Ask a trusted adult or phone technician to help you check and remove it.',
+        hi: 'किसी भरोसेमंद बड़े या फोन तकनीशियन से जाँच और ऐप हटाने में मदद लें।'
       }
     },
     {
       step: 2,
       code: 'CALL_1930',
       title: {
-        en: 'Call 1930 immediately',
-        hi: 'तुरंत 1930 पर कॉल करें'
+        en: 'If money was taken, call 1930.',
+        hi: 'पैसे गए? 1930 पर कॉल करें।'
       },
       detail: {
-        en: 'Dial the National Cybercrime Helpline (1930) within the golden hour to freeze stolen funds before they are withdrawn.',
-        hi: 'गोल्डन-आवर के भीतर राष्ट्रीय साइबर क्राइम हेल्पलाइन 1930 पर कॉल करके धोखाधड़ी की रकम फ्रीज कराएं।'
+        en: 'This is India’s cyber-fraud helpline. Ask someone you trust to help with the call.',
+        hi: 'यह भारत की साइबर धोखाधड़ी हेल्पलाइन है। कॉल करने में किसी भरोसेमंद व्यक्ति से मदद लें।'
       }
     },
     {
       step: 3,
       code: 'REPORT_PORTAL',
       title: {
-        en: 'Report at cybercrime.gov.in',
-        hi: 'cybercrime.gov.in पर शिकायत दर्ज करें'
+        en: 'Report it at cybercrime.gov.in.',
+        hi: 'cybercrime.gov.in पर रिपोर्ट करें।'
       },
       detail: {
-        en: 'File an official cyber fraud report with screenshots, transaction IDs, and caller details to obtain an acknowledgement number.',
-        hi: 'स्क्रीनशॉट, ट्रांजैक्शन आईडी और कॉलर विवरण के साथ आधिकारिक पोर्टल पर रिपोर्ट दर्ज करें।'
+        en: 'Keep the message and transaction details. Ask a trusted adult to help with the report.',
+        hi: 'मैसेज और लेन-देन की जानकारी संभालकर रखें। रिपोर्ट करने में किसी भरोसेमंद बड़े से मदद लें।'
       }
     }
   ]
@@ -293,7 +293,7 @@ const GOLDEN_HOUR_PLAYBOOK = {
 
 /**
  * Four one-tap presets for Tab 2 (Link, Message & UPI X-Ray).
- * Strictly fictional demo domains and handles — zero real brand/bank names.
+ * Strictly fictional demo domains and handles - zero real brand/bank names.
  */
 const XRAY_PRESETS = [
   {

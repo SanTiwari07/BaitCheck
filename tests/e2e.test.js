@@ -582,7 +582,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     );
     await cdp.clickByText(
       '#view-drill .choices-list button',
-      'Decline — a UPI PIN only sends money out'
+      'Decline - a UPI PIN only sends money out'
     );
     await cdp.waitFor('document.querySelector(".safe-pass-banner")', 'Drill 3 pass debrief');
     const d3Debrief = await cdp.eval(

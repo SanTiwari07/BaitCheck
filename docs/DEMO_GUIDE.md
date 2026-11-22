@@ -1,123 +1,141 @@
-# BaitCheck — Hackathon Demo & Operator Guide
+# BaitCheck - Hackathon Demo Guide
 
-**Live Target URL:** `https://baitcheck.embarko.app`  
-**Event:** Deploy With Embarko Student Challenge 2026 (`#DeployWithEmbarko`)  
+**Live app:** `https://baitcheck.embarko.app`\
+**Event:** Deploy With Embarko Student Challenge 2026 (`#DeployWithEmbarko`)\
 **Repository:** `https://github.com/SanTiwari07/BaitCheck`
 
----
-
 ## 1. What BaitCheck Does
-**BaitCheck** is a mobile-first **60-second AI-era scam survival simulator + deterministic forensic link & UPI X-Ray + shareable family challenge platform**.
 
-Instead of passive awareness quizzes, BaitCheck drops any user (ages 10–80, in English or हिंदी, with zero login wall) straight into a high-tension simulated incoming call and 3 timed 15-second panic drills, pairs it with a real deterministic forensic scanner (`POST /api/scan`), and lets students generate personal `/c/:id` links to test parents or friends and watch their live `/c/:id/report` readiness sheet update in SQLite.
+BaitCheck is a free, bilingual scam-safety practice app for kids, adults, and older people. In a short guided drill, people make choices in realistic but fictional scam situations, learn the warning signs, and practice a safer next step. They can also inspect a suspicious message with the rule-based Message Check or invite family to practice together.
 
----
+The app is designed for quick understanding: no account is needed to start, the home screen offers three clear actions, the main practice takes about a minute, and additional examples can be explored without a timer. A larger-text control is available in the header.
 
-## 2. What Problem It Solves
-Modern scams exploit **15 seconds of human panic** rather than broken grammar:
-1. **AI Voice / "Digital Arrest" Video Calls** forcing isolation and instant "security deposit" transfers.
-2. **Disguised `.pdf.apk` Chat Lures** (fake electricity cutoff bills / delivery notices) stealing SMS OTPs and Android Accessibility control.
-3. **UPI Cashback / Refund Collect Traps** tricking victims into entering a UPI PIN thinking it receives money.
+## 2. The Problem and the Approach
 
-Existing tools are reactive (caller ID), hardware/OS-gated, enterprise-only, or purely post-fraud (`1930`). BaitCheck pre-trains the instinct *before* panic hits and embeds the `1930` Golden-Hour checklist right inside the Verdict Ticket.
+Scams often use urgency, fear, trust, or confusion to make people act before they can check. BaitCheck gives people a low-pressure way to rehearse pausing and verifying, using examples such as:
 
----
+1. A caller pretending to be police or a government official and demanding money.
+2. A fake electricity or delivery notice that asks someone to install an app.
+3. A UPI refund or cashback request that tries to make someone enter a PIN.
+4. A cloned family voice asking for emergency money.
+5. A parcel-fee QR code, a job that asks for an upfront fee, or fake tech support asking for remote access.
+
+The scenarios use fictional names and safe, non-functional examples. The practice does not initiate calls, payments, downloads, or remote access.
 
 ## 3. How to Start the Application Locally
 
 ### Prerequisites
-- **Node.js `20+`** (verified on `v26.13.0` using built-in `node:sqlite`, with `better-sqlite3` as an optional dependency for Node 20 environments).
 
-### Installation & Start
+- Node.js 20 or newer. The project uses built-in `node:sqlite` on supported Node versions and can use the optional `better-sqlite3` dependency on Node 20.
+
+### Install and start
+
 ```bash
 npm install
 npm start
 ```
-The server listens on `http://0.0.0.0:3000` (or `process.env.PORT`).
 
-### Run Automated Tests
+The server listens on `http://0.0.0.0:3000` or the port configured by `PORT`.
+
+### Automated tests
+
 ```bash
 npm test
 ```
-Runs unit tests (`tests/forensic.test.js`), SQLite/HTTP API integration tests (`tests/api.test.js`), and real headless browser E2E tests (`tests/e2e.test.js`).
 
----
+This runs the repository's unit, API integration, and browser end-to-end test suites.
 
-## 4. Required & Optional Environment Configuration
+## 4. Environment Configuration
 
 | Variable | Required? | Default | Purpose |
 |---|---|---|---|
-| `PORT` | No (set by Embarko) | `3000` | HTTP bind port (`0.0.0.0:$PORT`). |
-| `DATA_DIR` | No (set by Embarko) | `./data` | Persistent directory for `baitcheck.db` (preserves Litestream `_litestream_*` tables). |
-| `CRON_SECRET` | Optional (set by Embarko) | `""` | Bearer secret protecting `GET /tasks/daily-stats` (`401` if set and missing/mismatched). |
-| `STORAGE_URL` | Optional | `""` | Embarko file storage base URL for `POST /api/badge` PNG uploads. |
-| `STORAGE_TOKEN` | Optional | `""` | Bearer token for `STORAGE_URL` (never exposed to clients). |
-| `APP_NAME` | Optional | `baitcheck` | Target app slug under `STORAGE_URL`. |
+| `PORT` | No | `3000` | HTTP server port. |
+| `DATA_DIR` | No | `./data` | Persistent location for the SQLite database. |
+| `CRON_SECRET` | No | Empty | Protects `GET /tasks/daily-stats` when configured. |
+| `STORAGE_URL` | No | Empty | Optional remote storage endpoint for badge PNG uploads. |
+| `STORAGE_TOKEN` | No | Empty | Optional server-side storage credential. |
+| `APP_NAME` | No | `baitcheck` | App slug used by remote storage. |
 
-**Embarko Hosting Notes:**
-- No `Dockerfile`, no WebSockets, single Node process (`<60 MB` RSS under 256 MB cap).
-- Claim the deployed app immediately (`claimed: true`) so Embarko does not auto-delete it after 24 hours.
-- `embarko.json` schedules daily benchmark refresh (`0 9 * * *` `Asia/Kolkata`) at `/tasks/daily-stats`.
+## 5. Judge Demo Flow (about 90 seconds)
 
----
+### Step 1: Explain the first screen (15 seconds)
 
-## 5. Step-by-Step Live Demonstration Flow (60–90 Seconds)
+- Open the deployed app on a phone-sized screen.
+- Point out the safety banner: this is a simulation and does not take real payments, OTPs, or downloads.
+- Show English/Hindi, sound, and the A+ larger-text control.
+- Explain the three plain-language actions: **Practice**, **Check a message**, and **Practice with family**.
+- Start the main practice.
 
-### Step 1: Instant First-Screen Hook (`/` on a phone or `360×800` viewport)
-- Open `http://localhost:3000` (or `https://baitcheck.embarko.app`).
-- Point out the permanent yellow top safety ribbon (`SIMULATION • EDUCATIONAL SCAM DRILL — NO REAL DATA, OTPs, OR DOWNLOADS`), the `EN | हिंदी` toggle, and the pulsing **"Central Cyber Desk (Simulated)"** incoming call card with zero login wall.
-- Toggle `हिंदी` briefly to show full bilingual support, then tap **`ANSWER & START 60s DRILL →`** (unlocks WebAudio alert chime + live 15.0s countdown).
+### Step 2: Make one decision in the timed practice (30 seconds)
 
-### Step 2: Play Through the 3 Panic Drills (`01 60s DRILL`)
-1. **Drill 1 (Digital Arrest Video Call):** Tap the trap option (*"Stay on the video call & pay the refundable deposit"*) to showcase the visceral **`SIMULATED LOSS: -₹50,000`** red debrief banner explaining why real agencies never arrest on video calls.
-2. **Drill 2 (Fake Utility Bill `.pdf.apk`):** Tap the attachment pill `MetroBill_Notice.pdf.apk • 4.2 MB` to prove **zero real file downloads** occur (`SIMULATION SAFE` inline notice), then choose *"Check the .apk extension & delete the message"* to earn **`TRAP DODGED (+35 IMMUNITY)`**.
-3. **Drill 3 (UPI Cashback Collect Trap):** Choose *"Decline — a UPI PIN only sends money out"* to earn **`TRAP DODGED (+30 IMMUNITY)`**.
+- Read the fictional caller/message and pick a response.
+- Choose a risky response once to show the consequence and explanation, then point out the safer alternative.
+- Highlight that feedback names the warning sign and gives a next action instead of only marking an answer right or wrong.
+- If time permits, finish all three short scenarios and show the summary.
 
-### Step 3: Perforated Verdict Ticket & `1930` Playbook
-- On the finale screen, show the mechanical split-flap counters (**`65% IMMUNITY`**, **`2/3 TRAPS DODGED`**), the perforated Verdict Ticket, and the **3-step `1930` Golden-Hour Playbook** (*1. Airplane Mode -> 2. Call 1930 -> 3. cybercrime.gov.in*).
-- Tap **`DOWNLOAD VERDICT TICKET (1080×1350 PNG)`** to generate the high-resolution `1080×1350` poster PNG locally (with inline preview for mobile WebViews).
+### Step 3: Show the no-timer lessons (15 seconds)
 
-### Step 4: Real-Time Deterministic Forensic Link & UPI X-Ray (`02 LINK X-RAY`)
-- Switch to **`02 LINK X-RAY`**.
-- Tap **`Punycode + KYC SMS`** preset -> instant `<5 ms` dissection highlighting `xn--metrobank-kyc-9x2a.example` in red and urgency phrases in amber.
-- Tap **`UPI Cashback Trap`** preset -> shows decoded UPI payload table (`pa`, `pn`, `am: 4500`, `tn`) plus the Golden Rule warning.
-- Optionally paste `"You are under digital arrest right now"` or `"http://metrobank-kyc.xyz/login"` to demonstrate live custom analysis (`CAUTION — SUSPICIOUS SIGNALS`).
+- Return to the home screen and expand **More scam examples • no timer**.
+- Open one example (for example, the cloned family voice call).
+- Choose an answer, read the supportive feedback, and retry. Mention the other lessons: parcel-fee QR, upfront-fee job, and fake tech support.
 
-### Step 5: Family Challenge Link & Live Readiness Report (`03 CHALLENGE` -> `/c/:id` -> `/c/:id/report`)
-- Switch to **`03 CHALLENGE`**.
-- Enter nickname **`Aarav`** and target **`Mom`** (zero PII stored), tap **`CREATE CHALLENGE LINK →`**.
-- Open **`OPEN LIVE REPORT →`** (`/c/mom-.../report`) in one view (showing `LIVE • AUTO-POLLING EVERY 4s`), or open the `/c/mom-...` challenge link on a second phone/tab, complete the 3 drills, and watch `/c/mom-.../report` update live with per-drill pass/fail status and reaction speed in milliseconds.
+### Step 4: Check a message (15 seconds)
 
----
+- Open **Check a message** and load a built-in fictional example.
+- Show how the scanner highlights suspicious signals and explains them in plain language.
+- Emphasize that its signal score is an aid, not proof that a message is safe. Verify using an official app, website, or known phone number. The pasted message is not saved.
 
-## 6. Main Features to Showcase
-- **Zero-Login Mobile Hero (`Screen 0`):** Immediate value clarity above the fold on `360×640` / `360×800`.
-- **Tap-to-Unlock WebAudio + Always-On `>=18px` Bilingual Captions (`EN | हिंदी`):** Works muted or unmuted on iOS Safari and Android Chrome.
-- **Deterministic `<5 ms` Forensic Engine (`POST /api/scan`):** Punycode/homoglyphs, `.pdf.apk`, `@`-mask/IPv4/shorteners/disposable TLDs, `upi://pay?` dissector, and EN/हिंदी pressure phrases.
-- **Persistent Family Challenges (`/c/:id` & `/c/:id/report`):** SQLite persistence in `DATA_DIR` with Litestream safety and 4s HTTP polling (zero WebSockets).
-- **Strict Anti-Phishing & Abuse Safety:** Fictional entities only, zero real brand logos, zero OTP/PIN/password inputs, zero file downloads.
+### Step 5: Close with family practice and safety (15 seconds)
 
----
+- Open **Practice with family** to show how a user can create a shareable practice link and review a report.
+- Explain that only nicknames are used for the challenge; do not enter full names, contact details, OTPs, PINs, passwords, or bank information.
+- Finish with the emergency guidance: contact India's cyber-fraud helpline **1930** promptly if money has been lost, ask a trusted person for help, and report through the official `cybercrime.gov.in` portal.
 
-## 7. Sample Data & Safe Test Strings
-- **Safe Presets (built into Tab 2):**
-  1. `Punycode + KYC SMS`: `URGENT: Your KYC is suspended today. Verify immediately at https://xn--metrobank-kyc-9x2a.example/update`
-  2. `.pdf.apk Utility Bill`: `URGENT: Electricity cut tonight 9:30 PM. Install MetroBill_Notice.pdf.apk to pay Rs 12 verification.`
-  3. `UPI Cashback Trap`: `Congratulations! Claim Rs 4500 cashback refund: upi://pay?pa=reward-desk@paysim&pn=Prize%20Refund%20Demo&am=4500&cu=INR&tn=Approve%20PIN%20to%20Receive`
-  4. `Safe Portal Link`: `Official cyber safety portal reminder: report fraud at https://cybercrime.gov.in or dial 1930.`
-- **Health Telemetry Check:** `GET /health` returns `{ ok: true, memoryMb, uptime }`.
+## 6. Features to Highlight
 
----
+- **Accessible start:** no login wall, large buttons, English/Hindi, and an A+ text-size option.
+- **Short and optional practice:** a guided one-minute drill plus additional untimed lessons.
+- **Actionable learning:** scenario feedback explains the clue and a safer next step.
+- **Message Check:** deterministic analysis of links, suspicious wording, and UPI payment requests. The result is a signal, not a guarantee.
+- **Family practice:** shareable challenges with nickname-based reports.
+- **Privacy and safety:** no real transactions, downloads, credential collection, or saved pasted message text.
+- **Transparent metrics:** home-page stats combine an illustrative baseline with activity recorded by the app; do not present the baseline as a user study.
 
-## 8. Known Limitations
-- **Speech Synthesis Voices:** `window.speechSynthesis` only reads captions aloud when the visitor's OS/browser has an `en-IN` or `hi-IN` voice installed; otherwise it degrades silently to WebAudio ticks + always-on `>=18px` captions.
-- **Remote Badge CDN Upload (`POST /api/badge`):** Requires `STORAGE_URL` and `STORAGE_TOKEN` environment variables on Embarko; when unset, local `1080×1350` PNG download and inline mobile preview work 100% client-side.
-- **Rule-Based X-Ray Scope:** `POST /api/scan` uses deterministic lexical, URL, UPI, and Unicode homoglyph rules (`<5 ms`, `<60 MB` RAM) rather than live WHOIS lookups or remote ML models.
+## 7. Submission Video Outline (55 seconds)
 
----
+The challenge page asks for a 40-second to 3-minute video covering six parts. Keep it vertical, captioned, and understandable without sound. Show your real Embarko workflow accurately.
 
-## 9. Troubleshooting
-- **Port already in use:** Run with `PORT=3001 npm start` (PowerShell: `$env:PORT=3001; npm start`).
-- **Node 20 vs Node 26 SQLite driver:** `src/db.js` automatically uses built-in `node:sqlite` on Node 22.5+/26+ and falls back to optional `better-sqlite3` on Node 20+.
-- **No sound on mobile phone:** Ensure device mute switch is off and tap `ANSWER & START 60s DRILL →` (browsers require a direct tap to unlock `AudioContext`).
-- **401 on `/tasks/daily-stats`:** When `CRON_SECRET` is set, include header `Authorization: Bearer <CRON_SECRET>`.
+| Time | Part | What to show and say |
+|---|---|---|
+| 0:00-0:04 | Introduction | Show the simulated call. Say who you are and that you built BaitCheck to help families practice spotting scams. |
+| 0:04-0:16 | What you built | Show one scenario, make a choice, and reveal the clue and safer next step. Keep the simulation label visible. |
+| 0:16-0:23 | Embarko experience | Briefly explain how you used Embarko and your AI tool while building the app. Use your actual experience. |
+| 0:23-0:34 | Hosting on Embarko | Show the real deployment workflow or dashboard and the live app opening at its Embarko URL. |
+| 0:34-0:49 | Wow factor | Open a family practice link and show its report, or run the message checker on a fictional sample. Choose one clear payoff. |
+| 0:49-0:55 | Link and hashtag | Show the live URL clearly and end with `#DeployWithEmbarko`. |
+
+Post the video publicly on Instagram, X, and YouTube if you can produce a clean version for each. Submit every post link with the app link. Keep the app live and posts public until judging. Do not use paid promotion, purchased engagement, or copyrighted media.
+
+## 8. Safe Demo Examples
+
+Use the built-in examples in the app. If typing a sample manually, use fictional domains and never use a real person's message or personal data. Example themes include:
+
+1. A fake KYC notice with a lookalike domain.
+2. An electricity notice asking the recipient to install an Android package.
+3. A fictional UPI refund request that asks for a PIN to “receive” money.
+4. A fictional safe reminder pointing to the official cybercrime portal and 1930.
+
+`GET /health` provides a basic service-health response.
+
+## 9. Known Limitations
+
+- Message Check is rule-based and cannot prove that a message, caller, or website is safe. Scam techniques change; users should verify independently.
+- Speech output depends on voices installed on the device. Text remains available if a matching voice is unavailable.
+- Remote badge uploads require `STORAGE_URL` and `STORAGE_TOKEN`; local badge generation can work without them.
+- Challenge reports require the app's server and database to be available.
+
+## 10. Troubleshooting
+
+- **Port already in use:** set `PORT=3001` before starting (PowerShell: `$env:PORT=3001; npm start`).
+- **No sound on mobile:** check the device's sound settings and tap the sound control; browsers require a user gesture before audio can play.
+- **Unauthorized daily stats request:** when `CRON_SECRET` is configured, include `Authorization: Bearer <CRON_SECRET>`.

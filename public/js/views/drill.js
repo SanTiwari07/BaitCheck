@@ -18,6 +18,85 @@
     computeFinaleMetrics,
     downloadVerdictTicketPng
   }) {
+    function renderLearningLibrary(container) {
+      const library = createEl('section', 'learning-library');
+      const toggle = createEl('button', 'learning-library-toggle', t('learnMoreToggle'));
+      toggle.type = 'button';
+      toggle.setAttribute('aria-expanded', state.learningLibraryOpen ? 'true' : 'false');
+      toggle.setAttribute('aria-controls', 'learning-library-content');
+      toggle.addEventListener('click', () => {
+        state.learningLibraryOpen = !state.learningLibraryOpen;
+        if (!state.learningLibraryOpen) state.learningOpenScenarioId = null;
+        renderDrillView();
+      });
+      library.appendChild(toggle);
+      const content = createEl('div', 'learning-library-content');
+      content.id = 'learning-library-content';
+
+      if (state.learningLibraryOpen) {
+        content.appendChild(createEl('p', 'body-md', t('learnMoreIntro')));
+        const scenarios = global.BaitCheckScenarios || [];
+
+        for (const scenario of scenarios) {
+          const card = createEl('article', 'learning-scenario');
+          const open = state.learningOpenScenarioId === scenario.id;
+          const heading = createEl('button', 'learning-scenario-toggle');
+          heading.type = 'button';
+          heading.setAttribute('aria-expanded', open ? 'true' : 'false');
+          heading.appendChild(createEl('span', 'learning-category', loc(scenario.category)));
+          heading.appendChild(createEl('strong', 'learning-scenario-title', loc(scenario.title)));
+          heading.appendChild(createEl('span', 'learning-chevron', open ? '−' : '+'));
+          heading.addEventListener('click', () => {
+            state.learningOpenScenarioId = open ? null : scenario.id;
+            renderDrillView();
+          });
+          card.appendChild(heading);
+
+          if (open) {
+            const body = createEl('div', 'learning-scenario-body');
+            body.appendChild(createEl('p', 'learning-story', loc(scenario.story)));
+            body.appendChild(createEl('p', 'learning-question', t('learnQuestion')));
+            const choiceList = createEl('div', 'learning-choices');
+            for (const choice of scenario.choices) {
+              const choiceBtn = createEl('button', 'learning-choice', loc(choice.label));
+              choiceBtn.type = 'button';
+              choiceBtn.addEventListener('click', () => {
+                state.learningAnswers[scenario.id] = choice.id;
+                renderDrillView();
+              });
+              choiceList.appendChild(choiceBtn);
+            }
+            body.appendChild(choiceList);
+
+            const answerId = state.learningAnswers[scenario.id];
+            const answer = scenario.choices.find((choice) => choice.id === answerId);
+            if (answer) {
+              const feedback = createEl('div', answer.safe ? 'safe-pass-banner learning-feedback' : 'trap-alert-banner learning-feedback');
+              feedback.setAttribute('role', 'status');
+              feedback.appendChild(createEl('h3', 'debrief-title', t(answer.safe ? 'learnSafeTitle' : 'learnTryAgainTitle')));
+              feedback.appendChild(createEl('p', 'body-md', loc(scenario.clue)));
+              feedback.appendChild(createEl('strong', 'learning-next-step', t('learnNextStep')));
+              feedback.appendChild(createEl('p', 'body-md', loc(scenario.action)));
+              const retry = createEl('button', 'button-ghost-light learning-retry', t('learnRetry'));
+              retry.type = 'button';
+              retry.addEventListener('click', () => {
+                delete state.learningAnswers[scenario.id];
+                renderDrillView();
+              });
+              feedback.appendChild(retry);
+              body.appendChild(feedback);
+            }
+            card.appendChild(body);
+          }
+          content.appendChild(card);
+        }
+      } else {
+        content.hidden = true;
+      }
+      library.appendChild(content);
+      container.appendChild(library);
+    }
+
     function renderFinaleView(container) {
       const metrics = computeFinaleMetrics();
       const wall = createEl('div', 'poster-wall');
@@ -236,7 +315,7 @@
 
         const recPill = createEl('span', 'rec-pill');
         recPill.appendChild(createEl('span', 'rec-dot'));
-        recPill.appendChild(document.createTextNode('INCOMING • SIMULATED'));
+        recPill.appendChild(document.createTextNode(t('incomingSimulated')));
         meta.appendChild(recPill);
         card.appendChild(meta);
 
@@ -293,6 +372,7 @@
         card.appendChild(quickRow);
 
         wall.appendChild(card);
+        renderLearningLibrary(wall);
         container.appendChild(wall);
         return;
       }
@@ -317,7 +397,7 @@
         topStrip.appendChild(
           createEl('span', 'eyebrow', `${t('drillPrefix')} ${state.drillIndex + 1} ${t('ofLabel')} ${state.drills.length}`)
         );
-        topStrip.appendChild(createEl('span', 'status-tag status-tag--warn', drill.badge || 'SIMULATED'));
+        topStrip.appendChild(createEl('span', 'status-tag status-tag--warn', t('simulationBadge')));
         sheet.appendChild(topStrip);
 
         const durationMs = (Number(drill.durationSec) || 15) * 1000;
@@ -349,7 +429,7 @@
           const info = createEl('div', 'stack-sm');
           const rec = createEl('span', 'rec-pill');
           rec.appendChild(createEl('span', 'rec-dot'));
-          rec.appendChild(document.createTextNode(drill.badge));
+          rec.appendChild(document.createTextNode(t('simulationBadge')));
           info.appendChild(rec);
           info.appendChild(createEl('strong', 'body-md', loc(drill.entity)));
           frame.appendChild(info);
@@ -360,13 +440,13 @@
           drillCard.appendChild(frame);
         } else if (drill.mode === 'chat-attachment') {
           const frame = createEl('div', 'drill-visual-frame drill-visual--chat');
-          frame.appendChild(createEl('div', 'chat-bubble-meta', loc(drill.entity) + ' • CHAT LURE'));
+          frame.appendChild(createEl('div', 'chat-bubble-meta', `${loc(drill.entity)} • ${t('exampleMessage')}`));
           frame.appendChild(createEl('div', 'caption-txt', t('inspectApkHint')));
 
           const pillBtn = createEl('button', 'apk-pill-btn');
           pillBtn.type = 'button';
           pillBtn.appendChild(createEl('span', '', drill.attachment ? drill.attachment.pillText : 'Notice.pdf.apk'));
-          pillBtn.appendChild(createEl('span', 'apk-pill-badge', 'SIMULATED'));
+          pillBtn.appendChild(createEl('span', 'apk-pill-badge', t('simulationBadge')));
           pillBtn.addEventListener('click', () => {
             state.apkNoticeShown = true;
             renderDrillView();
@@ -382,7 +462,7 @@
           frame.appendChild(createEl('p', 'eyebrow', t('upiCollectHeader')));
           const row = createEl('div', 'upi-amount-row');
           row.appendChild(createEl('span', 'upi-amount-big', drill.collectMeta ? drill.collectMeta.amountDisplay : '₹4,500'));
-          row.appendChild(createEl('span', 'status-tag status-tag--warn', 'COLLECT'));
+          row.appendChild(createEl('span', 'status-tag status-tag--warn', t('upiCollectLabel')));
           frame.appendChild(row);
           frame.appendChild(
             createEl('div', 'body-md', drill.collectMeta ? loc(drill.collectMeta.prompt) : '')

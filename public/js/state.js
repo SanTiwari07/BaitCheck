@@ -10,6 +10,7 @@
     return {
       lang: 'en',
       muted: false,
+      largeText: false,
       route: { mode: 'tab', tab: 'drill', challengeId: null },
 
       // Server payload cache
@@ -37,6 +38,9 @@
       ticketDownloadedMsg: '',
       ticketPreviewUrl: '',
       ticketBadgeUrl: '',
+      learningLibraryOpen: false,
+      learningOpenScenarioId: null,
+      learningAnswers: {},
 
       // Active challenge context (when on /c/:id)
       activeChallenge: null,

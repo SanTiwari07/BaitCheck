@@ -1,9 +1,9 @@
 <div align="center">
-  <img src="public/assets/social-card.svg" alt="BaitCheck — 60s Scam Survival Drill & Forensic Link X-Ray" width="100%" />
+  <img src="public/assets/social-card.svg" alt="BaitCheck - 60s Scam Survival Drill & Forensic Link X-Ray" width="100%" />
 
   <br /><br />
 
-  <h1>BAITCHECK®</h1>
+  <h1>BAITCHECK</h1>
   <p>
     <strong>60-Second Interactive AI-Era Scam Survival Trainer, Deterministic Forensic Link/UPI X-Ray &amp; Family Readiness Platform</strong>
   </p>
@@ -27,12 +27,12 @@
 
 ## Why BaitCheck?
 
-Modern scams no longer rely on typos—they hijack **15 seconds of human panic**:
+Modern scams no longer rely on typos-they hijack **15 seconds of human panic**:
 1. **AI Voice / "Digital Arrest" Video Calls** demanding forced isolation and instant "refundable security deposits".
 2. **Disguised `.pdf.apk` Chat Lures** (fake electricity cutoff bills or delivery notices) capturing SMS OTPs and Android Accessibility control.
 3. **UPI Cashback / Refund Collect Traps** exploiting confusion around UPI PINs (`PIN only sends money out, never receives it`).
 
-Passive awareness posters fail under pressure, caller-ID apps are reactive, and OS-level scam filters are hardware-gated. **BaitCheck** trains real decision reflexes in 60 seconds inside any mobile browser—with zero login walls—paired with a real-time forensic scanner and shareable family readiness links.
+Passive awareness posters fail under pressure, caller-ID apps are reactive, and OS-level scam filters are hardware-gated. **BaitCheck** trains real decision reflexes in 60 seconds inside any mobile browser-with zero login walls-paired with a real-time forensic scanner and shareable family readiness links.
 
 ---
 
@@ -40,7 +40,7 @@ Passive awareness posters fail under pressure, caller-ID apps are reactive, and 
 
 | Mode | What It Does | Key Engineering Highlights |
 |---|---|---|
-| **01 · 60s Panic Drill** (`/`, `/c/:id`) | Drops users directly onto a pulsing simulated incoming call (`Central Cyber Desk`), followed by `.pdf.apk` utility lure and UPI collect traps—each on a 15-second clock with `EN \| हिंदी` always-on `>=18px` captions. | Tap-to-unlock WebAudio `AudioContext` cues, conditional `en-IN`/`hi-IN` `speechSynthesis`, mid-drill tab-switch timer pause/resume, `-₹50,000` simulated loss debriefs, `1080×1350` Canvas Verdict Ticket PNG + `1930` Golden-Hour checklist. |
+| **01 · 60s Panic Drill** (`/`, `/c/:id`) | Drops users directly onto a pulsing simulated incoming call (`Central Cyber Desk`), followed by `.pdf.apk` utility lure and UPI collect traps-each on a 15-second clock with `EN \| हिंदी` always-on `>=18px` captions. | Tap-to-unlock WebAudio `AudioContext` cues, conditional `en-IN`/`hi-IN` `speechSynthesis`, mid-drill tab-switch timer pause/resume, `-₹50,000` simulated loss debriefs, `1080×1350` Canvas Verdict Ticket PNG + `1930` Golden-Hour checklist. |
 | **02 · Link, Message & UPI X-Ray** (`/?tab=xray`, `POST /api/scan`) | Deterministically dissects arbitrary SMS text, URLs, `.apk` filenames, or `upi://pay?...` strings in `<5 ms` with 4 one-tap real-world presets. | Detects Punycode (`xn--`), mixed Cyrillic/Greek homoglyphs (zero Devanagari false positives), double-extension executables, `@` URL userinfo masking, raw IPv4 hosts, shorteners, disposable TLDs (`.xyz`/`.top`/`.click`), decoded UPI params, and bilingual pressure tokens. |
 | **03 · Family Challenge & Live Report** (`/?tab=challenge`, `/c/:id/report`) | Generates nickname-only personal challenge links (`/c/mom-7x2a`) to test parents, siblings, or friends and monitor results live. | SQLite persistence in `DATA_DIR` preserving Embarko Litestream `_litestream_*` tables, 4-second HTTP polling (zero WebSockets), human-readable `missed_flag` diagnostics, and `localStorage` recent challenge history. |
 
@@ -61,7 +61,7 @@ flowchart LR
 
 ### Strict Anti-Phishing & Embarko Hosting Guardrails
 - **Zero Real Brand/Agency Impersonation:** Uses fictional demo entities only (`Central Cyber Desk (Simulated)`, `Metro Power Utility (Demo)`, `PaySim Wallet Collect (Demo)`).
-- **Permanent Sticky Safety Ribbon:** Top bar across every route reads `SIMULATION • EDUCATIONAL SCAM DRILL — NO REAL DATA, OTPs, OR DOWNLOADS`.
+- **Permanent Sticky Safety Ribbon:** Top bar across every route reads `SIMULATION • EDUCATIONAL SCAM DRILL - NO REAL DATA, OTPs, OR DOWNLOADS`.
 - **Zero Credential / Download Surfaces:** Zero `<input type="password">`, OTP boxes, card forms, UPI PIN keypads, or file downloads.
 - **Zero PII Stored:** `forensic_scans` records only `risk_score` and `rules_hit_json` (never raw scanned text or phone numbers).
 - **CSP-Safe & Lean Runtime:** Zero `innerHTML`, zero inline `<script>` / `onclick=` handlers, zero WebSockets, no `Dockerfile`, running at **~52–57 MB RSS** inside Embarko's **256 MB** RAM cap.
@@ -171,8 +171,8 @@ Executes unit, SQLite persistence, storage, REST API integration, and real headl
 
 ## Documentation & Reports
 
-- **[Operator Demo Guide](docs/DEMO_GUIDE.md)** — Cold-start 60–90s demo flow, environment variables, sample payloads & troubleshooting.
-- **[Test & Security Report](docs/reports/TEST_REPORT.md)** — `npm audit`, XSS/CSP/brand-safety checks, memory benchmarks & verbatim test output.
-- **[Project Analysis](docs/reports/PROJECT_ANALYSIS.md)** — Complete requirements traceability matrix & specification conflict register.
-- **[Implementation Roadmap](docs/reports/IMPLEMENTATION_ROADMAP.md)** — Prioritized feature breakdown and verification status.
-- **[Engineering Log](docs/reports/ENGINEERING_LOG.md)** — Multi-agent architecture decisions, bug discoveries & fixes.
+- **[Operator Demo Guide](docs/DEMO_GUIDE.md)** - Cold-start 60–90s demo flow, environment variables, sample payloads & troubleshooting.
+- **[Test & Security Report](docs/reports/TEST_REPORT.md)** - `npm audit`, XSS/CSP/brand-safety checks, memory benchmarks & verbatim test output.
+- **[Project Analysis](docs/reports/PROJECT_ANALYSIS.md)** - Complete requirements traceability matrix & specification conflict register.
+- **[Implementation Roadmap](docs/reports/IMPLEMENTATION_ROADMAP.md)** - Prioritized feature breakdown and verification status.
+- **[Engineering Log](docs/reports/ENGINEERING_LOG.md)** - Multi-agent architecture decisions, bug discoveries & fixes.

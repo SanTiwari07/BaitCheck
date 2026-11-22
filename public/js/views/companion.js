@@ -10,13 +10,9 @@
       const h2 = createEl('h2', 'display-md', t('cohortTitle'));
       h2.id = 'cohort-heading';
       panel.appendChild(h2);
+      panel.appendChild(createEl('p', 'caption-txt cohort-disclosure', t('cohortDisclosure')));
 
-      const stats = state.stats || {
-        totalDrills: 142,
-        passRatePct: 61.5,
-        topMissedScenario: 'drill-2-apk',
-        totalScans: 0
-      };
+      const stats = state.stats;
 
       const grid = createEl('div', 'split-flap-grid split-flap-grid--two');
       const TOP_MISSED_SHORT_LABELS = {
@@ -24,15 +20,17 @@
         'drill-2-apk': { en: '.PDF.APK', hi: 'बिल .APK' },
         'drill-3-upi': { en: 'UPI COLLECT', hi: 'UPI कलेक्ट' }
       };
-      const mappedMissed = TOP_MISSED_SHORT_LABELS[stats.topMissedScenario];
-      const topMissedLabel = mappedMissed
+      const mappedMissed = TOP_MISSED_SHORT_LABELS[stats?.topMissedScenario];
+      const topMissedLabel = !stats?.topMissedScenario
+        ? '-'
+        : mappedMissed
         ? loc(mappedMissed)
         : String(stats.topMissedScenario || 'DRILL-2');
 
       const tiles = [
-        [String(stats.totalDrills), t('cohortDrillsLbl')],
-        [`${stats.passRatePct}%`, t('cohortPassLbl')],
-        [String(stats.totalScans || 0), t('cohortScansLbl')],
+        [String(stats?.totalDrills ?? '-'), t('cohortDrillsLbl')],
+        [stats ? `${stats.passRatePct}%` : '-', t('cohortPassLbl')],
+        [String(stats?.totalScans ?? '-'), t('cohortScansLbl')],
         [topMissedLabel, t('cohortTopMissedLbl')]
       ];
 

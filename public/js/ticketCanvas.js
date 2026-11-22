@@ -124,7 +124,7 @@
       ctx.fillRect(64, 104, 240, 56);
       ctx.fillStyle = '#0D0D0D';
       ctx.font = '800 32px "Archivo Narrow", Impact, sans-serif';
-      ctx.fillText('BAITCHECK®', 88, 143, 200);
+      ctx.fillText('BAITCHECK', 88, 143, 200);
 
       const serialCode = 'BC-' + String(Math.floor(1000 + Math.random() * 9000));
       const serialNo = t('ticketSerialPrefix') + serialCode;

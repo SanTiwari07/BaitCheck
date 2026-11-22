@@ -1,4 +1,4 @@
-# Detailed Execution & Engineering Plan — BaitCheck
+# Detailed Execution & Engineering Plan - BaitCheck
 
 **Target Directory:** `C:\Projects\02_Hackathons_and_Flagship_Apps\BaitCheck`  
 **Timeline:** 22 November 2026 → 30 November 2026 (`04:00 PM IST` Unstop Cutoff; personal target submit **28–29 Nov**)
@@ -99,7 +99,7 @@ BaitCheck/
 
 ## 5. 55-Second Vertical Video Shotlist (6-Part Rubric)
 
-1. **`0:00–0:04` (Part 1 & 3s Hook):** Real phone in hand pulsing *"INCOMING CALL • CYBER DESK (SIMULATED)"* as a family member/friend taps Answer → *"I gave them 60 seconds to survive 3 AI-era scams—watch what they clicked."*
+1. **`0:00–0:04` (Part 1 & 3s Hook):** Real phone in hand pulsing *"INCOMING CALL • CYBER DESK (SIMULATED)"* as a family member/friend taps Answer → *"I gave them 60 seconds to survive 3 AI-era scams-watch what they clicked."*
 2. **`0:04–0:20` (Part 2: App Walkthrough):** Fast cuts through Digital Arrest call, `.pdf.apk` chat trap, UPI Collect trap, and pasting a shady link into **Link X-Ray** (`xn--` / `.apk` highlighted in red).
 3. **`0:20–0:36` (Parts 3 & 4: Embarko Prompt & Live Deploy):** Screen-recording copying the Embarko prompt from `embarko.ai`, pasting into AI, and watching `baitcheck.embarko.app` go live with SQLite `DATA_DIR`.
 4. **`0:36–0:48` (Part 5: WOW Factor):** Showing the child's `/c/:id/report` screen updating live + perforated **BaitCheck Verdict Ticket** printing on screen.

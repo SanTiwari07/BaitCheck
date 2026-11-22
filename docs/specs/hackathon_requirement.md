@@ -1,7 +1,7 @@
-# Hackathon Requirements & Intelligence — Deploy With Embarko Student Challenge 2026
+# Hackathon Requirements & Intelligence - Deploy With Embarko Student Challenge 2026
 
 > **Last Ground-Truth Verification:** 22 November 2026 (IST)  
-> **Project Locked:** `BaitCheck` (`https://baitcheck.embarko.app`) — Mobile-First Web App
+> **Project Locked:** `BaitCheck` (`https://baitcheck.embarko.app`) - Mobile-First Web App
 
 ---
 
@@ -13,7 +13,7 @@
 | **Organizer (Unstop)** | Walkover Web Solution Pvt. Ltd. (Indore, India) | Unstop Listing (`1783717`) |
 | **Legal Sponsor (Rules)** | SuperHeroes Inc., 651 N Broad St, Suite 201, Middletown, DE 19702, USA (operator of Embarko) | `embarko.ai/challenge/rules` (Updated 11 Nov 2026) |
 | **Eligibility** | Students aged 13+ enrolled in a school, college, university, or recognized educational program (any stream, global; proof of age & student status required from potential winners) | Official Rules Sec. 2 |
-| **Team Size** | **Strictly Individual Only** — *"Entries must be by one individual; team entries are not allowed."* | Official Rules Sec. 3 & Unstop |
+| **Team Size** | **Strictly Individual Only** - *"Entries must be by one individual; team entries are not allowed."* | Official Rules Sec. 3 & Unstop |
 | **Registration Deadline** | **30 Nov 2026, 03:30 PM IST** (Unstop) | Unstop Listing |
 | **Submission Deadline** | **Discrepancy:** Unstop lists **30 Nov 2026, 04:00 PM IST**; Official Rules list **30 Nov 2026, 11:59 PM IST**. **Action:** Target **28–29 Nov 2026**, hard cutoff **30 Nov, 03:00 PM IST**. | Unstop + Official Rules |
 | **Judging & Results** | Unstop lists 30 Nov 05:04 PM – 01 Dec 08:00 PM IST; Official Rules confirm final ranks published **05 Dec 2026**. Keep app live and posts public until well after Dec 15. | Unstop + Official Rules Sec. 5 & 7 |
@@ -47,19 +47,19 @@ Extracted from Official Rules Sections 5 & 5A and verified against `embarko.ai/a
 |---|---:|---|---|
 | **Work (App Quality)** | **400** | (1) How the app looks (fonts, spacing, first screen that wows), (2) Originality (*"Original beats another to-do app"*), (3) **Works on a phone** (*"Open it on your phone before you submit. Most judges will."*), (4) Video explains Embarko deployment. | **Tie-Breaker #1** |
 | **Video Quality** | **300** | (1) Hook viewers in first 3 seconds, (2) Easy to understand in one watch, (3) 6-part story structure, (4) Shows how Embarko put it live + ends with `#DeployWithEmbarko`. | **Tie-Breaker #2** |
-| **Post Reach** | **300** | Organic views and engagement (likes, comments, shares) visible on your submitted public posts on Instagram, X, and YouTube at judging time. | — |
+| **Post Reach** | **300** | Organic views and engagement (likes, comments, shares) visible on your submitted public posts on Instagram, X, and YouTube at judging time. | - |
 | **Submission + Posts** | **200** | `+50` for submitting an eligible entry + `+50` per post link submitted (up to **3 posts** = `+150`). | Deterministic |
 | **Referral Bonus** | **210** | Capped at **15% of overall max (`210 pts`)**. Per referred friend (confirmed email): `+1` register, `+5` puts an app live (using matching challenge email), `+10` submits eligible entry (`+16` per full friend; 14 friends hits cap). Joining via a friend's link gives half (`+0.5 / +2.5 / +5`). | Deterministic |
 | **LinkedIn Bonus** | **5** | `+2` comment + `+3` repost on Embarko's official LinkedIn challenge post (`https://lnkd.in/p/dM6aPbhz`), claimed in `My points`. | Deterministic |
-| **Maximum Total** | **1,415** | `1,000 Judge + 200 Entry/Posts + 210 Referral Cap + 5 LinkedIn` | — |
+| **Maximum Total** | **1,415** | `1,000 Judge + 200 Entry/Posts + 210 Referral Cap + 5 LinkedIn` | - |
 
 ### Mandatory 6-Part Video Rubric (`embarko.ai/challenge`)
-1. **Part 1 — Intro & 3s Hook:** Who you are, what you built it for, and immediate visual hook in the first 3 seconds.
-2. **Part 2 — App Walkthrough:** Show the live app on phone, scroll, and tap interactive flows.
-3. **Part 3 — Embarko Experience:** How you copied the Embarko prompt and what it felt like to use.
-4. **Part 4 — Live Deploy Moment:** Paste the Embarko prompt into your AI and show the app going live on `*.embarko.app`.
-5. **Part 5 — The WOW Factor:** The single unforgettable moment of the app.
-6. **Part 6 — Link & Hashtag:** Display `baitcheck.embarko.app` clearly and end with `#DeployWithEmbarko`.
+1. **Part 1 - Intro & 3s Hook:** Who you are, what you built it for, and immediate visual hook in the first 3 seconds.
+2. **Part 2 - App Walkthrough:** Show the live app on phone, scroll, and tap interactive flows.
+3. **Part 3 - Embarko Experience:** How you copied the Embarko prompt and what it felt like to use.
+4. **Part 4 - Live Deploy Moment:** Paste the Embarko prompt into your AI and show the app going live on `*.embarko.app`.
+5. **Part 5 - The WOW Factor:** The single unforgettable moment of the app.
+6. **Part 6 - Link & Hashtag:** Display `baitcheck.embarko.app` clearly and end with `#DeployWithEmbarko`.
 
 ---
 
@@ -79,11 +79,11 @@ Extracted from Official Rules Sections 5 & 5A and verified against `embarko.ai/a
 
 - **Live Funnel (`embarko.ai/api/challenge/leaderboard`):**
   - `5,825` registered → `3,691` email-confirmed rows → `680` submitted entries → only `89` entries have all 3 social posts (`200` entry pts).
-  - `0` entries have `website`, `video`, or `reach` scored yet—the entire 1,000-point judging pool is unallocated until Nov 30+.
+  - `0` entries have `website`, `video`, or `reach` scored yet-the entire 1,000-point judging pool is unallocated until Nov 30+.
   - Pre-judging Rank 1–12 sit at `410–415` pts; Rank 50 sits at `208` pts; Rank 250 sits at `108` pts.
 - **Embarko Showcase & Runtime Audit (`embarko.ai/showcase`):**
   - Live apps observed (`Dopamine Pharmacy`, `Spliq`, `PARAKH`, `RoadFix`, `STANOVEX`, `CodeReel`, `worthrot`, `Vendora`, `viaSocket Assistant`). None cover interactive scam drills or link/UPI X-Ray forensics.
-  - **Empirical Failure Lesson:** Heavy server apps (`codereel.embarko.app`) threw `502 Bad Gateway` and `worthrot.embarko.app` timed out on Nov 22—confirming Embarko's **256 MB RAM** limit must be respected strictly.
+  - **Empirical Failure Lesson:** Heavy server apps (`codereel.embarko.app`) threw `502 Bad Gateway` and `worthrot.embarko.app` timed out on Nov 22-confirming Embarko's **256 MB RAM** limit must be respected strictly.
 
 ---
 

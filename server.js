@@ -17,7 +17,7 @@ const PLACEHOLDER_HTML = `<!DOCTYPE html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BaitCheck — Scam Survival Drill (Simulated)</title>
+  <title>BaitCheck - Scam Survival Drill (Simulated)</title>
   <style>
     body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: #161616; color: #F2EFE7; }
     .ribbon { background: #FEC917; color: #0D0D0D; font-weight: 800; padding: 10px 16px; font-size: 13px; letter-spacing: 0.04em; text-align: center; }
@@ -26,7 +26,7 @@ const PLACEHOLDER_HTML = `<!DOCTYPE html>
   </style>
 </head>
 <body>
-  <div class="ribbon">SIMULATION • EDUCATIONAL SCAM DRILL — NO REAL DATA, OTPs, OR DOWNLOADS</div>
+  <div class="ribbon">SIMULATION • EDUCATIONAL SCAM DRILL - NO REAL DATA, OTPs, OR DOWNLOADS</div>
   <main>
     <div class="card">
       <h1>BaitCheck</h1>
@@ -41,7 +41,7 @@ const NOT_FOUND_HTML = `<!DOCTYPE html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>404 Not Found — BaitCheck (Simulated)</title>
+  <title>404 Not Found - BaitCheck (Simulated)</title>
   <style>
     body { margin: 0; font-family: system-ui, -apple-system, sans-serif; background: #161616; color: #F2EFE7; }
     .ribbon { background: #FEC917; color: #0D0D0D; font-weight: 800; padding: 10px 16px; font-size: 13px; letter-spacing: 0.04em; text-align: center; }
@@ -53,10 +53,10 @@ const NOT_FOUND_HTML = `<!DOCTYPE html>
   </style>
 </head>
 <body>
-  <div class="ribbon">SIMULATION • EDUCATIONAL SCAM DRILL — NO REAL DATA, OTPs, OR DOWNLOADS</div>
+  <div class="ribbon">SIMULATION • EDUCATIONAL SCAM DRILL - NO REAL DATA, OTPs, OR DOWNLOADS</div>
   <main>
     <div class="card">
-      <h1>404 — Page Not Found</h1>
+      <h1>404 - Page Not Found</h1>
       <p>The page you requested could not be found.</p>
       <a class="home-link" href="/">Back to BaitCheck Home</a>
     </div>

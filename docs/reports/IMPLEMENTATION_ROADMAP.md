@@ -1,4 +1,4 @@
-# BaitCheck — Prioritized Implementation Roadmap
+# BaitCheck - Prioritized Implementation Roadmap
 
 **Last Updated:** 22 November 2026  
 **Target Architecture:** Single-process Node.js (`0.0.0.0:$PORT`, `<60 MB` RSS), SQLite in `DATA_DIR`, self-contained Bill-Poster SPA in `public/`.
@@ -77,7 +77,7 @@
 - **Database Changes:** None.
 - **Dependencies:** Feature 1.1.
 - **Acceptance Criteria:**
-  - Permanent sticky yellow `SIMULATION • EDUCATIONAL SCAM DRILL — NO REAL DATA, OTPs, OR DOWNLOADS` ribbon.
+  - Permanent sticky yellow `SIMULATION • EDUCATIONAL SCAM DRILL - NO REAL DATA, OTPs, OR DOWNLOADS` ribbon.
   - Zero horizontal scroll at `360×800`, `390×844`, tablet, and desktop.
   - All touch targets `>=44px` (`>=48px` primary CTAs).
   - Exact Bill-Poster palette (`#FEC917`, `#0D0D0D`, `#161616`, `#F2EFE7`), `0px` radii, condensed `Archivo Narrow` display type.

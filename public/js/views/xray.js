@@ -187,6 +187,7 @@
         track.appendChild(fill);
         meterCard.appendChild(track);
         sheet.appendChild(meterCard);
+        sheet.appendChild(createEl('p', 'caption-txt xray-confidence-note', t('xrayCaveat')));
 
         // Inline Highlighted Preview (Strictly built with createElement + textContent)
         if (Array.isArray(res.highlightedSegments) && res.highlightedSegments.length > 0) {

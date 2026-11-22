@@ -1,10 +1,10 @@
-# BaitCheck — Final QA, Security & Performance Test Report (Phase 8)
+# BaitCheck - Final QA, Security & Performance Test Report (Phase 8)
 
 **Audit Date:** 2026-11-22  
 **Workspace:** `c:\Projects\02_Hackathons_and_Flagship_Apps\BaitCheck`  
 **Runtime:** Node.js `v26.13.0` (`node:sqlite` built-in driver active; `better-sqlite3` fallback available)  
 **Headless Browser:** Google Chrome (`C:\Program Files\Google\Chrome\Application\chrome.exe`) via Chrome DevTools Protocol (CDP)  
-**Overall Verdict:** **PASS** — 60/60 automated tests passing across 17 suites (52 original + 4 `tests/storage.test.js` + 4 `tests/db.test.js` post-modularization), 0 dependency vulnerabilities, 0 dangerous DOM/code sinks, 0 forbidden brand impersonations, and `56.46 MB` RSS memory under live benchmark load.
+**Overall Verdict:** **PASS** - 60/60 automated tests passing across 17 suites (52 original + 4 `tests/storage.test.js` + 4 `tests/db.test.js` post-modularization), 0 dependency vulnerabilities, 0 dangerous DOM/code sinks, 0 forbidden brand impersonations, and `56.46 MB` RSS memory under live benchmark load.
 
 ---
 
@@ -34,12 +34,12 @@ Scanned `server.js`, `src/db.js`, `src/drills.js`, `src/forensicEngine.js`, `src
 | **`<input type="password">` or password collection** | **PASS (0 password inputs)** | Only non-code occurrences of the word `password` are educational disclaimers (`public/app.js:18`, `public/index.html:77`). Challenge form inputs use `type="text"`. |
 | **`navigator.vibrate`** | **PASS (0 matches)** | Not used anywhere in the codebase. |
 | **Inline `<script>` / `onclick=` / inline event handlers** | **PASS (0 matches)** | `public/index.html:82` loads `<script src="/app.js" defer></script>` externally; all UI listeners are bound via `addEventListener` in `public/app.js`. |
-| **Forbidden real bank / agency / app brand names** | **PASS (0 impersonations)** | Scanned for `SBI`, `HDFC`, `ICICI`, `Paytm`, `GPay`, `Google Pay`, `PhonePe`, `WhatsApp`, `CBI`, `RBI`, `TRAI`, `UIDAI`, `NPCI`. Only permissible matches are outbound share button labels (`public/app.js:147` `'SHARE ON WHATSAPP'`, `public/app.js:311` `'WHATSAPP पर भेजें'`) linking to `https://wa.me/?text=...` (`public/app.js:2534`). All drill/preset entities are fictional (`Central Cyber Desk (Simulated)`, `Metro Power Utility (Demo)`, `PaySim Wallet Collect (Demo)`, `reward-desk@paysim`). |
+| **Forbidden real bank / agency / app brand names** | **PASS (0 impersonations)** | Scanned for `SBI`, `HDFC`, `ICICI`, `Paytm`, `GPay`, `Google Pay`, `PhonePe`, `WhatsApp`, `CBI`, `RBI`, `TRAI`, `UIDAI`, `NPCI`. Only permissible matches are outbound share button labels (`public/app.js:147` `'SHARE ON WHATSAPP'`, `public/app.js:311` `'WHATSAPP पर भेजें'`) linking to `https://wa.me/> text=...` (`public/app.js:2534`). All drill/preset entities are fictional (`Central Cyber Desk (Simulated)`, `Metro Power Utility (Demo)`, `PaySim Wallet Collect (Demo)`, `reward-desk@paysim`). |
 
 ### 1.3 HTTP, Storage & Zero-PII Guardrails Observed
 
 - **Zero-PII SQLite Telemetry:** `db.recordForensicScan` (`src/db.js:348-367`) persists only `risk_score` and `rules_hit_json` (rule IDs + points), verified against raw SQLite rows in `tests/api.test.js`.
-- **SQL Injection Safety:** All SQLite queries in `src/db.js` use parameterized prepared statements (`?` placeholders).
+- **SQL Injection Safety:** All SQLite queries in `src/db.js` use parameterized prepared statements (`> ` placeholders).
 - **HTTP Hardening (`server.js`):**
   - `app.disable('x-powered-by')` (`server.js:221`).
   - JSON body limits enforced (`32kb` default, `2mb` for `/api/badge`, returning `413 Payload too large`; malformed JSON returns `400 Invalid JSON payload`).
@@ -57,7 +57,7 @@ Scanned `server.js`, `src/db.js`, `src/drills.js`, `src/forensicEngine.js`, `src
 
 1. **`tests/forensic.test.js`:**
    - Verified `"You are under digital arrest right now."` (`riskScore === 15`) returns `verdictLevel: 'medium'` (and never `'low'` / `'NO KNOWN TRAP TOKENS'`).
-   - Added Suite `12. Phase 8 Regression — High-risk disposable TLD + keyword lures vs benign domains`: verifies `http://metrobank-kyc.xyz/login` and `verify-bill.top/pay` score `+25` (`url_deception`, `verdictLevel: 'medium'`) while benign `https://example.xyz/about` and `https://cybercrime.gov.in` score `0` (`verdictLevel: 'low'`).
+   - Added Suite `12. Phase 8 Regression - High-risk disposable TLD + keyword lures vs benign domains`: verifies `http://metrobank-kyc.xyz/login` and `verify-bill.top/pay` score `+25` (`url_deception`, `verdictLevel: 'medium'`) while benign `https://example.xyz/about` and `https://cybercrime.gov.in` score `0` (`verdictLevel: 'low'`).
 2. **`tests/api.test.js`:**
    - Verified `POST /api/challenge/:id/result` with `passed: "yes"` or `passed: "FALSE"` returns `400 { error: 'passed must be a boolean' }`.
    - Verified `GET /api/nonexistent` returns `404 { error: 'Not found' }` JSON and `GET /nonexistent-page` returns `404` HTML with the `SIMULATION` ribbon.
@@ -75,100 +75,100 @@ Executed `npm test` (`node --test`) after all edits to `tests/forensic.test.js`,
 > baitcheck@1.0.0 test
 > node --test
 
-▶ SQLite Persistence & Litestream Safety
-  ✔ persists challenges, drill results, and forensic scans across close() and reopen (19.2202ms)
-  ✔ preserves pre-existing _litestream_seq and _litestream_lock tables and rows (22.0964ms)
-✔ SQLite Persistence & Litestream Safety (43.6928ms)
-▶ Full HTTP API Lifecycle & Zero-PII Integration
-  ✔ GET /health returns 200 with ok: true and memoryMb < 75 (39.3214ms)
-  ✔ GET /api/drills returns 3 drills, 3 playbook steps, and 4 presets (7.8192ms)
-  ✔ GET /api/stats returns seeded cohort baseline (totalDrills >= 142) (3.3548ms)
-  ✔ POST /api/scan scores all 4 presets accurately and rejects invalid payloads with 400 (42.4931ms)
-  ✔ Zero-PII check: POST /api/scan never stores raw sensitive URL/text in forensic_scans (4.7015ms)
-  ✔ POST /api/challenge validates inputs, creates slug, and handles non-ASCII "माँ" fallback (17.0488ms)
-  ✔ GET /api/challenge/:id returns 404 on unknown/invalid IDs and 200 on created ID (12.9748ms)
-  ✔ POST /api/challenge/:id/result validates scenarioId/challenge and computes immunityScore 100, 65, 0 (67.3141ms)
-  ✔ GET /tasks/daily-stats enforces CRON_SECRET and does not double-count cohort stats (13.6829ms)
-  ✔ GET /api/nonexistent returns 404 JSON and GET /nonexistent-page returns 404 HTML with SIMULATION ribbon (3.9604ms)
-✔ Full HTTP API Lifecycle & Zero-PII Integration (235.2514ms)
-▶ POST /api/badge Storage Upload & Fallback Guardrails
-  ✔ returns 200 unconfigured fallback when STORAGE_URL/STORAGE_TOKEN are absent (28.6898ms)
-  ✔ rejects invalid filename and invalid PNG payloads with 400 (53.761ms)
-  ✔ returns 200 with uploaded URL when mock uploader succeeds (29.7874ms)
-  ✔ returns 502 on upstream failure and redacts STORAGE_TOKEN from error responses (34.6862ms)
-✔ POST /api/badge Storage Upload & Fallback Guardrails (148.2387ms)
-▶ BaitCheck Headless Browser E2E Suite (CDP)
-  ✔ 1. Mobile 360x800 layout, safety ribbon, >=44px touch targets & bilingual toggle (325.5715ms)
-  ✔ 2. Full 60s Drill flow (Trap + APK Inspect + Pass + 1080x1350 PNG Canvas) (1366.7975ms)
-  ✔ 3. Tab 2 Link X-Ray (Presets, Decoded UPI Table & XSS Safety) (211.9553ms)
-  ✔ 4. Tab 3 Family Challenge -> /c/:id -> /c/:id/report live persistence (249.136ms)
-  ✔ 5. Desktop 1280x800 2-column grid layout & zero console/exception errors (89.2105ms)
-  ✔ 6. Responsive 390x844 & 768x1024 zero overflow + /c/nonexistent-999 friendly 404 recovery (150.3161ms)
-✔ BaitCheck Headless Browser E2E Suite (CDP) (3150.7426ms)
-▶ Forensic Engine — Unit & Edge-Case Suite
-  ▶ 1. Punycode (xn--) detection & span highlighting
-    ✔ flags xn-- punycode URL host with exact span highlighting (2.0459ms)
-    ✔ flags uppercase XN-- and standalone punycode domains without scheme (1.4081ms)
-  ✔ 1. Punycode (xn--) detection & span highlighting (4.3094ms)
-  ▶ 2. Mixed Cyrillic/Greek homoglyphs vs clean Hindi Devanagari
-    ✔ detects Cyrillic lookalike "е" inside Latin domain mеtrobank.example (1.2971ms)
-    ✔ detects Cyrillic "а" and Greek "ο" lookalikes inside Latin domains/brands (0.348ms)
-    ✔ does NOT false-positive on clean Hindi Devanagari mixed with clean English URLs (0.2281ms)
-    ✔ does NOT false-positive on pure non-Latin Cyrillic text without Latin mixing (0.1158ms)
-  ✔ 2. Mixed Cyrillic/Greek homoglyphs vs clean Hindi Devanagari (2.1748ms)
-  ▶ 3. Double-extension & executable lures
-    ✔ flags .pdf.apk double-extension lure at +40 risk and highlights only filename (0.1814ms)
-    ✔ flags .jpg.exe and .doc.bat double-extension lures at +40 risk (0.2071ms)
-    ✔ scores standalone .apk at +35 without lure keywords and +40 with urgent lure keywords (0.2399ms)
-  ✔ 3. Double-extension & executable lures (0.7716ms)
-  ▶ 4. @ userinfo masking vs harmless email in query params
-    ✔ flags @ userinfo credential masking in URL authority (+30 danger) (0.2882ms)
-    ✔ does NOT false-positive on harmless email in URL query params or path (0.1456ms)
-  ✔ 4. @ userinfo masking vs harmless email in query params (0.5389ms)
-  ▶ 5. Raw IPv4 literal URLs vs invalid IPv4 strings
-    ✔ flags valid raw IPv4 URL host (+30 danger) with exact host span (0.3542ms)
-    ✔ ignores invalid IPv4 octets like 999.999.1.1 (0.1519ms)
-  ✔ 5. Raw IPv4 literal URLs vs invalid IPv4 strings (0.6143ms)
-  ▶ 6. URL shorteners alone vs with urgency
-    ✔ scores bit.ly and tinyurl.com alone at +20 warn (0.2559ms)
-    ✔ escalates shortener url_deception from +20 to +30 when urgency keywords are present (0.2445ms)
-  ✔ 6. URL shorteners alone vs with urgency (0.5909ms)
-  ▶ 7. UPI deep-link parameter dissection & collect-trap rules
-    ✔ dissects pa, pn, am, cu, tn and warns on positive am + cashback/refund/PIN (0.7829ms)
-    ✔ dissects positive am without cashback wording with Debit Alert warning (0.2249ms)
-    ✔ dissects benign upi://pay without positive am or receive bait without flagging (0.149ms)
-    ✔ detects plain-text UPI collect-trap wording when no upi://pay URI is present (0.2599ms)
-  ✔ 7. UPI deep-link parameter dissection & collect-trap rules (1.5616ms)
-  ▶ 8. Bilingual EN & हिंदी social-engineering pressure tokens
-    ✔ detects English pressure tokens (digital arrest, stay alone) and scales points up to 25 (0.5469ms)
-    ✔ detects Hindi pressure tokens (बिजली कट, गिरफ्तारी, पिन डालें) (0.3091ms)
-  ✔ 8. Bilingual EN & हिंदी social-engineering pressure tokens (0.9688ms)
-  ▶ 9. Benign inputs & validation errors (400 EMPTY_INPUT / INPUT_TOO_LONG)
-    ✔ returns low risk 0 for https://cybercrime.gov.in and normal family messages (0.3149ms)
-    ✔ throws 400 EMPTY_INPUT for empty, whitespace, or non-string inputs (0.8387ms)
-    ✔ throws 400 INPUT_TOO_LONG for >2000 chars and accepts exact 2000-char boundary (0.4567ms)
-  ✔ 9. Benign inputs & validation errors (400 EMPTY_INPUT / INPUT_TOO_LONG) (1.7697ms)
-  ▶ 10. Lossless highlightedSegments, XSS immunity & <10ms latency
-    ✔ never injects HTML tags and preserves exact text with overlapping signals & angle brackets (0.435ms)
-    ✔ completes within <10 ms even on 2000-char pathological input (2.372ms)
-  ✔ 10. Lossless highlightedSegments, XSS immunity & <10ms latency (3.1496ms)
-  ▶ 11. DRILLS, PLAYBOOK & PRESETS integrity validation
-    ✔ has exactly 3 drills whose weights sum to 100 (0.2217ms)
-    ✔ has non-spoiler choice labels and varied trap positions across drills (0.4179ms)
-    ✔ contains zero real bank/agency/app brand names across drills, playbook, and presets (0.3246ms)
-  ✔ 11. DRILLS, PLAYBOOK & PRESETS integrity validation (1.0932ms)
-  ▶ 12. Phase 8 Regression — High-risk disposable TLD + keyword lures vs benign domains
-    ✔ scores disposable TLD + lure keyword URLs at +25 (url_deception, medium) while benign domains score 0 (low) (0.2127ms)
-  ✔ 12. Phase 8 Regression — High-risk disposable TLD + keyword lures vs benign domains (0.2504ms)
-✔ Forensic Engine — Unit & Edge-Case Suite (18.5502ms)
-ℹ tests 52
-ℹ suites 17
-ℹ pass 52
-ℹ fail 0
-ℹ cancelled 0
-ℹ skipped 0
-ℹ todo 0
-ℹ duration_ms 5247.0953
+>  SQLite Persistence & Litestream Safety
+  PASS persists challenges, drill results, and forensic scans across close() and reopen (19.2202ms)
+  PASS preserves pre-existing _litestream_seq and _litestream_lock tables and rows (22.0964ms)
+PASS SQLite Persistence & Litestream Safety (43.6928ms)
+>  Full HTTP API Lifecycle & Zero-PII Integration
+  PASS GET /health returns 200 with ok: true and memoryMb < 75 (39.3214ms)
+  PASS GET /api/drills returns 3 drills, 3 playbook steps, and 4 presets (7.8192ms)
+  PASS GET /api/stats returns seeded cohort baseline (totalDrills >= 142) (3.3548ms)
+  PASS POST /api/scan scores all 4 presets accurately and rejects invalid payloads with 400 (42.4931ms)
+  PASS Zero-PII check: POST /api/scan never stores raw sensitive URL/text in forensic_scans (4.7015ms)
+  PASS POST /api/challenge validates inputs, creates slug, and handles non-ASCII "माँ" fallback (17.0488ms)
+  PASS GET /api/challenge/:id returns 404 on unknown/invalid IDs and 200 on created ID (12.9748ms)
+  PASS POST /api/challenge/:id/result validates scenarioId/challenge and computes immunityScore 100, 65, 0 (67.3141ms)
+  PASS GET /tasks/daily-stats enforces CRON_SECRET and does not double-count cohort stats (13.6829ms)
+  PASS GET /api/nonexistent returns 404 JSON and GET /nonexistent-page returns 404 HTML with SIMULATION ribbon (3.9604ms)
+PASS Full HTTP API Lifecycle & Zero-PII Integration (235.2514ms)
+>  POST /api/badge Storage Upload & Fallback Guardrails
+  PASS returns 200 unconfigured fallback when STORAGE_URL/STORAGE_TOKEN are absent (28.6898ms)
+  PASS rejects invalid filename and invalid PNG payloads with 400 (53.761ms)
+  PASS returns 200 with uploaded URL when mock uploader succeeds (29.7874ms)
+  PASS returns 502 on upstream failure and redacts STORAGE_TOKEN from error responses (34.6862ms)
+PASS POST /api/badge Storage Upload & Fallback Guardrails (148.2387ms)
+>  BaitCheck Headless Browser E2E Suite (CDP)
+  PASS 1. Mobile 360x800 layout, safety ribbon, >=44px touch targets & bilingual toggle (325.5715ms)
+  PASS 2. Full 60s Drill flow (Trap + APK Inspect + Pass + 1080x1350 PNG Canvas) (1366.7975ms)
+  PASS 3. Tab 2 Link X-Ray (Presets, Decoded UPI Table & XSS Safety) (211.9553ms)
+  PASS 4. Tab 3 Family Challenge -> /c/:id -> /c/:id/report live persistence (249.136ms)
+  PASS 5. Desktop 1280x800 2-column grid layout & zero console/exception errors (89.2105ms)
+  PASS 6. Responsive 390x844 & 768x1024 zero overflow + /c/nonexistent-999 friendly 404 recovery (150.3161ms)
+PASS BaitCheck Headless Browser E2E Suite (CDP) (3150.7426ms)
+>  Forensic Engine - Unit & Edge-Case Suite
+  >  1. Punycode (xn--) detection & span highlighting
+    PASS flags xn-- punycode URL host with exact span highlighting (2.0459ms)
+    PASS flags uppercase XN-- and standalone punycode domains without scheme (1.4081ms)
+  PASS 1. Punycode (xn--) detection & span highlighting (4.3094ms)
+  >  2. Mixed Cyrillic/Greek homoglyphs vs clean Hindi Devanagari
+    PASS detects Cyrillic lookalike "е" inside Latin domain mеtrobank.example (1.2971ms)
+    PASS detects Cyrillic "а" and Greek "ο" lookalikes inside Latin domains/brands (0.348ms)
+    PASS does NOT false-positive on clean Hindi Devanagari mixed with clean English URLs (0.2281ms)
+    PASS does NOT false-positive on pure non-Latin Cyrillic text without Latin mixing (0.1158ms)
+  PASS 2. Mixed Cyrillic/Greek homoglyphs vs clean Hindi Devanagari (2.1748ms)
+  >  3. Double-extension & executable lures
+    PASS flags .pdf.apk double-extension lure at +40 risk and highlights only filename (0.1814ms)
+    PASS flags .jpg.exe and .doc.bat double-extension lures at +40 risk (0.2071ms)
+    PASS scores standalone .apk at +35 without lure keywords and +40 with urgent lure keywords (0.2399ms)
+  PASS 3. Double-extension & executable lures (0.7716ms)
+  >  4. @ userinfo masking vs harmless email in query params
+    PASS flags @ userinfo credential masking in URL authority (+30 danger) (0.2882ms)
+    PASS does NOT false-positive on harmless email in URL query params or path (0.1456ms)
+  PASS 4. @ userinfo masking vs harmless email in query params (0.5389ms)
+  >  5. Raw IPv4 literal URLs vs invalid IPv4 strings
+    PASS flags valid raw IPv4 URL host (+30 danger) with exact host span (0.3542ms)
+    PASS ignores invalid IPv4 octets like 999.999.1.1 (0.1519ms)
+  PASS 5. Raw IPv4 literal URLs vs invalid IPv4 strings (0.6143ms)
+  >  6. URL shorteners alone vs with urgency
+    PASS scores bit.ly and tinyurl.com alone at +20 warn (0.2559ms)
+    PASS escalates shortener url_deception from +20 to +30 when urgency keywords are present (0.2445ms)
+  PASS 6. URL shorteners alone vs with urgency (0.5909ms)
+  >  7. UPI deep-link parameter dissection & collect-trap rules
+    PASS dissects pa, pn, am, cu, tn and warns on positive am + cashback/refund/PIN (0.7829ms)
+    PASS dissects positive am without cashback wording with Debit Alert warning (0.2249ms)
+    PASS dissects benign upi://pay without positive am or receive bait without flagging (0.149ms)
+    PASS detects plain-text UPI collect-trap wording when no upi://pay URI is present (0.2599ms)
+  PASS 7. UPI deep-link parameter dissection & collect-trap rules (1.5616ms)
+  >  8. Bilingual EN & हिंदी social-engineering pressure tokens
+    PASS detects English pressure tokens (digital arrest, stay alone) and scales points up to 25 (0.5469ms)
+    PASS detects Hindi pressure tokens (बिजली कट, गिरफ्तारी, पिन डालें) (0.3091ms)
+  PASS 8. Bilingual EN & हिंदी social-engineering pressure tokens (0.9688ms)
+  >  9. Benign inputs & validation errors (400 EMPTY_INPUT / INPUT_TOO_LONG)
+    PASS returns low risk 0 for https://cybercrime.gov.in and normal family messages (0.3149ms)
+    PASS throws 400 EMPTY_INPUT for empty, whitespace, or non-string inputs (0.8387ms)
+    PASS throws 400 INPUT_TOO_LONG for >2000 chars and accepts exact 2000-char boundary (0.4567ms)
+  PASS 9. Benign inputs & validation errors (400 EMPTY_INPUT / INPUT_TOO_LONG) (1.7697ms)
+  >  10. Lossless highlightedSegments, XSS immunity & <10ms latency
+    PASS never injects HTML tags and preserves exact text with overlapping signals & angle brackets (0.435ms)
+    PASS completes within <10 ms even on 2000-char pathological input (2.372ms)
+  PASS 10. Lossless highlightedSegments, XSS immunity & <10ms latency (3.1496ms)
+  >  11. DRILLS, PLAYBOOK & PRESETS integrity validation
+    PASS has exactly 3 drills whose weights sum to 100 (0.2217ms)
+    PASS has non-spoiler choice labels and varied trap positions across drills (0.4179ms)
+    PASS contains zero real bank/agency/app brand names across drills, playbook, and presets (0.3246ms)
+  PASS 11. DRILLS, PLAYBOOK & PRESETS integrity validation (1.0932ms)
+  >  12. Phase 8 Regression - High-risk disposable TLD + keyword lures vs benign domains
+    PASS scores disposable TLD + lure keyword URLs at +25 (url_deception, medium) while benign domains score 0 (low) (0.2127ms)
+  PASS 12. Phase 8 Regression - High-risk disposable TLD + keyword lures vs benign domains (0.2504ms)
+PASS Forensic Engine - Unit & Edge-Case Suite (18.5502ms)
+INFO tests 52
+INFO suites 17
+INFO pass 52
+INFO fail 0
+INFO cancelled 0
+INFO skipped 0
+INFO todo 0
+INFO duration_ms 5247.0953
 ```
 
 ---

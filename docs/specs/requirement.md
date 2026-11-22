@@ -1,4 +1,4 @@
-# Technical & Functional Requirements — BaitCheck
+# Technical & Functional Requirements - BaitCheck
 
 **Version:** 1.0 (Hackathon Build Spec)  
 **Runtime Target:** Single-process Node.js 20+ on Embarko (`0.0.0.0:$PORT`, `<60 MB RAM`, max `256 MB`)

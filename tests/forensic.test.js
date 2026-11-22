@@ -20,7 +20,7 @@ function assertLosslessSegments(input, result) {
   }
 }
 
-describe('Forensic Engine — Unit & Edge-Case Suite', () => {
+describe('Forensic Engine - Unit & Edge-Case Suite', () => {
   describe('1. Punycode (xn--) detection & span highlighting', () => {
     it('flags xn-- punycode URL host with exact span highlighting', () => {
       const input = 'Verify account at https://xn--metrobank-kyc-9x2a.example/update now.';
@@ -460,7 +460,7 @@ describe('Forensic Engine — Unit & Edge-Case Suite', () => {
     });
   });
 
-  describe('12. Phase 8 Regression — High-risk disposable TLD + keyword lures vs benign domains', () => {
+  describe('12. Phase 8 Regression - High-risk disposable TLD + keyword lures vs benign domains', () => {
     it('scores disposable TLD + lure keyword URLs at +25 (url_deception, medium) while benign domains score 0 (low)', () => {
       for (const lure of ['http://metrobank-kyc.xyz/login', 'verify-bill.top/pay']) {
         const res = analyzeInput(lure);
