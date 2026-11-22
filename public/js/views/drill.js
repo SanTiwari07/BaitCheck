@@ -438,15 +438,22 @@
           simVideo.poster = '/assets/sim/police-video-poster.jpg';
           simVideo.autoplay = true;
           simVideo.loop = true;
-          simVideo.muted = true;
+          simVideo.muted = Boolean(state.muted);
+          simVideo.defaultMuted = Boolean(state.muted);
           simVideo.controls = true;
           simVideo.playsInline = true;
           simVideo.setAttribute('autoplay', '');
           simVideo.setAttribute('loop', '');
-          simVideo.setAttribute('muted', '');
+          if (state.muted) {
+            simVideo.setAttribute('muted', '');
+          }
           simVideo.setAttribute('playsinline', '');
           simVideo.setAttribute('aria-label', loc(drill.title));
           frame.appendChild(simVideo);
+          const playPromise = simVideo.play();
+          if (playPromise && typeof playPromise.catch === 'function') {
+            playPromise.catch(() => {});
+          }
 
           drillCard.appendChild(frame);
         } else if (drill.mode === 'chat-attachment') {

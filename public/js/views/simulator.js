@@ -136,15 +136,22 @@
         if (step.image) video.poster = step.image;
         video.autoplay = true;
         video.loop = true;
-        video.muted = true;
+        video.muted = Boolean(state.muted);
+        video.defaultMuted = Boolean(state.muted);
         video.controls = true;
         video.playsInline = true;
         video.setAttribute('autoplay', '');
         video.setAttribute('loop', '');
-        video.setAttribute('muted', '');
+        if (state.muted) {
+          video.setAttribute('muted', '');
+        }
         video.setAttribute('playsinline', '');
         video.setAttribute('aria-label', loc(step.imageAlt));
         mediaWrap.appendChild(video);
+        const playPromise = video.play();
+        if (playPromise && typeof playPromise.catch === 'function') {
+          playPromise.catch(() => {});
+        }
       } else {
         const img = createEl('img', 'sim-evidence-img');
         img.src = step.image;

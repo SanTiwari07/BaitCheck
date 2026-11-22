@@ -727,6 +727,10 @@
       } else {
         unlockAudio();
       }
+      const activeVideos = document.querySelectorAll('.sim-evidence-video, .drill-stage-video');
+      for (const vid of activeVideos) {
+        vid.muted = Boolean(state.muted);
+      }
       renderTopBar();
     });
 

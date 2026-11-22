@@ -511,6 +511,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
         bodyText: document.querySelector('#view-drill')?.textContent || '',
         timerText: timer ? timer.textContent.trim() : '',
         videoSrc: vid ? vid.getAttribute('src') : '',
+        videoMuted: vid ? vid.muted : true,
         captionFontSize: cap ? parseFloat(getComputedStyle(cap).fontSize) : 0,
         scrollWidth: document.documentElement.scrollWidth
       };
@@ -519,6 +520,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
     assert.match(drill1State.bodyText, /Central Cyber Desk \(Simulated\)/);
     assert.match(drill1State.timerText, /^\d+\.\ds$/);
     assert.equal(drill1State.videoSrc, '/assets/sim/digital-arrest-call-en.mp4');
+    assert.equal(drill1State.videoMuted, false);
     assert.ok(
       drill1State.captionFontSize >= 18,
       `Expected >=18px caption fontSize, got ${drill1State.captionFontSize}px`
@@ -1063,6 +1065,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
       return {
         src: vid ? vid.getAttribute('src') : '',
         poster: vid ? vid.getAttribute('poster') : '',
+        muted: vid ? vid.muted : true,
         text: document.querySelector('#view-drill')?.textContent || '',
         scrollWidth: document.documentElement.scrollWidth
       };
@@ -1070,6 +1073,7 @@ describe('BaitCheck Headless Browser E2E Suite (CDP)', () => {
 
     assert.equal(step1.src, '/assets/sim/digital-arrest-call-en.mp4');
     assert.equal(step1.poster, '/assets/sim/police-video-poster.jpg');
+    assert.equal(step1.muted, false);
     assert.match(step1.text, /CYBER LOCK/);
     assert.match(step1.text, /What would you do next\?/);
     assert.ok(step1.scrollWidth <= 360);
